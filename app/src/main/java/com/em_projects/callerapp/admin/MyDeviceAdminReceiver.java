@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by danny on 22 אפריל 2017.
+ * Created by Eyal Muchtar.
  */
+
+// Ref: https://developer.android.com/guide/topics/admin/device-admin.html
 
 public class MyDeviceAdminReceiver extends DeviceAdminReceiver {
     @Override
