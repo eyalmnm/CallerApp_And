@@ -140,4 +140,23 @@ public class ContactsUtils {
             }
         }
     }
+
+    public static void getContactId(Context context, String phoneNumber) {
+        Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,Uri.encode(phoneNumber));
+        String[] proj = new String[]
+                {///as we need only this colum from a table...
+                        ContactsContract.Contacts.DISPLAY_NAME,
+                        ContactsContract.Contacts._ID,
+                };
+        String id=null;
+        String sortOrder1 = ContactsContract.CommonDataKinds.StructuredPostal.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+        Cursor crsr = context.getContentResolver().query(lookupUri,proj, null, null, sortOrder1);
+        while(crsr.moveToNext())
+        {
+            String name=crsr.getString(crsr.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            id = crsr.getString(crsr.getColumnIndex(ContactsContract.Contacts._ID));
+            Toast.makeText(context,"Name of this cntct is   : " +name +"\n id is : "+id ,Toast.LENGTH_SHORT).show();
+        }
+        crsr.close();
+    }
 }
