@@ -31,11 +31,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Device Admin Receiver -->
         <receiver android:name=".admin.MyDeviceAdminReceiver">
             <meta-data android:name="android.app.device_admin"
                 android:resource="@xml/my_admin" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLE" />
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLE_REQUESTED" />
             </intent-filter>
         </receiver>
 
