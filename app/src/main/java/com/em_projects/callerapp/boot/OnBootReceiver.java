@@ -13,7 +13,7 @@ public class OnBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Reload the application
-        Intent startIntent = new Intent(context, SpalshActivity.class);
+        Intent startIntent = new Intent(context, SplashActivity.class);
         context.startActivity(startIntent);
     }
 }
