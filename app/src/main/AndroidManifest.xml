@@ -15,6 +15,9 @@
     <!-- Read Contact Details Permissions -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- Boot Receiver Permissions -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:allowBackup="true"
@@ -73,6 +76,20 @@
             </intent-filter>
         </receiver>
 
+        <!-- On Boot Receiver -->
+        <receiver android:name=".boot.OnBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Shutdown Receiver -->
+        <receiver android:name=".boot.ShutDownReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
