@@ -18,6 +18,9 @@
     <!-- Boot Receiver Permissions -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- Phone Call Permissions -->
+    <uses-permission android:name="android.permission.3" />
+
 
     <application
         android:allowBackup="true"
