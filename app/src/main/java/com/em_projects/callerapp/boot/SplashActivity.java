@@ -7,27 +7,40 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.em_projects.callerapp.MainActivity;
+import com.em_projects.callerapp.R;
 
 /**
  * Created by eyalmuchtar on 25/07/2017.
  */
 
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = "SplashActivity";
 
     public final static int REQUEST_CODE = -1;
     public final static int OVERLAY_REQUEST_CODE = 13;
 
+    private ImageView splashImageView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+
+        splashImageView = (ImageView) findViewById(R.id.splashImageView);
 
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -44,16 +57,28 @@ public class SplashActivity extends AppCompatActivity {
         //Restart the activity
         if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
             //mandatory permissions must be accepted...
-            if (false == createPermissions()) {
+//            if (false == createPermissions()) {
                 if (checkDrawOverlayPermission(this) == false) {
                     continueInitApp();
                 }
-            }
+//            }
             return;
         }
 
         if (createPermissions() == false) continueInitApp();
 
+    }
+
+    private void continueInitApp() {
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        }, 2500);
     }
 
     public boolean createPermissions() {
@@ -65,15 +90,13 @@ public class SplashActivity extends AppCompatActivity {
                 {Manifest.permission.CALL_PHONE, "Please allow initiate calls", "995"},
                 {Manifest.permission.READ_CONTACTS, "Please allow access to your contact list for showing avatar", "996"},
                 {Manifest.permission.ACCESS_COARSE_LOCATION, "Please allow access to your Location", "997"},
-                //{ Manifest.permission.CAPTURE_AUDIO_OUTPUT,"Please allow capturing of Voice Audio to provide real-time alerting over the call", "991"},
-                //Manifest.permission.SYSTEM_ALERT_WINDOW  -- Danny denied from the app immediately
         };
         int i = 0;
         for (final String[] permission : permissions) {
             if (ContextCompat.checkSelfPermission(this, permission[0]) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission[0])) {
 
-                    Snackbar.make(mLayout, permission[1], Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(splashImageView, permission[1], Snackbar.LENGTH_INDEFINITE)
                             .setAction(android.R.string.ok, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
