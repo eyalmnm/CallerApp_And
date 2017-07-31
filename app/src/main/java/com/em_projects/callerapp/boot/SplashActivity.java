@@ -28,7 +28,6 @@ import com.em_projects.callerapp.R;
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = "SplashActivity";
 
-    public final static int REQUEST_CODE = -1;
     public final static int OVERLAY_REQUEST_CODE = 13;
 
     private ImageView splashImageView;
@@ -134,4 +133,25 @@ public class SplashActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+
+            case OVERLAY_REQUEST_CODE:
+                /** check if received result code
+                 is equal our requested code for draw permission  */
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(this)) {
+                        // continue here - permission was granted
+                        // FIXME - to recreate the service here...
+                        continueInitApp();
+                        // TODO Or createPermissions()
+                    }
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
 }
