@@ -256,4 +256,11 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+    public static boolean isValidPhoneNumber(String number) {
+        if (false == StringUtils.isNullOrEmpty(number)) {
+            return number.matches("^[+]?[0-9]{10,13}$");
+        }
+        return false;
+    }
 }
