@@ -7,7 +7,7 @@ import android.telephony.TelephonyManager;
 import java.lang.reflect.Method;
 
 /**
- * Created by eyal muchtar on 13/02/2017.
+ * Created by eyalmuchtar on 1/08/2017.
  */
 
 public class DeviceUtils {
@@ -41,7 +41,7 @@ public class DeviceUtils {
      * @param context application or base context
      * @return device's IMSI
      */
-    public static String getDeviceImsi(Context context) {
+    public static String getDeviceImsi(Context context) throws Exception {
 //        String myIMSI = SystemProperties.get(android.telephony.TelephonyProperties.PROPERTY_IMSI);
 //        String myIMEI = SystemProperties.get(android.telephony.TelephonyProperties.PROPERTY_IMEI);
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -60,7 +60,7 @@ public class DeviceUtils {
      *
      * @return an empty string if the key isn't found
      */
-    private static String get(Context context, String key) {
+    private static String get(Context context, String key) throws Exception {
         String ret = "";
 
         try {
@@ -82,11 +82,12 @@ public class DeviceUtils {
             ret = (String) get.invoke(SystemProperties, params);
         } catch (Exception e) {
             ret = "";
-            //TODO : Error handling
+            throw new Exception(e.getMessage());
         }
 
         return ret;
     }
+
 
     private static String findDeviceID(Context context) {
         String deviceID = null;
