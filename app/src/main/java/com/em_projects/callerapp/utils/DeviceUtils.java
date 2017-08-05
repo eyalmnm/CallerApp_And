@@ -7,7 +7,7 @@ import android.telephony.TelephonyManager;
 import java.lang.reflect.Method;
 
 /**
- * Created by eyalmuchtar on 1/08/2017.
+ * Created by eyal muchtar on 1/08/2017.
  */
 
 public class DeviceUtils {
