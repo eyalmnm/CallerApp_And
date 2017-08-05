@@ -1,11 +1,48 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!--style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!- Customize your theme here. ->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style-->
+
+    <style name="SmsVerificationTheme" parent="SmsVerificationTheme.Base">
+    </style>
+
+    <style name="SmsVerificationTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme" parent="CallAppTheme" />
+
+    <style name="CallAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="colorAccent">#4d4d4d</item>
+        <item name="colorPrimary">#f37721</item>
+        <item name="colorPrimaryDark">#4d4d4d</item>
+        <item name="colorControlNormal">#e6e6e6</item>
+        <item name="colorControlActivated">#f37721</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="actionMenuTextColor">@color/app_text_color</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/app_text_color</item>
+        <item name="android:textSize">17sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/orange</item>
+        <item name="colorControlNormal">@color/app_text_color</item>
+        <item name="colorControlActivated">@color/white</item>
     </style>
 
 </resources>
