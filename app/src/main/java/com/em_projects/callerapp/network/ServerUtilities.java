@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.network;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.em_projects.callerapp.config.Constants;
@@ -58,7 +59,6 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void requestSMSVerification(String deviceId, String phoneNumber, CommListener listener) {
-
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -81,10 +81,12 @@ public final class ServerUtilities implements Runnable {
         post(serverUrl, params, listener);
     }
 
+    // Puts the request into queue for requests and add some additional data
     private void post(final String serverURL, final Map<String, String> params, CommListener listener) {
 
         //Amend device information for the server
         params.put("PHONE_MODEL", android.os.Build.MODEL);
+        params.put("PHONE_MANUFACTURER", Build.MANUFACTURER);
         params.put("VERSION", android.os.Build.VERSION.RELEASE);
         params.put("PHONE_TYPE", "Android");
 
@@ -94,6 +96,7 @@ public final class ServerUtilities implements Runnable {
         }
     }
 
+    // The main looper of the server requests
     @Override
     public void run() {
         while (isRunning) {
@@ -115,7 +118,7 @@ public final class ServerUtilities implements Runnable {
         }
     }
 
-
+    // Handle a single request till returns data to listener
     private void handleRequest(final CommRequest requestHolder) {
         try {
             if (requestHolder != null) {
@@ -136,6 +139,7 @@ public final class ServerUtilities implements Runnable {
         }
     }
 
+    // Sends the request to the server. Supporting GET and POST only
     private synchronized String transmitData(CommRequest commRequest) throws IOException {
         Map<String, String> params = commRequest.getParams();
         CommRequest.MethodType method = commRequest.getMethodType();
@@ -203,6 +207,7 @@ public final class ServerUtilities implements Runnable {
         return nameValuePairs;
     }
 
+    // Reads the returned data and convert it to String
     private String handleHttpResponse(HttpResponse httpResponse) throws IllegalStateException, IOException {
         InputStream is = httpResponse.getEntity().getContent();
         InputStreamReader isr = new InputStreamReader(is, "UTF-8");
