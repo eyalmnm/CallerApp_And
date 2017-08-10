@@ -246,7 +246,14 @@ public class StringUtils {
         return spanStr;
     }
 
-    public static String stringArr2Strong(ArrayList<String> strArr, String delimeter) {
+    /**
+     * Constract a String from the given array
+     *
+     * @param strArr the array to be used for the String
+     * @param delimeter the delimiter for separate between the words
+     * @return the constructed String
+     */
+    public static String stringArr2String(ArrayList<String> strArr, String delimeter) {
         String prefix = "";
         StringBuilder sb = new StringBuilder();
         for (String str : strArr) {
@@ -257,6 +264,12 @@ public class StringUtils {
         return sb.toString();
     }
 
+    /**
+     * Check if the given number is valid phone number.
+     *
+     * @param number the string to be checked
+     * @return true if it is valid phone number
+     */
     public static boolean isValidPhoneNumber(String number) {
         if (false == StringUtils.isNullOrEmpty(number)) {
             return number.matches("^[+]?[0-9]{10,13}$");
