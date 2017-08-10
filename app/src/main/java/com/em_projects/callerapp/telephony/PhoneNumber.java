@@ -51,6 +51,28 @@ public class PhoneNumber {
         }
     }
 
+    public PhoneNumber(String number, String countryCode, Context context) throws Exception {
+        if (false == StringUtils.isValidPhoneNumber(number)) {
+            throw new Exception("Invalid Phone number: " + number);
+        }
+        mContext = context;
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        if (true == StringUtils.isNullOrEmpty(countryCode)) {
+            countryCode = tm.getNetworkCountryIso();
+        }
+        Log.d(TAG, "number: " + countryCode + "-" + number);
+        Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());
+        Log.d(TAG, "Operator: " + tm.getSimOperator());
+        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
+        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
+        Log.d(TAG, "state: " + tm.getSimState());
+        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
+        if (!From(number, countryCode)) { // Failed copying numbre
+            Log.d(TAG, "Failed to normalize phone number " + number);
+            this.phoneNumber = number;
+        }
+    }
+
     public static final String getCountryCode(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String countryCode = tm.getSimCountryIso();
