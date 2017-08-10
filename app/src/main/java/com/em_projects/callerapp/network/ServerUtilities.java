@@ -2,8 +2,10 @@ package com.em_projects.callerapp.network;
 
 import android.util.Log;
 
+import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.utils.StringUtils;
+import com.em_projects.callerapp.utils.TimeUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,7 +35,6 @@ import static java.lang.Thread.sleep;
  */
 
 public final class ServerUtilities implements Runnable {
-
     private static String TAG = "ServerUtilities";
 
     private static ServerUtilities instance = null;
@@ -55,6 +57,42 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
+    public void requestSMSVerification(String deviceId, String phoneNumber, CommListener listener) {
+
+        String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
+        HashMap params = new HashMap();
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, phoneNumber);
+        params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
+
+        post(serverUrl, params, listener);
+    }
+
+    public void verifyOtpCode(String otp, String phoneNumber, String deviceId, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.otpVerification;
+        HashMap params = new HashMap();
+        params.put(Constants.otp, otp);
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, phoneNumber);
+        params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
+
+        post(serverUrl, params, listener);
+    }
+
+    private void post(final String serverURL, final Map<String, String> params, CommListener listener) {
+
+        //Amend device information for the server
+        params.put("PHONE_MODEL", android.os.Build.MODEL);
+        params.put("VERSION", android.os.Build.VERSION.RELEASE);
+        params.put("PHONE_TYPE", "Android");
+
+        queue.add(new CommRequest(serverURL, params, listener));
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
+    }
 
     @Override
     public void run() {
@@ -104,7 +142,7 @@ public final class ServerUtilities implements Runnable {
         String serverUrl = commRequest.getServerURL();
         HttpResponse httpResponse = null;
         HttpClient client = new DefaultHttpClient();
-        Log.d(TAG, "uniqueId: " + params.get(Dynamic.call_unique_ID));
+        Log.d(TAG, "uniqueId: " + params.get(Dynamic.getCall_unique_ID()));
         Log.d(TAG, "senderPhone");
 
         if (method == CommRequest.MethodType.GET) {
