@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:windowSoftInputMode="adjustResize|adjustPan">
+
+
+    <TextView
+        android:id="@+id/captionTextView"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:lines="2"
+        android:text="@string/msg_enter_mobile"
+        android:textAllCaps="false"
+        android:textColor="@color/app_text_color"
+        android:textSize="17sp" />
+
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/captionTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:orientation="vertical">
+
+
+        <Spinner
+            android:id="@+id/inputCountryCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-light"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingBottom="11dp"
+            android:textColor="@color/app_text_color"
+            android:textColorHint="@color/app_text_color"
+            android:textSize="17dp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
+
+            <EditText
+                android:id="@+id/inputMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/lbl_mobile"
+                android:imeOptions="actionSend"
+                android:inputType="phone"
+                android:maxLength="15"
+                android:paddingBottom="11dp"
+                android:textColor="@color/app_text_color"
+                android:textColorHint="@color/app_text_color"
+                android:textCursorDrawable="@null"
+                android:textSize="17dp" />
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnRequestSms"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:text="@string/lbl_next"
+        android:textColor="@color/app_text_color"
+        android:textSize="21dp" />
+
+</RelativeLayout>
