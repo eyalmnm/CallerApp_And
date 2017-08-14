@@ -21,12 +21,12 @@ public class Constants {
 
 
     // Server Communication parameters
-    public static String serverURL;
-    public static String ourSecret;
-    public static String deviceId;
-    public static String phoneNumber;
-    public static String timeStamp;
-    public static String otp;
+    public static String serverURL = "serverURL";
+    public static String ourSecret = "ourSecret";
+    public static String deviceId = "deviceId";
+    public static String phoneNumber = "phoneNumber";
+    public static String timeStamp = "timeStamp";
+    public static String otp = "otp";
 
     // Server Communication methods
     public static String smsVerification;
