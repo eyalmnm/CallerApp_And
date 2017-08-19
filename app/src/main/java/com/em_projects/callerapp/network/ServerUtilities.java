@@ -159,7 +159,7 @@ public final class ServerUtilities implements Runnable {
             HttpPost httpPost = new HttpPost(serverUrl);
             ArrayList<NameValuePair> nameValuePairs = convertMapToNameValuePairs(params);
             Log.d(TAG, "transmitData urlString: " + serverUrl);
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
             httpResponse = client.execute(httpPost);
         }
 
