@@ -22,6 +22,13 @@
     <uses-permission android:name="android.permission.3" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <!-- GCM Permissions -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="com.em_projects.selleniumproj.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
 
     <application
         android:allowBackup="true"
@@ -94,6 +101,45 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
             </intent-filter>
         </receiver>
+
+        <!-- GCM -->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.em_projects.selleniumproj" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.em_projects.callerapp.gcm.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.em_projects.callerapp.gcm.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.em_projects.callerapp.gcm.RegistrationIntentService"
+            android:exported="false">
+        </service>
+        <service
+            android:name=".gcm.GcmIntentService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!--action android:name="com.google.android.c2dm.intent.REGISTRATION" /-->
+            </intent-filter>
+        </service>
 
     </application>
 
