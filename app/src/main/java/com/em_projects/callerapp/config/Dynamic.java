@@ -12,7 +12,9 @@ public class Dynamic {
 
     private static String myNumber;
     private static String myToken;
-    private static String call_unique_ID;
+    public static String call_unique_ID = "1000";
+    public static String gcm_token = "";
+
 
     public Dynamic(Context context) {
         myNumber = PreferencesUtils.getInstance(context).getPhone();

@@ -32,6 +32,9 @@ public class Constants {
     public static String smsVerification;
     public static String otpVerification;
 
+    // GCM Constants
+    public static final String SENT_TOKEN_TO_SERVER = "sent_token_to_server";
+    public static final String REGISTRATION_COMPLETE = "registration_complete";
 
     // Server Communication secret
     public static String secret = "sfasfwtweerwenjhvytetqw8er9y8rhhjvctu67r687et9yqiehnnbebfdq8etqo";
