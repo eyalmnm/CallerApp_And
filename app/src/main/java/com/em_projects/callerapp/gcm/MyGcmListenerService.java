@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.em_projects.selleniumproj.config.Constants;
-import com.em_projects.selleniumproj.utils.StringUtils;
+import com.em_projects.callerapp.config.Constants;
+import com.em_projects.callerapp.utils.StringUtils;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
 import org.json.JSONException;

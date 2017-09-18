@@ -21,9 +21,10 @@ public class Constants {
 
 
     // Server Communication parameters
-    public static String serverURL = "serverURL";
+    public static String serverURL = "http://77.139.223.13";
     public static String ourSecret = "ourSecret";
     public static String deviceId = "deviceId";
+    public static String gcmToken = "gcmToken";
     public static String phoneNumber = "phoneNumber";
     public static String timeStamp = "timeStamp";
     public static String otp = "otp";
@@ -36,12 +37,22 @@ public class Constants {
     public static final String SENT_TOKEN_TO_SERVER = "sent_token_to_server";
     public static final String REGISTRATION_COMPLETE = "registration_complete";
 
+    // Server Communication methods
+    public static String sendGcmToken = "/";
+
+
     // Server Communication secret
     public static String secret = "sfasfwtweerwenjhvytetqw8er9y8rhhjvctu67r687et9yqiehnnbebfdq8etqo";
 
     // Connection token
     public static String token = "token";
 
+    // GCM Properties
+    public static final String GCM_JSON_DATA = "data";
+    public static final String GCM_SENDER_ID = "633244248355";
+    public static final String GCM_COMMAND_METHOD = "method";
+    public static final String GCM_COMMAND_COUNTER = "counter";
+    public static final String GCM_COMMAND_CONTACT = "contacts";
 
 
     // SMS Verifcation Section

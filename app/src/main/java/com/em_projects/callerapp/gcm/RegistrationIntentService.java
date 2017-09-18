@@ -13,11 +13,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.em_projects.selleniumproj.config.Constants;
-import com.em_projects.selleniumproj.config.Dynamic;
-import com.em_projects.selleniumproj.network.CommListener;
-import com.em_projects.selleniumproj.network.ServerUtilities;
-import com.em_projects.selleniumproj.utils.DeviceUtils;
+import com.em_projects.callerapp.config.Constants;
+import com.em_projects.callerapp.config.Dynamic;
+import com.em_projects.callerapp.network.CommListener;
+import com.em_projects.callerapp.network.ServerUtilities;
+import com.em_projects.callerapp.utils.DeviceUtils;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;

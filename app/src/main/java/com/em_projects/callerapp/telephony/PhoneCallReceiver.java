@@ -36,23 +36,27 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         Log.d(TAG, "The received event : " + event + ", incoming_number : " + incomingNumber);
 
-        PhoneNumber norm_incomingphone = new PhoneNumber(incomingNumber, context);
-        if (StringUtils.isNullOrEmpty(norm_incomingphone.getNumber()) == false)
-            incomingNumber = norm_incomingphone.getNumber();
+        try {
+            PhoneNumber norm_incomingphone = new PhoneNumber(incomingNumber, context);
+            if (StringUtils.isNullOrEmpty(norm_incomingphone.getNumber()) == false)
+                incomingNumber = norm_incomingphone.getNumber();
 
-        Log.d(TAG, "incomingNumber : " + incomingNumber);
-        Log.d(TAG, "Incoming event: " + event);
+            Log.d(TAG, "incomingNumber : " + incomingNumber);
+            Log.d(TAG, "Incoming event: " + event);
 
-        if (false == StringUtils.isNullOrEmpty(Dynamic.myNumber)
-                && incomingNumber.equals(Dynamic.myNumber)) return;
+            if (false == StringUtils.isNullOrEmpty(Dynamic.getMyNumber())
+                    && incomingNumber.equals(Dynamic.getMyNumber())) return;
 
-        switch (event) {
-            case "RINGING":
-                break;
-            case "OFFHOOK":
-                break;
-            case "IDLE":
-                break;
+            switch (event) {
+                case "RINGING":
+                    break;
+                case "OFFHOOK":
+                    break;
+                case "IDLE":
+                    break;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "onReceive", e);
         }
         // TODO: This method is called when the BroadcastReceiver is receiving
         // We need this receiver to be as quick as possible

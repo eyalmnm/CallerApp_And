@@ -21,7 +21,7 @@ public class OutgoingCallHandler extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive");
-        if (StringUtils.isNullOrEmpty(Dynamic.myNumber)) return;
+        if (StringUtils.isNullOrEmpty(Dynamic.getMyNumber())) return;
 
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         // Extract phone number reformatted by previous receivers
