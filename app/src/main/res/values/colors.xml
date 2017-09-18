@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <!-- Application color -->
+    <color name="orange">#f37721</color>
+    <color name="turquoise">#FF00C5CD</color>
+    <color name="dark_gray">#FF333333</color>
+    <!--color name="dark_gray">#FF4D4D4D</color-->
+    <color name="app_text_color">#FFCCCCCC</color>
+
+    <!--color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF4081</color-->
+
+    <color name="colorPrimary">#3b5bb3</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#ea5d88</color>
+
+    <color name="bg_view_sms">#ffd423</color>
+    <color name="bg_view_otp">#fc6d38</color>
+
+    <color name="white">#FFFFFFFF</color>
 </resources>

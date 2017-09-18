@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/introTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="Title"
+            android:textAllCaps="false"
+            android:textColor="@color/app_text_color"
+            android:textSize="19sp" />
+
+        <ImageView
+            android:id="@+id/introImageImageView"
+            android:layout_width="250dp"
+            android:layout_height="187dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="38dip"
+            android:adjustViewBounds="true"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:src="@mipmap/ic_launcher" />
+
+
+        <TextView
+            android:id="@+id/introMessageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="38dp"
+            android:gravity="center|top"
+            android:lines="2"
+            android:text="Message"
+            android:textColor="@color/app_text_color"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">Caller App</string>
+
+    <!-- SMS Verification Strings -->
+    <string name="title_activity_sms">SmsActivity</string>
+    <string name="action_logout">Logout</string>
+    <string name="msg_enter_mobile">Enter your mobile number to get started!</string>
+    <string name="lbl_country_code">Country Code</string>
+    <string name="lbl_name">Name</string>
+    <string name="lbl_email">Email</string>
+    <string name="lbl_mobile">Mobile</string>
+    <string name="lbl_next">NEXT</string>
+    <string name="msg_sit_back">Sit back &amp; Relax! while we verify your mobile number</string>
+    <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
+    <string name="lbl_enter_otp">Enter OTP</string>
+    <string name="lbl_submit">SUBMIT</string>
+    <string name="lbl_confirm">Confirm</string>
+    <string name="lbl_resend_message">Resend</string>
+    <string name="invalid_phone_entered">Please enter a valid phone number</string>
+
+    <!-- GCM Strings -->
+    <string name="gcm_api_key">AIzaSyBe5icePknb_wAlPNKVeFIvyXaAqiga6jo</string>
+
+    <!-- Intro Activity -->
+    <string name="skip">Skip</string>
+    <string name="first_intro_title">First Intro Title</string>
+    <string name="second_intro_title">Second Intro Title</string>
+    <string name="third_intro_title">Third Intro Title</string>
+    <string name="fourth_intro_title">Fourth Intro Title</string>
+    <string name="first_intro_message">First Intro Message</string>
+    <string name="second_intro_message">Second Intro Message</string>
+    <string name="third_intro_message">Third Intro Message</string>
+    <string name="fourth_intro_message">Fourth Intro Message</string>
+
 </resources>
