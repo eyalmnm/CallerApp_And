@@ -145,6 +145,10 @@
         <activity
             android:name=".intro.IntroActivity" />
 
+        <!-- Main Screen -->
+        <activity
+            android:name=".main.MainScreenActivity" />
+
     </application>
 
 </manifest>
