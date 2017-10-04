@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Caller App</string>
+    <string name="app_name">WizeCaller</string>
 
     <!-- SMS Verification Strings -->
     <string name="title_activity_sms">SmsActivity</string>
