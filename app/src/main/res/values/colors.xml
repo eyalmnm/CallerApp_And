@@ -11,6 +11,15 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
 
+    <color name="primary">#673AB7</color>
+    <color name="primary_dark">#512DA8</color>
+    <color name="primary_light">#D1C4E9</color>
+    <color name="accent">#FFC107</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
     <!-- Other Color -->
     <color name="orange">#f37721</color>
     <color name="turquoise">#FF00C5CD</color>
