@@ -21,10 +21,10 @@
 
     <style name="AppTheme" parent="CallAppTheme" />
 
-    <style name="CallAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="CallAppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="colorControlNormal">#e6e6e6</item>
-        <item name="colorControlActivated">#f37721</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="android:colorBackground">@color/colorPrimary</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:fontFamily">sans-serif</item>
