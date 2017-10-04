@@ -23,9 +23,6 @@
 
     <style name="CallAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
-        <item name="colorAccent">#4d4d4d</item>
-        <item name="colorPrimary">#f37721</item>
-        <item name="colorPrimaryDark">#4d4d4d</item>
         <item name="colorControlNormal">#e6e6e6</item>
         <item name="colorControlActivated">#f37721</item>
         <item name="android:colorBackground">@color/colorPrimary</item>
