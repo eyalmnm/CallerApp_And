@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Fab layout -->
+    <dimen name="fab_margin">9dp</dimen>
+    <dimen name="fab_size_normal">56dp</dimen>
+
+    <!-- Text Size -->
+    <dimen name="text_size_main">21sp</dimen>
+    <dimen name="text_size_reg">17sp</dimen>
+
+    <!-- Standard buttons dimens -->
+    <dimen name="button_width">100dp</dimen>
+    <dimen name="button_height">45dp</dimen>
+
+    <!-- Standard margin -->
+    <dimen name="standard_margin">10dp</dimen>
+
+</resources>
