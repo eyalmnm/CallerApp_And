@@ -23,7 +23,7 @@ import com.em_projects.callerapp.intro.viewpagerindicator.CirclePageIndicator;
  * Created by USER on 25/04/2017.
  */
 
-public class IntroActivity extends Activity {
+public class IntroActivity extends AppCompatActivity {
     private static final String TAG = "IntroActivity";
 
     private ViewPager introViewPager;
