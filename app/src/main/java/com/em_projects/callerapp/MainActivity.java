@@ -5,11 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.tracer.ExceptionHandler;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private Context context;
