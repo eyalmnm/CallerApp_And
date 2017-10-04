@@ -22,62 +22,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/buttonsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/fab_1"
-                android:layout_width="@dimen/fab_size_normal"
-                android:layout_height="@dimen/fab_size_normal"
-                android:layout_margin="@dimen/fab_margin"
-                android:background="@drawable/send_text"
-                android:visibility="visible" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/fab_2"
-                android:layout_width="@dimen/fab_size_normal"
-                android:layout_height="@dimen/fab_size_normal"
-                android:layout_margin="@dimen/fab_margin"
-                android:background="@drawable/share_file"
-                android:visibility="visible" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/fab_3"
-                android:layout_width="@dimen/fab_size_normal"
-                android:layout_height="@dimen/fab_size_normal"
-                android:layout_margin="@dimen/fab_margin"
-                android:background="@drawable/rec_dis"
-                android:visibility="visible" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/fab"
-                android:layout_width="@dimen/fab_size_normal"
-                android:layout_height="@dimen/fab_size_normal"
-                android:layout_margin="@dimen/fab_margin"
-                android:background="@drawable/rec_en"
-                android:visibility="visible" />
-        </LinearLayout>
-
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
