@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.intro;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.em_projects.callerapp.MainActivity;
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.intro.viewpagerindicator.CirclePageIndicator;
 
@@ -21,7 +23,7 @@ import com.em_projects.callerapp.intro.viewpagerindicator.CirclePageIndicator;
  * Created by USER on 25/04/2017.
  */
 
-public class IntroActivity extends AppCompatActivity {
+public class IntroActivity extends Activity {
     private static final String TAG = "IntroActivity";
 
     private ViewPager introViewPager;
@@ -72,7 +74,7 @@ public class IntroActivity extends AppCompatActivity {
         skipIntroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MainScreenActivity.class);
+                Intent intent = new Intent(context, MainActivity.class); //MainScreenActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
