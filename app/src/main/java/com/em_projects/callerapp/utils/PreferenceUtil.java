@@ -16,12 +16,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PreferenceUtil {
 
-    public static void firstTimeAskingPermission(Context context, String permission, boolean isFirstTime) {
-        SharedPreferences sharedPreference = context.getSharedPreferences(Constants.shared_preferences_name, MODE_PRIVATE);
-        sharedPreference.edit().putBoolean(permission, isFirstTime).apply();
+    public static boolean isRegisteredUser(Context context) {
+        String registrationCode = context.getSharedPreferences(Constants.shared_preferences_name, MODE_PRIVATE).getString("registrationCode", null);
+        return !StringUtils.isNullOrEmpty(registrationCode);
     }
 
-    public static boolean isFirstTimeAskingPermission(Context context, String permission) {
-        return context.getSharedPreferences(Constants.shared_preferences_name, MODE_PRIVATE).getBoolean(permission, true);
+    public static void registeredUser(Context context, String registrationCode) {
+        SharedPreferences sharedPreference = context.getSharedPreferences(Constants.shared_preferences_name, MODE_PRIVATE);
+        sharedPreference.edit().putString("registrationCode", registrationCode).apply();
     }
 }
