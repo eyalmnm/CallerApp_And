@@ -272,7 +272,7 @@ public class StringUtils {
      */
     public static boolean isValidPhoneNumber(String number) {
         if (false == StringUtils.isNullOrEmpty(number)) {
-            return number.matches("^[+]?[0-9]{10,13}$");
+            return android.util.Patterns.PHONE.matcher(number).matches(); // number.matches("^[+]?[0-9]{10,13}$");
         }
         return false;
     }

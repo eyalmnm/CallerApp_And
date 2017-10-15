@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -49,6 +50,8 @@ import java.util.Arrays;
 /**
  * Created by eyalmuchtar on 08/08/2017.
  */
+
+// Ref: https://stackoverflow.com/questions/6533234/how-to-make-httppost-call-with-json-encoded-body
 
 public class LoginActivity extends Activity {
     private static final String TAG = "LoginActivity";
@@ -93,7 +96,9 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_sms_auth);
+        setContentView(R.layout.activity_authentication);
+        // Make sure the view adjust while showing keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Log.d(TAG, "onCreate");
 
         // Init the reference to this
@@ -164,10 +169,10 @@ public class LoginActivity extends Activity {
         inputCountryCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCountryPrefix = countryPrefix.get(position);
+                selectedCountryPrefix = countryCodes.get(position); // countryPrefix.get(position);
                 TextView spinnerAdapterOptActivityTextView = (TextView) view.findViewById(R.id.spinnerAdapterOptActivityTextView);
                 spinnerAdapterOptActivityTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                spinnerAdapterOptActivityTextView.setText(countryCodes.get(position) + "(" + selectedCountryPrefix + ")");
+                spinnerAdapterOptActivityTextView.setText(selectedCountryPrefix + "(" + "+" + countryPrefix.get(position) + ")");
             }
 
             @Override
@@ -199,19 +204,31 @@ public class LoginActivity extends Activity {
         btnRequestSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO add first and last name fields
+                String firstName = "Test";
+                String lastName = "Test";
+                progressBar.setVisibility(View.VISIBLE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 String phoneEntered = inputMobile.getText().toString();
                 if (true == StringUtils.isNullOrEmpty(phoneEntered)) {
                     Toast.makeText(context, R.string.invalid_phone_entered, Toast.LENGTH_LONG).show();
                 } else {
                     try {
                         phoneNumber = new PhoneNumber(phoneEntered, selectedCountryPrefix, LoginActivity.this);
-                        String imzi = DeviceUtils.getDeviceImsi(context);
-                        ServerUtilities.getInstance().requestSMSVerification(imzi, phoneNumber.getNumber(), new CommListener() {
+                        String imzi = "1000"; // DeviceUtils.getDeviceImsi(context); // TODO
+                        ServerUtilities.getInstance().requestSMSVerification(imzi, phoneNumber.getNumber(), firstName, lastName, new CommListener() {
                             @Override
                             public void newDataArrived(String response) {
+                                Log.d(TAG, "newDataArrived: " + response);
                                 // moving the screen to next pager item i.e otp screen
-                                progressBar.setVisibility(View.VISIBLE);
-                                mainViewPager.setCurrentItem(1);
+                                new Handler(getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressBar.setVisibility(View.GONE);
+                                        mainViewPager.setCurrentItem(1);
+                                    }
+                                });
                             }
 
                             @Override

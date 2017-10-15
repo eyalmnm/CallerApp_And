@@ -61,12 +61,12 @@ public class PhoneNumber {
             countryCode = tm.getNetworkCountryIso();
         }
         Log.d(TAG, "number: " + countryCode + "-" + number);
-        Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());
-        Log.d(TAG, "Operator: " + tm.getSimOperator());
-        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
-        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
-        Log.d(TAG, "state: " + tm.getSimState());
-        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
+//        Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());  // TODO remove the comments.
+//        Log.d(TAG, "Operator: " + tm.getSimOperator());
+//        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
+//        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
+//        Log.d(TAG, "state: " + tm.getSimState());
+//        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
         if (!From(number, countryCode)) { // Failed copying numbre
             Log.d(TAG, "Failed to normalize phone number " + number);
             this.phoneNumber = number;
@@ -87,6 +87,9 @@ public class PhoneNumber {
     }
 
     public String getNumber() {
+        if (false == phoneNumber.startsWith("+")) {
+            phoneNumber = "+" + phoneNumber;
+        }
         return phoneNumber;
     }
 
@@ -100,10 +103,13 @@ public class PhoneNumber {
                 if (phoneNumber.charAt(0) == (char) '+') {
                     phoneNumber = phoneNumber.substring(1);
                 }
-                char emptyChar = "".charAt(0); // TODO Test the next line for getting the country code
-                this.countryCode = phoneNumber.substring(0,phoneNumber.indexOf(emptyChar)).replace('+', ' ').trim();
+                if (true == number.startsWith("0")) {
+                    number = number.substring(1);
+                }
+                this.countryCode = phoneNumber.substring(0, phoneNumber.indexOf(number));
+//                this.countryCode = phoneNumber.substring(0,phoneNumber.indexOf(emptyChar)).replace('+', ' ').trim();
             } else
-                phoneNumber = number;
+                phoneNumber = number;   // TODO
         } catch (Throwable t) {
             return false;
         }

@@ -15,7 +15,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,12 +71,14 @@ public final class ServerUtilities implements Runnable {
         post(serverUrl, params, listener);
     }
 
-    public void requestSMSVerification(String deviceId, String phoneNumber, CommListener listener) {
+    public void requestSMSVerification(String deviceId, String phoneNumber, String firstName, String lastName, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
+        params.put(Constants.firstName, firstName);
+        params.put(Constants.lastName, lastName); // TODO
         params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
 
         post(serverUrl, params, listener);
@@ -167,9 +172,11 @@ public final class ServerUtilities implements Runnable {
             httpResponse = client.execute(request);
         } else if (method == CommRequest.MethodType.POST) {
             HttpPost httpPost = new HttpPost(serverUrl);
-            ArrayList<NameValuePair> nameValuePairs = convertMapToNameValuePairs(params);
             Log.d(TAG, "transmitData urlString: " + serverUrl);
+            ArrayList<NameValuePair> nameValuePairs = convertMapToNameValuePairs(params);
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+//            String data = convertMapToJson(params).toString();
+//            httpPost.setEntity(new StringEntity(data, "UTF8"));
             httpResponse = client.execute(httpPost);
         }
 
@@ -215,6 +222,11 @@ public final class ServerUtilities implements Runnable {
             }
         }
         return nameValuePairs;
+    }
+
+    private JSONObject convertMapToJson(Map<String, String> params) {
+        JSONObject json = new JSONObject(params);
+        return json;
     }
 
     // Reads the returned data and convert it to String
