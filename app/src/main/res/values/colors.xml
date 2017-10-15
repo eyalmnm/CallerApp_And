@@ -4,11 +4,15 @@
     <color name="colorPrimary">#673bb6</color>
     <color name="colorPrimaryDark">#512da7</color>
     <color name="colorPrimaryLight">#cfc3e7</color>
-    <color name="colorText">#fefefe</color>
-    <color name="colorIcon">#fefefe</color>
     <color name="colorAccent">#fdc006</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
+    <color name="statusBarColor">@color/colorPrimaryDark</color>
+    <color name="textColorPrimary">@color/colorPrimaryText</color>
+    <color name="colorControlActivated">@color/colorAccent</color>
+    <color name="navigationBarColor">@color/colorPrimary</color>
+    <color name="colorText">#fefefe</color>
+    <color name="colorIcon">#fefefe</color>
     <color name="colorDivider">#BDBDBD</color>
 
     <color name="primary">#673AB7</color>
@@ -28,7 +32,6 @@
     <color name="app_text_color">#FFCCCCCC</color>
 
     <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
 
     <color name="bg_view_sms">#ffd423</color>
     <color name="bg_view_otp">#fc6d38</color>

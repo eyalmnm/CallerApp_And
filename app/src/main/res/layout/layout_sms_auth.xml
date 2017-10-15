@@ -18,12 +18,12 @@
         android:gravity="center_horizontal"
         android:lines="2"
         android:text="@string/msg_enter_mobile"
-        android:textAllCaps="false"
         android:textColor="@color/app_text_color"
         android:textSize="17sp" />
 
 
     <LinearLayout
+        android:id="@+id/inputDataLinearLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/captionTextView"
@@ -75,10 +75,10 @@
         android:id="@+id/btnRequestSms"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/inputDataLinearLayout"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/lbl_next"
         android:textColor="@color/app_text_color"
