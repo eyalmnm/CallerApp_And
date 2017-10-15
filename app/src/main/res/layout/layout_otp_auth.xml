@@ -52,7 +52,7 @@
             android:paddingBottom="11dp"
             android:textColor="@color/app_text_color"
             android:textColorHint="@color/app_text_color"
-            android:textSize="17dp" >
+            android:textSize="17dp">
 
             <requestFocus />
         </EditText>

@@ -4,5 +4,5 @@
     <declare-styleable name="CustomTextView">
         <attr name="custom_font" format="string" />
     </declare-styleable>
-   
+
 </resources>

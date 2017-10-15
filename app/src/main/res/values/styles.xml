@@ -8,8 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style-->
 
-    <style name="SmsVerificationTheme" parent="SmsVerificationTheme.Base">
-    </style>
+    <style name="SmsVerificationTheme" parent="SmsVerificationTheme.Base"></style>
 
     <style name="SmsVerificationTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
@@ -17,6 +16,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowSoftInputMode">adjustResize|adjustPan</item>
     </style>
 
     <style name="AppTheme" parent="CallAppTheme" />
