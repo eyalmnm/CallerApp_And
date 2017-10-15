@@ -26,6 +26,8 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission android:name="com.em_projects.selleniumproj.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
+    <!-- Wake lock permissions -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
@@ -148,6 +150,12 @@
         <!-- Main Screen -->
         <activity
             android:name=".main.MainScreenActivity" />
+
+        <!-- Login -->
+        <activity
+            android:name=".verification.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
 
     </application>
 
