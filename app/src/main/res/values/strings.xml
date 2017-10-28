@@ -7,6 +7,7 @@
     <string name="msg_enter_mobile">Enter your mobile number to get started</string>
     <string name="lbl_country_code">Country Code</string>
     <string name="lbl_name">Name</string>
+    <string name="lbl_fullname">Full Name</string>
     <string name="lbl_email">Email</string>
     <string name="lbl_mobile">Mobile</string>
     <string name="lbl_next">NEXT</string>
@@ -17,6 +18,7 @@
     <string name="lbl_confirm">Confirm</string>
     <string name="lbl_resend_message">Resend</string>
     <string name="invalid_phone_entered">Please enter a valid phone number</string>
+    <string name="invalid_fullname_entered">Please enter your full name</string>
 
     <!-- GCM Strings -->
     <string name="gcm_api_key">AIzaSyBe5icePknb_wAlPNKVeFIvyXaAqiga6jo</string>

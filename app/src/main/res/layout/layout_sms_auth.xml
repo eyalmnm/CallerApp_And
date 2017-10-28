@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:windowSoftInputMode="adjustResize|adjustPan">
+    android:orientation="vertical">
 
 
     <TextView
@@ -31,6 +30,27 @@
         android:layout_marginTop="35dp"
         android:orientation="vertical">
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
+
+            <EditText
+                android:id="@+id/inputFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/lbl_fullname"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:lines="1"
+                android:paddingBottom="11dp"
+                android:textColor="@color/app_text_color"
+                android:textColorHint="@color/app_text_color"
+                android:textCursorDrawable="@null"
+                android:textSize="17dp" />
+        </android.support.design.widget.TextInputLayout>
 
         <Spinner
             android:id="@+id/inputCountryCode"
@@ -42,10 +62,10 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1"
-            android:paddingBottom="11dp"
             android:textColor="@color/app_text_color"
             android:textColorHint="@color/app_text_color"
             android:textSize="17dp" />
+
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -62,7 +82,6 @@
                 android:imeOptions="actionSend"
                 android:inputType="phone"
                 android:maxLength="15"
-                android:paddingBottom="11dp"
                 android:textColor="@color/app_text_color"
                 android:textColorHint="@color/app_text_color"
                 android:textCursorDrawable="@null"
