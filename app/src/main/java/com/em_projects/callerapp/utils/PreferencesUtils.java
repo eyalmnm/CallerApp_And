@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import com.em_projects.callerapp.config.Constants;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by eyalmuchtar on 06/08/2017.
  */
@@ -50,13 +48,14 @@ public class PreferencesUtils {
     }
 
     public boolean isRegisteredUser() {
-        String registrationCode = context.getSharedPreferences(Constants.shared_preferences_name, MODE_PRIVATE).getString("registrationCode", null);
-        return !StringUtils.isNullOrEmpty(registrationCode);
+        String otp = getOTP();
+        String phoneNumber = getPhone();
+        return (false == StringUtils.isNullOrEmpty(otp)) && (false == StringUtils.isNullOrEmpty(phoneNumber));
     }
 
-    public void registerUser(String registrationCode) {
-        SharedPreferences sharedPreference = context.getSharedPreferences(Constants.shared_preferences_name, MODE_PRIVATE);
-        sharedPreference.edit().putString("registrationCode", registrationCode).apply();
+    public void registerUser(String phoneNumber, String otp) throws Exception {
+        setPhoneNumber(phoneNumber);
+        setOTP(otp);
     }
 
     public String getPhone() {
@@ -68,7 +67,7 @@ public class PreferencesUtils {
     }
 
     public void setToken(String token) throws Exception {
-        if (true == StringUtils.isNullOrEmpty(token)) {
+        if (false == StringUtils.isNullOrEmpty(token)) {
             editor.putString(Constants.token, token);
             editor.commit();
         } else {
@@ -81,11 +80,11 @@ public class PreferencesUtils {
     }
 
     public void setOTP(String otp) throws Exception {
-        if (true == StringUtils.isNullOrEmpty(otp)) {
+        if (false == StringUtils.isNullOrEmpty(otp)) {
             editor.putString(Constants.otp, otp);
             editor.commit();
         } else {
-            throw new Exception("Invalid Token");
+            throw new Exception("Invalid OTP");
         }
     }
 

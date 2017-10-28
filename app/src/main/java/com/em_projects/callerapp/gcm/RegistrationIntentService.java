@@ -18,6 +18,7 @@ import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.network.CommListener;
 import com.em_projects.callerapp.network.ServerUtilities;
 import com.em_projects.callerapp.utils.DeviceUtils;
+import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -59,7 +60,7 @@ public class RegistrationIntentService extends IntentService {
             Log.i(TAG, "GCM Registration Token: " + token);
 
             // TODO: Implement this method to send any registration to your app's servers.
-            sendRegistrationToServer(token);
+            sendRegistrationToServer(token, PreferencesUtils.getInstance(context).getPhone());
 
             // Subscribe to topic channels
 //            subscribeTopics(token);
@@ -87,13 +88,18 @@ public class RegistrationIntentService extends IntentService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(final String token, String phoneNumber) {
         String deviceId = DeviceUtils.getDeviceUniqueID(this);
-        ServerUtilities.getInstance().sendGcmToken(deviceId, token, new CommListener() {
+        ServerUtilities.getInstance().sendGcmToken(deviceId, phoneNumber, token, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "newDataArrived: " + response);
                 showToast("GCM Registration to server success");
+                try {
+                    PreferencesUtils.getInstance(context).setToken(token);
+                } catch (Exception e) {
+                    Log.e(TAG, "sendRegistrationToServer -> newDataArrived", e);
+                }
             }
 
             @Override

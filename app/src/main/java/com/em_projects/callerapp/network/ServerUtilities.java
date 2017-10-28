@@ -15,9 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -61,24 +59,24 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
-    public void sendGcmToken(String deviceId, String gcmToken, CommListener listener) {
-        String serverUrl = Constants.serverURL +  Constants.sendGcmToken;
+    public void sendGcmToken(String deviceId, String phone, String gcmToken, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.sendGcmToken;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, phone);
         params.put(Constants.gcmToken, gcmToken);
 
         post(serverUrl, params, listener);
     }
 
-    public void requestSMSVerification(String deviceId, String phoneNumber, String firstName, String lastName, CommListener listener) {
+    public void requestSMSVerification(String deviceId, String phoneNumber, String fullName, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
-        params.put(Constants.firstName, firstName);
-        params.put(Constants.lastName, lastName); // TODO
+        params.put(Constants.fullName, fullName);
         params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
 
         post(serverUrl, params, listener);

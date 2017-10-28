@@ -1,6 +1,5 @@
 package com.em_projects.callerapp.main;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -35,10 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
+import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
 import com.em_projects.callerapp.main.fragments.DummyFragment;
 import com.em_projects.callerapp.models.Setting;
-import com.em_projects.callerapp.utils.PreferenceUtil;
+import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.verification.LoginActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -59,14 +59,11 @@ import static android.Manifest.permission.WAKE_LOCK;
  */
 
 public class MainScreenActivity extends AppCompatActivity {
-    private static final String TAG = "MainScreenActivity";
-
-    private static final int PERMISSION_REQUEST_CODE = 200;
-
     // Setting IDs
     public static final int APP_SETTING = 100;
     public static final int USER_PROFILE = 101;
-
+    private static final String TAG = "MainScreenActivity";
+    private static final int PERMISSION_REQUEST_CODE = 200;
     private Context context;
 
     private SearchView searchView;
@@ -149,13 +146,26 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkIfRegistered() {
-        return PreferenceUtil.isRegisteredUser(context);
+        return PreferencesUtils.getInstance(context).isRegisteredUser();
+    }
+
+    private void setIsRestration(String otp, String phone) {
+        try {
+            PreferencesUtils.getInstance(context).registerUser(phone, otp);
+            PreferencesUtils.getInstance(context).setPhoneNumber(phone);
+            PreferencesUtils.getInstance(context).setOTP(otp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (PERMISSION_REQUEST_CODE == requestCode) {   // Login response
             if (Activity.RESULT_OK == resultCode) {
+                String otp = data.getStringExtra(Constants.otp);
+                String phone = data.getStringExtra(Constants.phoneNumber);
+                setIsRestration(otp, phone);
                 gcmRegistration();
             }
         }
@@ -287,14 +297,6 @@ public class MainScreenActivity extends AppCompatActivity {
         drawerToggle.syncState();
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
     /**
      * Swaps fragments in the main content view
      * if args is null then show all otherwise show the related data
@@ -347,8 +349,6 @@ public class MainScreenActivity extends AppCompatActivity {
         ft.commit();
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -360,7 +360,6 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     protected void onPause() {
@@ -374,6 +373,13 @@ public class MainScreenActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
 
     private class SettingAdapter extends BaseAdapter {
 

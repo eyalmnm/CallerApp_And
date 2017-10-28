@@ -2,9 +2,11 @@ package com.em_projects.callerapp.verification;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -30,19 +32,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
+import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.network.CommListener;
 import com.em_projects.callerapp.network.ServerUtilities;
 import com.em_projects.callerapp.telephony.PhoneNumber;
+import com.em_projects.callerapp.telephony.SmsReceiver;
 import com.em_projects.callerapp.ui.widgets.CustomFont;
 import com.em_projects.callerapp.ui.widgets.VerificationViewPager;
 import com.em_projects.callerapp.utils.DeviceUtils;
-import com.em_projects.callerapp.utils.JSONUtils;
-import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.utils.StringUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,14 +53,12 @@ import java.util.Arrays;
 // Ref: https://stackoverflow.com/questions/6533234/how-to-make-httppost-call-with-json-encoded-body
 
 public class LoginActivity extends Activity {
-    private static final String TAG = "LoginActivity";
-
     // SMS Receiver Broadcast Action
     public static final String OPT_VERIFICATION_ARRIVED = "com.em_projects.callerapp.verification.LoginActivity.OPT_VERIFICATION_ARRIVED";
     public static final String OPT_VERIFICATION_SUCCESS = "com.em_projects.callerapp.verification.LoginActivity.OPT_VERIFICATION_SUCCESS";
     public static final String OPT_VERIFICATION_FAILED = "com.em_projects.callerapp.verification.LoginActivity.OPT_VERIFICATION_FAILED";
     public static final String ERROR_OCCURS = "com.em_projects.callerapp.verification.LoginActivity.ERROR_OCCURS";
-
+    private static final String TAG = "LoginActivity";
     // UI Component of both of screens
     // (activity_sms_verification)
     private VerificationViewPager mainViewPager;
@@ -70,6 +67,7 @@ public class LoginActivity extends Activity {
     // (layout_sms_auth)
     private Spinner inputCountryCode;
     private EditText inputMobile;
+    private EditText inputFullName;
     private TextView btnRequestSms;
     private PhoneNumber phoneNumber;
 
@@ -93,6 +91,11 @@ public class LoginActivity extends Activity {
     // Hold a refrence to this
     private Context context;
 
+    public static boolean isSuccessVerification(String response) {
+        Log.d(TAG, "isSuccessVerification");
+        return "success validation".equalsIgnoreCase(response.trim());
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +118,9 @@ public class LoginActivity extends Activity {
 
         // Init OPT verification Receiver
         initOptVerificationReceiver();
+
+        // Init SMS Receiver
+        registerSmsReceiver();
     }
 
     private void initViewComponents() {
@@ -134,6 +140,7 @@ public class LoginActivity extends Activity {
         // Screens UI Input Components
         inputCountryCode = (Spinner) findViewById(R.id.inputCountryCode);
         inputMobile = (EditText) findViewById(R.id.inputMobile);
+        inputFullName = (EditText) findViewById(R.id.inputFullName);
         btnRequestSms = (TextView) findViewById(R.id.btnRequestSms);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -149,7 +156,8 @@ public class LoginActivity extends Activity {
 
         initSpinnerAdapter();
 
-        setCurrentCountryCode(PhoneNumber.getCountryCode(this));
+        String code = PhoneNumber.getCountryCode(this);
+        setCurrentCountryCode(code);
     }
 
     private void initSpinnerData() {
@@ -183,7 +191,7 @@ public class LoginActivity extends Activity {
     }
 
     private void setCurrentCountryCode(String countryCode) {
-        int position = countryCodes.indexOf(countryCode);
+        int position = countryCodes.indexOf(countryCode.toUpperCase());
         if (-1 < position) {
             inputCountryCode.setSelection(position);
         }
@@ -201,12 +209,25 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
+        inputOtp.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEND) {
+                    btn_verify_otp.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
         btnRequestSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO add first and last name fields
-                String firstName = "Test";
-                String lastName = "Test";
+                String fullName = inputFullName.getText().toString();
+                if (true == StringUtils.isNullOrEmpty(fullName)) {
+                    Toast.makeText(context, R.string.invalid_fullname_entered, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -216,12 +237,13 @@ public class LoginActivity extends Activity {
                 } else {
                     try {
                         phoneNumber = new PhoneNumber(phoneEntered, selectedCountryPrefix, LoginActivity.this);
-                        String imzi = "1000"; // DeviceUtils.getDeviceImsi(context); // TODO
-                        ServerUtilities.getInstance().requestSMSVerification(imzi, phoneNumber.getNumber(), firstName, lastName, new CommListener() {
+                        String imzi = DeviceUtils.getDeviceUniqueID(context);
+                        ServerUtilities.getInstance().requestSMSVerification(imzi, phoneNumber.getNumber(), fullName, new CommListener() {
                             @Override
                             public void newDataArrived(String response) {
-                                Log.d(TAG, "newDataArrived: " + response);
+                                Log.d(TAG, "btnRequestSms - newDataArrived: " + response);
                                 // moving the screen to next pager item i.e otp screen
+                                Dynamic.setMyNumber(phoneNumber.getNumber());
                                 new Handler(getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -233,7 +255,7 @@ public class LoginActivity extends Activity {
 
                             @Override
                             public void exceptionThrown(Throwable throwable) {
-                                Log.e(TAG, "requestSMSVerification -> exceptionThrown", throwable);
+                                Log.e(TAG, "requestSMSVerification - exceptionThrown", throwable);
                                 moveToLoginScreen();
                             }
                         });
@@ -254,28 +276,27 @@ public class LoginActivity extends Activity {
         btn_verify_otp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String otp = inputOtp.getText().toString();
+                final String otp = inputOtp.getText().toString();
                 if (false == StringUtils.isNullOrEmpty(otp)) {
                     try {
-                        ServerUtilities.getInstance().verifyOtpCode(otp, Dynamic.getMyNumber(), DeviceUtils.getDeviceImsi(context), new CommListener() {
+                        String imzi = DeviceUtils.getDeviceUniqueID(context);
+                        ServerUtilities.getInstance().verifyOtpCode(otp, Dynamic.getMyNumber(), imzi, new CommListener() {
+
                             @Override
                             public void newDataArrived(String response) {
+                                Log.d(TAG, "btn_verify_otp - newDataArrived response: " + response);
                                 try {
-                                    if (true == isSuccessVerification(response, context)) {
-                                        setResult(RESULT_OK);
-                                        finish();
-                                        overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                                    if (true == isSuccessVerification(response)) {
+                                        backToMainScreen(otp);
                                     }
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     Log.e(TAG, "btn_verify_otp - newDataArrived", e);
                                 }
                             }
 
                             @Override
                             public void exceptionThrown(Throwable throwable) {
-                                Log.e(TAG, "btn_verify_otp" +
-                                        " - exceptionThrown", throwable);
-
+                                Log.e(TAG, "btn_verify_otp - exceptionThrown", throwable);
                                 moveToLoginScreen();
                             }
                         });
@@ -286,20 +307,6 @@ public class LoginActivity extends Activity {
                 }
             }
         });
-    }
-
-    private boolean isSuccessVerification(String response, Context context) throws JSONException {
-        Log.d(TAG, "isSuccessVerification");
-        JSONObject jsonResponse = new JSONObject(response.trim());
-        int retCode = JSONUtils.getIntValue(jsonResponse, "retcode");
-        if (retCode == 200) {
-            try {
-                PreferencesUtils.getInstance(context).setPhoneNumber(phoneNumber.getNumber());
-            } catch (Exception e) {
-                Log.e(TAG, "isSuccessVerification", e);
-            }
-        }
-        return retCode == 200;
     }
 
     private void initOptVerificationReceiver() {
@@ -314,8 +321,7 @@ public class LoginActivity extends Activity {
                         break;
                     case OPT_VERIFICATION_SUCCESS:
                         LoginActivity.this.setResult(RESULT_OK);
-                        finish();
-                        overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                        backToMainScreen(intent.getStringExtra("otp"));
                         break;
                     case OPT_VERIFICATION_FAILED:
                     case ERROR_OCCURS:
@@ -335,6 +341,30 @@ public class LoginActivity extends Activity {
             }
         });
     }
+
+    private void backToMainScreen(String otp) {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.otp, otp);
+        intent.putExtra(Constants.phoneNumber, Dynamic.getMyNumber());
+        setResult(RESULT_OK, intent);
+        finish();
+        overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+
+    }
+
+//    private void setOtp(final String otp) {
+//        try {
+//            PreferencesUtils.getInstance(context).setOTP(otp);
+//        } catch (Exception e) {
+//            Log.e(TAG, "setOtp", e);
+//        }
+//        new Handler(getMainLooper()).post(new Runnable() {
+//            @Override
+//            public void run() {
+//                inputOtp.setText(otp);
+//            }
+//        });
+//    }
 
     private void moveToLoginScreen() {
         new Handler(getMainLooper()).post(new Runnable() {
@@ -362,6 +392,18 @@ public class LoginActivity extends Activity {
         return intentFilter;
     }
 
+
+    private void registerSmsReceiver() {
+        ComponentName component = new ComponentName(context, SmsReceiver.class);
+        context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
+
+    private void unregisterSmsReceiver() {
+        ComponentName component = new ComponentName(context, SmsReceiver.class);
+        if (context != null)
+            context.getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+    }
+
     @Override
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
@@ -372,6 +414,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterSmsReceiver();
         unregisterOptVerificationReceiver();
     }
 
@@ -384,10 +427,10 @@ public class LoginActivity extends Activity {
     // The country code spinner adapter
     private class SpinnerAdapter extends ArrayAdapter<String> {
 
-        private Activity activity;
-        private ArrayList<String> data;
         public Resources res;
         LayoutInflater inflater;
+        private Activity activity;
+        private ArrayList<String> data;
 
         public SpinnerAdapter(Activity activity, int textViewResourceId, ArrayList<String> countryName) {
             super(activity, textViewResourceId, countryName);

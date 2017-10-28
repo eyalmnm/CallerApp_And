@@ -6,7 +6,6 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.em_projects.callerapp.tracer.ExceptionHandler;
 import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.StringUtils;
 
@@ -18,133 +17,8 @@ import java.util.Map;
  * This class shall translate any given number and return eventually the formated number into international format
  */
 public class PhoneNumber {
-    private final String TAG = "PhoneNumber";
-    private String phoneNumber;
-    private Context mContext;
-    private String countryCode;
-
-    public PhoneNumber(PhoneNumber n, Context context) {
-        mContext = context;
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCode = tm.getSimCountryIso();
-        if (!From(n.getNumber(), n.getCountryCode()))
-            throw new NumberFormatException();
-    }
-
-    public PhoneNumber(String number, Context context) throws Exception {
-        if (false == StringUtils.isValidPhoneNumber(number)) {
-            throw new Exception("Invalid Phone number: " + number);
-        }
-        mContext = context;
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCode = tm.getSimCountryIso();
-        Log.d(TAG, "number: " + number);
-        Log.d(TAG, "Country Code: " + tm.getSimCountryIso());
-        Log.d(TAG, "Operator: " + tm.getSimOperator());
-        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
-        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
-        Log.d(TAG, "state: " + tm.getSimState());
-        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
-        if (!From(number, countryCode)) { // Failed copying numbre
-            Log.d(TAG, "Failed to normalize phone number " + number);
-            this.phoneNumber = number;
-        }
-    }
-
-    public PhoneNumber(String number, String countryCode, Context context) throws Exception {
-        if (false == StringUtils.isValidPhoneNumber(number)) {
-            throw new Exception("Invalid Phone number: " + number);
-        }
-        mContext = context;
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        if (true == StringUtils.isNullOrEmpty(countryCode)) {
-            countryCode = tm.getNetworkCountryIso();
-        }
-        Log.d(TAG, "number: " + countryCode + "-" + number);
-//        Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());  // TODO remove the comments.
-//        Log.d(TAG, "Operator: " + tm.getSimOperator());
-//        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
-//        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
-//        Log.d(TAG, "state: " + tm.getSimState());
-//        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
-        if (!From(number, countryCode)) { // Failed copying numbre
-            Log.d(TAG, "Failed to normalize phone number " + number);
-            this.phoneNumber = number;
-        }
-    }
-
-    public static final String getCountryCode(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCode = tm.getSimCountryIso();
-        if (true == StringUtils.isNullOrEmpty(countryCode)) {
-            countryCode = tm.getNetworkCountryIso();
-        }
-        return countryCode;
-    }
-
-    public void Clear() {
-        phoneNumber = "";
-    }
-
-    public String getNumber() {
-        if (false == phoneNumber.startsWith("+")) {
-            phoneNumber = "+" + phoneNumber;
-        }
-        return phoneNumber;
-    }
-
-    public String getCountryCode() { return countryCode; }
-
-    public boolean From(String number, String countryCode) {
-        try {
-            PhoneNumberUtils pnu = new PhoneNumberUtils();//PhoneNumberUtils..getInstance();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                phoneNumber = pnu.formatNumberToE164(number, countryCode.toUpperCase());
-                if (phoneNumber.charAt(0) == (char) '+') {
-                    phoneNumber = phoneNumber.substring(1);
-                }
-                if (true == number.startsWith("0")) {
-                    number = number.substring(1);
-                }
-                this.countryCode = phoneNumber.substring(0, phoneNumber.indexOf(number));
-//                this.countryCode = phoneNumber.substring(0,phoneNumber.indexOf(emptyChar)).replace('+', ' ').trim();
-            } else
-                phoneNumber = number;   // TODO
-        } catch (Throwable t) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "PhoneNumber{" +
-                "phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PhoneNumber that = (PhoneNumber) o;
-
-        return phoneNumber.equals(that.phoneNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return phoneNumber.hashCode();
-    }
-
-    // Get the indicative
-    public static String getPhone(String code)
-    {
-        return country_to_indicative.get(code.toUpperCase());
-    }
-
     private static Map<String, String> country_to_indicative = new HashMap<String, String>();
+
     static
     {
         country_to_indicative.put("AF", "+93");
@@ -402,5 +276,135 @@ public class PhoneNumber {
         country_to_indicative.put("CS", "+381");
         country_to_indicative.put("PS", "+970");
         country_to_indicative.put("EH", "+212");
+    }
+
+    private final String TAG = "PhoneNumber";
+    private String phoneNumber;
+    private Context mContext;
+    private String countryCode;
+
+    public PhoneNumber(PhoneNumber n, Context context) {
+        mContext = context;
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        String countryCode = tm.getSimCountryIso();
+        if (!From(n.getNumber(), n.getCountryCode()))
+            throw new NumberFormatException();
+    }
+
+    public PhoneNumber(String number, Context context) throws Exception {
+        if (false == StringUtils.isValidPhoneNumber(number)) {
+            throw new Exception("Invalid Phone number: " + number);
+        }
+        mContext = context;
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        String countryCode = tm.getSimCountryIso();
+        Log.d(TAG, "number: " + number);
+        Log.d(TAG, "Country Code: " + tm.getSimCountryIso());
+        Log.d(TAG, "Operator: " + tm.getSimOperator());
+        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
+        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
+        Log.d(TAG, "state: " + tm.getSimState());
+        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
+        if (!From(number, countryCode)) { // Failed copying numbre
+            Log.d(TAG, "Failed to normalize phone number " + number);
+            this.phoneNumber = number;
+        }
+    }
+
+    public PhoneNumber(String number, String countryCode, Context context) throws Exception {
+        if (false == StringUtils.isValidPhoneNumber(number)) {
+            throw new Exception("Invalid Phone number: " + number);
+        }
+        mContext = context;
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        if (true == StringUtils.isNullOrEmpty(countryCode)) {
+            countryCode = tm.getNetworkCountryIso();
+        }
+        Log.d(TAG, "number: " + countryCode + "-" + number);
+//        Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());  // TODO remove the comments.
+//        Log.d(TAG, "Operator: " + tm.getSimOperator());
+//        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
+//        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
+//        Log.d(TAG, "state: " + tm.getSimState());
+//        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
+        if (!From(number, countryCode)) { // Failed copying numbre
+            Log.d(TAG, "Failed to normalize phone number " + number);
+            this.phoneNumber = number;
+        }
+    }
+
+    public static final String getCountryCode(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String countryCode = tm.getSimCountryIso();
+        if (true == StringUtils.isNullOrEmpty(countryCode)) {
+            countryCode = tm.getNetworkCountryIso();
+        }
+        return countryCode;
+    }
+
+    // Get the indicative
+    public static String getPhone(String code) {
+        return country_to_indicative.get(code.toUpperCase());
+    }
+
+    public void Clear() {
+        phoneNumber = "";
+    }
+
+    public String getNumber() {
+        if (false == phoneNumber.startsWith("+")) {
+            phoneNumber = "+" + phoneNumber;
+        }
+        return phoneNumber;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public boolean From(String number, String countryCode) {
+        try {
+            PhoneNumberUtils pnu = new PhoneNumberUtils();//PhoneNumberUtils..getInstance();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                phoneNumber = pnu.formatNumberToE164(number, countryCode.toUpperCase());
+                if (phoneNumber.charAt(0) == (char) '+') {
+                    phoneNumber = phoneNumber.substring(1);
+                }
+                if (true == number.startsWith("0")) {
+                    number = number.substring(1);
+                }
+                int endIndex = phoneNumber.indexOf(number);
+                if (0 < endIndex) {
+                    this.countryCode = phoneNumber.substring(0, endIndex);
+                }
+//                this.countryCode = phoneNumber.substring(0,phoneNumber.indexOf(emptyChar)).replace('+', ' ').trim();
+            } else
+                phoneNumber = number;
+        } catch (Throwable t) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PhoneNumber{" +
+                "phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PhoneNumber that = (PhoneNumber) o;
+
+        return phoneNumber.equals(that.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return phoneNumber.hashCode();
     }
 }

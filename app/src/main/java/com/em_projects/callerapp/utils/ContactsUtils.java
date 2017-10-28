@@ -212,6 +212,23 @@ public class ContactsUtils {
                         output.append("\n Email:" + email);
                     }
                     emailCursor.close();
+
+                    // Read Contacts Photo
+                    Bitmap photo = null; // = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
+                    try {
+                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contact_id)));
+
+                        if (inputStream != null) {
+                            photo = BitmapFactory.decodeStream(inputStream);    // TODO
+                        }
+
+                        assert inputStream != null;
+                        inputStream.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 // Add the contact to the ArrayList
@@ -219,5 +236,46 @@ public class ContactsUtils {
             }
         }
         return contactList;
+    }
+
+    public static Bitmap retrieveContactPhotoNew(Context context, String number) {
+        ContentResolver contentResolver = context.getContentResolver();
+        String contactId = null;
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
+
+        Cursor cursor =
+                contentResolver.query(
+                        uri,
+                        projection,
+                        null,
+                        null,
+                        null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+            }
+            cursor.close();
+        }
+
+        Bitmap photo = null; // = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
+
+        try {
+            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactId)));
+
+            if (inputStream != null) {
+                photo = BitmapFactory.decodeStream(inputStream);
+            }
+
+            assert inputStream != null;
+            inputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return photo;
     }
 }
