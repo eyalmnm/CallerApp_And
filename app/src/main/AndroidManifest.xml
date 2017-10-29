@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- Outgoing Call Receiver Permissions -->
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
 
     <!-- Read Contact Details Permissions -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -24,12 +24,12 @@
 
     <!-- GCM Permissions -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:name="com.em_projects.selleniumproj.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.em_projects.selleniumproj.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- Wake lock permissions -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
 
     <application
@@ -49,7 +49,8 @@
 
         <!-- Device Admin Receiver -->
         <receiver android:name=".admin.MyDeviceAdminReceiver">
-            <meta-data android:name="android.app.device_admin"
+            <meta-data
+                android:name="android.app.device_admin"
                 android:resource="@xml/my_admin" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
@@ -108,7 +109,7 @@
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -118,7 +119,7 @@
         </receiver>
         <service
             android:name="com.em_projects.callerapp.gcm.MyGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -132,11 +133,10 @@
         </service>
         <service
             android:name="com.em_projects.callerapp.gcm.RegistrationIntentService"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
         <service
             android:name=".gcm.GcmIntentService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <!--action android:name="com.google.android.c2dm.intent.REGISTRATION" /-->
@@ -144,18 +144,22 @@
         </service>
 
         <!-- Intro -->
-        <activity
-            android:name=".intro.IntroActivity" />
+        <activity android:name=".intro.IntroActivity" />
 
         <!-- Main Screen -->
-        <activity
-            android:name=".main.MainScreenActivity" />
+        <activity android:name=".main.MainScreenActivity" />
 
         <!-- Login -->
         <activity
             android:name=".verification.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <service android:name=".verification.CommunicationService" />
+
+        <!-- Contacts List Transmitter -->
+        <service
+            android:name=".contacts.ContactsTxIntentService"
+            android:exported="false" />
 
     </application>
 
