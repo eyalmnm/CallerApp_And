@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.config.Constants;
+import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
 import com.em_projects.callerapp.main.fragments.DummyFragment;
 import com.em_projects.callerapp.models.Setting;
@@ -166,10 +167,16 @@ public class MainScreenActivity extends AppCompatActivity {
                 String otp = data.getStringExtra(Constants.otp);
                 String phone = data.getStringExtra(Constants.phoneNumber);
                 setIsRestration(otp, phone);
+                uploadContacts();
                 gcmRegistration();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void uploadContacts() {
+        Intent intent = new Intent(this, ContactsTxIntentService.class);
+        startService(intent);
     }
 
     private void gcmRegistration() {

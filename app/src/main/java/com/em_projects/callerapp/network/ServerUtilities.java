@@ -70,6 +70,18 @@ public final class ServerUtilities implements Runnable {
         post(serverUrl, params, listener);
     }
 
+    public void sendContact(String deviceId, String phone, String otp, String contatctsListJsonArray, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.sendContatcts;
+        HashMap params = new HashMap();
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, phone);
+        params.put(Constants.otp, otp);
+        params.put(Constants.contatcts, contatctsListJsonArray);
+
+        post(serverUrl, params, listener);
+    }
+
     public void requestSMSVerification(String deviceId, String phoneNumber, String fullName, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
         HashMap params = new HashMap();

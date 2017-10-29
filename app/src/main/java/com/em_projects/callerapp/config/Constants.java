@@ -43,15 +43,17 @@ public class Constants {
     public static String deviceId = "deviceId";
     public static String gcmToken = "gcmToken";
     public static String phoneNumber = "phone";
+    public static String email = "email";
     //    public static String firstName = "firstName";
 //    public static String lastName = "lastName";
     public static String fullName = "fullName";
     public static String timeStamp = "timeStamp";
     public static String otp = "sms_validation";
+    public static String contatcts = "contatcts_list";
     // Server Communication methods
     public static String smsVerification = "new_user";
     public static String otpVerification = "validate";
-    // Server Communication methods
+    public static String sendContatcts = "upload_contacts";
     public static String sendGcmToken = "send_token";
     // Server Communication secret
     public static String secret = "sfasfwtweerwenjhvytetqw8er9y8rhhjvctu67r687et9yqiehnnbebfdq8etqo";

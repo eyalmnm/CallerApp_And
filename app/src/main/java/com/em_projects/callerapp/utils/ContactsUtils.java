@@ -9,7 +9,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.em_projects.callerapp.config.Constants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +28,7 @@ import java.util.ArrayList;
 
 // "android.permission.READ_CONTACTS" permission is required.
 public class ContactsUtils {
+    private static final String TAG = "ContactsUtils";
 
     public static String getContactName(Context context, String phoneNumber) {
 
@@ -154,7 +162,7 @@ public class ContactsUtils {
         crsr.close();
     }
 
-    public static ArrayList<String> getContacts(Context context) {
+    public static ArrayList<String> getContactsArray(Context context) {
         Cursor cursor;
         ArrayList<String> contactList;
         contactList = new ArrayList<String>();
@@ -214,29 +222,101 @@ public class ContactsUtils {
                     emailCursor.close();
 
                     // Read Contacts Photo
-                    Bitmap photo = null; // = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
-                    try {
-                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
-                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contact_id)));
-
-                        if (inputStream != null) {
-                            photo = BitmapFactory.decodeStream(inputStream);    // TODO
-                        }
-
-                        assert inputStream != null;
-                        inputStream.close();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    Bitmap photo = null; // = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
+//                    try {
+//                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
+//                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contact_id)));
+//
+//                        if (inputStream != null) {
+//                            photo = BitmapFactory.decodeStream(inputStream);    // TODO
+//                        }
+//
+//                        assert inputStream != null;
+//                        inputStream.close();
+//
+//                    } catch (IOException e) {
+//                        Log.e(TAG, "getContacts", e);
+//                    }
                 }
 
                 // Add the contact to the ArrayList
                 contactList.add(output.toString());
             }
         }
+        cursor.close();
         return contactList;
     }
+
+    public static String getContactsJsonArray(Context context) throws JSONException {
+        Cursor cursor;
+        JSONArray contactList;
+        contactList = new JSONArray();
+
+        String phoneNumber = null;
+        String email = null;
+
+        Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
+        String _ID = ContactsContract.Contacts._ID;
+        String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+        String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
+
+        Uri PhoneCONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+        String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
+
+        Uri EmailCONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+        String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
+        String DATA = ContactsContract.CommonDataKinds.Email.DATA;
+
+        JSONObject output;
+
+        ContentResolver contentResolver = context.getContentResolver();
+
+        cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
+
+        // Iterate every contact in the phone
+        if (cursor.getCount() > 0) {
+
+            while (cursor.moveToNext()) {
+                output = new JSONObject();
+
+                String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
+                String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+
+                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
+
+                if (hasPhoneNumber > 0) {
+                    output.put(Constants.fullName, name);
+
+                    //This is to read multiple phone numbers associated with the same contact
+                    JSONArray phoneNumberArray = new JSONArray();
+                    Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
+                    while (phoneCursor.moveToNext()) {
+                        phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                        phoneNumberArray.put(phoneNumber);
+                    }
+                    phoneCursor.close();
+                    output.put(Constants.phoneNumber, phoneNumberArray);
+
+                    // Read every email id associated with the contact
+                    JSONArray emailArray = new JSONArray();
+                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
+                    while (emailCursor.moveToNext()) {
+                        email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
+                        emailArray.put(email);
+                    }
+                    emailCursor.close();
+                    output.put(Constants.email, emailArray);
+                }
+
+                // Add the contact to the ArrayList
+                contactList.put(output);
+            }
+        }
+        cursor.close();
+        return contactList.toString();
+    }
+
 
     public static Bitmap retrieveContactPhotoNew(Context context, String number) {
         ContentResolver contentResolver = context.getContentResolver();
@@ -274,8 +354,10 @@ public class ContactsUtils {
             inputStream.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "retrieveContactPhotoNew", e);
         }
         return photo;
     }
+
+
 }
