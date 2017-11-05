@@ -1,16 +1,19 @@
 package com.em_projects.callerapp;
 
-import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.em_projects.callerapp.config.Constants;
+import com.em_projects.callerapp.dialogs.IpAddressDialog;
 import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.tracer.ExceptionHandler;
+import com.em_projects.callerapp.utils.StringUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IpAddressDialog.IpDialogClickListener {
     private static final String TAG = "MainActivity";
 
     private Context context;
@@ -27,12 +30,39 @@ public class MainActivity extends AppCompatActivity {
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(context, IntroActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
-                finish();
+//                moveToNextScreen(); // TODO
+                showIpDialog(); // TODO
             }
         }, 3000);
+    }
+
+    private void moveToNextScreen() {
+        Intent intent = new Intent(context, IntroActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+        finish();
+    }
+
+    private void showIpDialog() {
+        FragmentManager fm = getFragmentManager();
+        IpAddressDialog dialog = new IpAddressDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("ip_addr_pref", Constants.serverURL);
+        dialog.setArguments(bundle);
+        dialog.show(fm, "IpAddressDialog");
+    }
+
+    @Override
+    public void okButtonClick(String ipAddress) {
+        if (false == StringUtils.isNullOrEmpty(ipAddress)) {
+            Constants.serverURL = ipAddress;
+        }
+        moveToNextScreen();
+    }
+
+    @Override
+    public void cancelButtonClick() {
+        moveToNextScreen();
     }
 }
