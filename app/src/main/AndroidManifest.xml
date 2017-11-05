@@ -144,10 +144,15 @@
         </service>
 
         <!-- Intro -->
-        <activity android:name=".intro.IntroActivity" />
+        <activity
+            android:name=".intro.IntroActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- Main Screen -->
-        <activity android:name=".main.MainScreenActivity" />
+        <activity
+            android:name=".main.MainScreenActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- Login -->
         <activity
