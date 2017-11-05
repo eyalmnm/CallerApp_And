@@ -7,6 +7,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.em_projects.callerapp.config.Dynamic;
+import com.em_projects.callerapp.network.CommListener;
+import com.em_projects.callerapp.network.ServerUtilities;
+import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.StringUtils;
 
 
@@ -49,6 +52,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
             switch (event) {
                 case "RINGING":
+                    searchForCallerByPhone(context, incomingNumber);
                     break;
                 case "OFFHOOK":
                     break;
@@ -61,6 +65,23 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // We need this receiver to be as quick as possible
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+    }
+
+    private void searchForCallerByPhone(Context context, String incomingNumber) {
+        String myPhone = Dynamic.getMyNumber();
+        String otp = Dynamic.getMyOTP();
+        String deviceId = DeviceUtils.getDeviceUniqueID(context);
+        ServerUtilities.getInstance().searchPhone(deviceId, myPhone, otp, incomingNumber, new CommListener() {
+            @Override
+            public void newDataArrived(String response) {
+                Log.d(TAG, "searchForCallerByPhone response: " + response);
+            }
+
+            @Override
+            public void exceptionThrown(Throwable throwable) {
+                Log.e(TAG, "searchForCallerByPhone" + throwable);
+            }
+        });
     }
 }
 

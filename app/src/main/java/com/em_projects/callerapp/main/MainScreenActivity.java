@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.config.Constants;
+import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
 import com.em_projects.callerapp.main.fragments.DummyFragment;
@@ -147,6 +148,7 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkIfRegistered() {
+        new Dynamic(this);
         return PreferencesUtils.getInstance(context).isRegisteredUser();
     }
 
@@ -155,6 +157,7 @@ public class MainScreenActivity extends AppCompatActivity {
             PreferencesUtils.getInstance(context).registerUser(phone, otp);
             PreferencesUtils.getInstance(context).setPhoneNumber(phone);
             PreferencesUtils.getInstance(context).setOTP(otp);
+            new Dynamic(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

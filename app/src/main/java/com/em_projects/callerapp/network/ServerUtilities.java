@@ -59,6 +59,18 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
+    public void searchPhone(String deviceId, String myPhone, String otp, String searchPhone, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
+        HashMap params = new HashMap();
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, myPhone);
+        params.put(Constants.otp, otp);
+        params.put(Constants.searchPhone, searchPhone);
+
+        post(serverUrl, params, listener);
+    }
+
     public void sendGcmToken(String deviceId, String phone, String gcmToken, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.sendGcmToken;
         HashMap params = new HashMap();

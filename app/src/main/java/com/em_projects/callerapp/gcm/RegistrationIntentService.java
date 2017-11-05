@@ -96,7 +96,7 @@ public class RegistrationIntentService extends IntentService {
                 Log.d(TAG, "newDataArrived: " + response);
                 showToast("GCM Registration to server success");
                 try {
-                    PreferencesUtils.getInstance(context).setToken(token);
+                    Dynamic.gcm_token = token;
                 } catch (Exception e) {
                     Log.e(TAG, "sendRegistrationToServer -> newDataArrived", e);
                 }

@@ -49,12 +49,14 @@ public class Constants {
     public static String fullName = "fullName";
     public static String timeStamp = "timeStamp";
     public static String otp = "sms_validation";
+    public static String callerPhone = "caller_phone";
     public static String contatcts = "contatcts_list";
     // Server Communication methods
     public static String smsVerification = "new_user";
     public static String otpVerification = "validate";
     public static String sendContatcts = "upload_contacts";
     public static String sendGcmToken = "send_token";
+    public static String searchPhone = "caller_phone";
     // Server Communication secret
     public static String secret = "sfasfwtweerwenjhvytetqw8er9y8rhhjvctu67r687et9yqiehnnbebfdq8etqo";
     // Connection token

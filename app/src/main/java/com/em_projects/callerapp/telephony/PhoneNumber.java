@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.telephony;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.PhoneNumberUtils;
@@ -311,6 +312,7 @@ public class PhoneNumber {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public PhoneNumber(String number, String countryCode, Context context) throws Exception {
         if (false == StringUtils.isValidPhoneNumber(number)) {
             throw new Exception("Invalid Phone number: " + number);
@@ -321,12 +323,16 @@ public class PhoneNumber {
             countryCode = tm.getNetworkCountryIso();
         }
         Log.d(TAG, "number: " + countryCode + "-" + number);
-//        Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());  // TODO remove the comments.
-//        Log.d(TAG, "Operator: " + tm.getSimOperator());
-//        Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
-//        Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
-//        Log.d(TAG, "state: " + tm.getSimState());
-//        Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
+        try {
+            Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());  // TODO remove the comments.
+            Log.d(TAG, "Operator: " + tm.getSimOperator());
+            Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
+            Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
+            Log.d(TAG, "state: " + tm.getSimState());
+            Log.d(TAG, "imzi: " + DeviceUtils.getDeviceImsi(mContext));
+        } catch (RuntimeException e) {
+            Log.e(TAG, "PhoneNumber", e);
+        }
         if (!From(number, countryCode)) { // Failed copying numbre
             Log.d(TAG, "Failed to normalize phone number " + number);
             this.phoneNumber = number;

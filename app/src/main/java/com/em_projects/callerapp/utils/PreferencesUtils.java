@@ -62,18 +62,18 @@ public class PreferencesUtils {
         return preferences.getString(Constants.phoneNumber, null);
     }
 
-    public String getToken() {
-        return preferences.getString(Constants.token, null);
-    }
+//    public String getToken() {
+//        return preferences.getString(Constants.token, null);
+//    }
 
-    public void setToken(String token) throws Exception {
-        if (false == StringUtils.isNullOrEmpty(token)) {
-            editor.putString(Constants.token, token);
-            editor.commit();
-        } else {
-            throw new Exception("Invalid Token");
-        }
-    }
+//    public void setToken(String token) throws Exception {
+//        if (false == StringUtils.isNullOrEmpty(token)) {
+//            editor.putString(Constants.token, token);
+//            editor.commit();
+//        } else {
+//            throw new Exception("Invalid Token");
+//        }
+//    }
 
     public String getOTP() {
         return preferences.getString(Constants.otp, null);
