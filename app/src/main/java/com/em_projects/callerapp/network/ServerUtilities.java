@@ -59,6 +59,31 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
+    public void sendFbToken(String deviceId, String phone, String otp, String fbToken, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.sendFbToken;
+        HashMap params = new HashMap();
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.otp, otp);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, phone);
+        params.put(Constants.fbToken, fbToken);
+
+        post(serverUrl, params, listener);
+    }
+
+    public void sendNewFbToken(String deviceId, String phone, String otp, String fbToken, String oldFbToken, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.sendNewFbToken;
+        HashMap params = new HashMap();
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.otp, otp);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, phone);
+        params.put(Constants.fbToken, fbToken);
+        params.put(Constants.fbOldToken, oldFbToken);
+
+        post(serverUrl, params, listener);
+    }
+
     public void searchPhone(String deviceId, String myPhone, String otp, String searchPhone, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
         HashMap params = new HashMap();
@@ -66,7 +91,7 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, myPhone);
         params.put(Constants.otp, otp);
-        params.put(Constants.searchPhone, searchPhone);
+        params.put(Constants.callerPhone, searchPhone);
 
         post(serverUrl, params, listener);
     }

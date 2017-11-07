@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.network.CommListener;
@@ -67,7 +68,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
     }
 
-    private void searchForCallerByPhone(Context context, String incomingNumber) {
+    private void searchForCallerByPhone(final Context context, String incomingNumber) {
         String myPhone = Dynamic.getMyNumber();
         String otp = Dynamic.getMyOTP();
         String deviceId = DeviceUtils.getDeviceUniqueID(context);
@@ -75,6 +76,8 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "searchForCallerByPhone response: " + response);
+                // response: no phone found
+                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
             }
 
             @Override
