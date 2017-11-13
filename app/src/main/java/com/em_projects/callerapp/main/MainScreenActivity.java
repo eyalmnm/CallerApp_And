@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.main;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -9,12 +10,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +40,7 @@ import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
+import com.em_projects.callerapp.main.activities.FacebookLoginActivity;
 import com.em_projects.callerapp.main.fragments.DummyFragment;
 import com.em_projects.callerapp.models.Setting;
 import com.em_projects.callerapp.utils.PreferencesUtils;
@@ -66,6 +69,8 @@ public class MainScreenActivity extends AppCompatActivity {
     public static final int USER_PROFILE = 101;
     private static final String TAG = "MainScreenActivity";
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private static int PERM_REQUEST_CODE_DRAW_OVERLAYS = 1234;
+
     private Context context;
 
     private SearchView searchView;
@@ -173,7 +178,16 @@ public class MainScreenActivity extends AppCompatActivity {
                 uploadContacts();
                 gcmRegistration();
             }
+        } else if (requestCode == PERM_REQUEST_CODE_DRAW_OVERLAYS) {
+            if (android.os.Build.VERSION.SDK_INT >= 23) {   //Android M Or Over
+                if (!checkPermissions()) {
+                    requestPermission();
+                } else {
+                    continueAppLoading();
+                }
+            }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -192,8 +206,15 @@ public class MainScreenActivity extends AppCompatActivity {
             Toast.makeText(context, "This device does not supports GCM!", Toast.LENGTH_LONG).show();
             finish();
         }
+        faceBookLogin();
     }
 
+    private void faceBookLogin() {
+        Intent intent = new Intent(context, FacebookLoginActivity.class);
+        startActivity(intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
     private boolean checkPermissions() {
         int receiveSms = ContextCompat.checkSelfPermission(getApplicationContext(), RECEIVE_SMS);
         int readSms = ContextCompat.checkSelfPermission(getApplicationContext(), READ_SMS);
@@ -204,6 +225,8 @@ public class MainScreenActivity extends AppCompatActivity {
         int readContact = ContextCompat.checkSelfPermission(getApplicationContext(), READ_CONTACTS);
         int receiveBootComplete = ContextCompat.checkSelfPermission(getApplicationContext(), RECEIVE_BOOT_COMPLETED);
 
+        boolean overLay = Settings.canDrawOverlays(this);
+
         return receiveSms == PackageManager.PERMISSION_GRANTED &&
                 readSms == PackageManager.PERMISSION_GRANTED &&
                 readPhoneState == PackageManager.PERMISSION_GRANTED &&
@@ -211,13 +234,15 @@ public class MainScreenActivity extends AppCompatActivity {
                 processOutgoingCalls == PackageManager.PERMISSION_GRANTED &&
                 wakeLockRes == PackageManager.PERMISSION_GRANTED &&
                 readContact == PackageManager.PERMISSION_GRANTED &&
-                receiveBootComplete == PackageManager.PERMISSION_GRANTED;
+                receiveBootComplete == PackageManager.PERMISSION_GRANTED &&
+                overLay;
     }
 
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS, WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED}, PERMISSION_REQUEST_CODE);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -235,29 +260,31 @@ public class MainScreenActivity extends AppCompatActivity {
 
                     if (cameraRes && locationRes && locationCRes && internetRes && contectRes &&
                             wakeLockRes && writeFileRes && readFileRes) {
-                        Snackbar.make(view, "Permission Granted, Now you can use the application.", Snackbar.LENGTH_LONG).show();
-                        continueAppLoading();
-                    } else {
-                        Snackbar.make(view, "Permission Denied, You cannot access the application.", Snackbar.LENGTH_LONG).show();
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (hasPermissions(context, RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS, WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED)) {
-                                showMessageOKCancel("You need to allow access to all the permissions",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                    requestPermissions(new String[]{RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS, WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED},
-                                                            PERMISSION_REQUEST_CODE);
-                                                }
-                                            }
-                                        });
-                                return;
-                            }
+                        if (Settings.canDrawOverlays(context)) {
+                            //Toast.makeText(context, "Permission Granted, Now you can use the application.", Toast.LENGTH_LONG).show();
+                            continueAppLoading();
+                        } else {
+                            //Toast.makeText(context, "Permission Denied, You cannot access the application.", Toast.LENGTH_LONG).show();
+                            permissionToDrawOverlays();
                         }
-
+                    } else {
+                        Toast.makeText(context, "Permission Denied, You cannot access the application.", Toast.LENGTH_LONG).show();
+                        if (!hasPermissions(context, RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS,
+                                WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED)) {
+                            Toast.makeText(context, "You need to allow access to all the permissions", Toast.LENGTH_LONG).show();
+                            requestPermission();
+                        }
                     }
                 }
+        }
+    }
+
+    public void permissionToDrawOverlays() {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {   //Android M Or Over
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, PERM_REQUEST_CODE_DRAW_OVERLAYS);
+            }
         }
     }
 

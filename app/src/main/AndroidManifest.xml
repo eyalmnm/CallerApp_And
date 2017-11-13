@@ -31,6 +31,9 @@
     <!-- Wake lock permissions -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!-- Overlay Screen Permissions -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
     <application
         android:allowBackup="true"
@@ -61,7 +64,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Incoming Call receiver -->
+        <!-- Incoming (and OutGoing) Call receiver -->
         <receiver
             android:name=".telephony.PhoneCallReceiver"
             android:enabled="true"
@@ -69,6 +72,9 @@
             <intent-filter android:priority="2147483647">
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
+            <!--intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter-->
         </receiver>
 
         <!-- OutGoing Call receiver -->
@@ -171,7 +177,10 @@
         <!-- Facebook -->
         <activity
             android:name=".main.activities.FacebookLoginActivity"
-            android:label="@string/app_name" />
+            android:excludeFromRecents="true"
+            android:label="@string/app_name"
+            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -181,6 +190,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <!-- In Call UI Service -->
+        <service
+            android:name=".incall.InCallService"
+            android:enabled="true"
+            android:exported="false" />
 
     </application>
 
