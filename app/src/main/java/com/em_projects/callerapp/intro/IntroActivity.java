@@ -1,6 +1,5 @@
 package com.em_projects.callerapp.intro;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.em_projects.callerapp.MainActivity;
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.intro.viewpagerindicator.CirclePageIndicator;
 import com.em_projects.callerapp.main.MainScreenActivity;
@@ -71,7 +69,6 @@ public class IntroActivity extends AppCompatActivity {
         indicator.setSnap(true);
 
 //        indicator.setBackgroundResource(R.drawable.intro_bg);
-
         skipIntroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +76,7 @@ public class IntroActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                finish();
             }
         });
     }

@@ -63,6 +63,8 @@ import static android.Manifest.permission.WAKE_LOCK;
  * Created by eyalmuchtar on 05/10/2017.
  */
 
+// Ref: https://gist.github.com/Aeonitis/2337b1ca652173839395be82db7d05c3
+
 public class MainScreenActivity extends AppCompatActivity {
     // Setting IDs
     public static final int APP_SETTING = 100;

@@ -88,6 +88,19 @@ public class PreferencesUtils {
         }
     }
 
+    public String getFbToken() {
+        return preferences.getString(Constants.fbToken, null);
+    }
+
+    public void setFbToken(String fbToken) throws Exception {
+        if (false == StringUtils.isNullOrEmpty(fbToken)) {
+            editor.putString(Constants.fbToken, fbToken);
+            editor.commit();
+        } else {
+            throw new Exception("Invalid FB Token");
+        }
+    }
+
     @Override
     protected void finalize() throws Throwable {
         super.finalize();

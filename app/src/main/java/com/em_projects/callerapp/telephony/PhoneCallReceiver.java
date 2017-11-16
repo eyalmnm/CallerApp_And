@@ -7,10 +7,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
-import com.em_projects.callerapp.network.CommListener;
-import com.em_projects.callerapp.network.ServerUtilities;
-import com.em_projects.callerapp.utils.DeviceUtils;
+import com.em_projects.callerapp.incall.InCallService;
 import com.em_projects.callerapp.utils.StringUtils;
 
 
@@ -35,16 +34,13 @@ public class PhoneCallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         Log.e(TAG, "onReceive: " + StringUtils.intentToString(intent));
+        Toast.makeText(context, "Incoming Call Detected!!!", Toast.LENGTH_SHORT).show();
 
         String event = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         Log.d(TAG, "The received event : " + event + ", incoming_number : " + incomingNumber);
 
         try {
-            PhoneNumber norm_incomingphone = new PhoneNumber(incomingNumber, context);
-            if (StringUtils.isNullOrEmpty(norm_incomingphone.getNumber()) == false)
-                incomingNumber = norm_incomingphone.getNumber();
-
             Log.d(TAG, "incomingNumber : " + incomingNumber);
             Log.d(TAG, "Incoming event: " + event);
 
@@ -58,6 +54,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
                 case "OFFHOOK":
                     break;
                 case "IDLE":
+                    context.stopService(new Intent(context, InCallService.class)); // TODO Consider this
                     break;
             }
         } catch (Exception e) {
@@ -69,22 +66,9 @@ public class PhoneCallReceiver extends BroadcastReceiver {
     }
 
     private void searchForCallerByPhone(final Context context, String incomingNumber) {
-        String myPhone = Dynamic.getMyNumber();
-        String otp = Dynamic.getMyOTP();
-        String deviceId = DeviceUtils.getDeviceUniqueID(context);
-        ServerUtilities.getInstance().searchPhone(deviceId, myPhone, otp, incomingNumber, new CommListener() {
-            @Override
-            public void newDataArrived(String response) {
-                Log.d(TAG, "searchForCallerByPhone response: " + response);
-                // response: no phone found
-                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void exceptionThrown(Throwable throwable) {
-                Log.e(TAG, "searchForCallerByPhone" + throwable);
-            }
-        });
+        Intent inCallServiceIntent = new Intent(context, InCallService.class);
+        inCallServiceIntent.putExtra(Constants.callerPhone, incomingNumber);
+        context.startService(inCallServiceIntent);
     }
 }
 
