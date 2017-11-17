@@ -30,6 +30,8 @@ import com.facebook.login.widget.LoginButton;
 // Ref: https://code.tutsplus.com/tutorials/quick-tip-add-facebook-login-to-your-android-app--cms-23837
 // Ref: https://developers.facebook.com/docs/facebook-login/android/accesstokens
 // Ref: https://developers.facebook.com/docs/facebook-login/android/
+// Ref: https://developers.facebook.com/apps/1722543137778905/settings/basic/
+// Ref: https://www.google.com/search?client=safari&rls=en&ei=0pYMWqesH5LPkgXr-7rQDA&q=facebook+android+login+given+url+is+not+allowed+by+the+application+configuration&oq=facebook+android+login+given+url+is+not+allowed+by+the+application+configuration&gs_l=psy-ab.3...63023.64726.0.66151.8.8.0.0.0.0.157.930.2j6.8.0....0...1.1.64.psy-ab..0.2.294...0i13k1j0i8i13i30k1.0.X3CsxMi1-qY
 
 public class FacebookLoginActivity extends Activity {
     private static final String TAG = "FacebookLoginActivity";
