@@ -94,7 +94,7 @@ public class RegistrationIntentService extends IntentService {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "newDataArrived: " + response);
-                showToast("GCM Registration to server success");
+                showToast("GCM Registration success");
                 try {
                     Dynamic.gcm_token = token;
                 } catch (Exception e) {
@@ -105,7 +105,7 @@ public class RegistrationIntentService extends IntentService {
             @Override
             public void exceptionThrown(Throwable throwable) {
                 Log.e(TAG, "exceptionThrown", throwable);
-                showToast("GCM Registration to server failed: " + throwable.getMessage());
+                showToast("GCM Registration failed: " + throwable.getMessage());
             }
         });
     }
