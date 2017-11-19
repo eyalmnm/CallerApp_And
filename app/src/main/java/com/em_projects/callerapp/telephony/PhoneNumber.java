@@ -324,7 +324,7 @@ public class PhoneNumber {
         }
         Log.d(TAG, "number: " + countryCode + "-" + number);
         try {
-            Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());  // TODO remove the comments.
+            Log.d(TAG, "Device's Country Code: " + tm.getSimCountryIso());
             Log.d(TAG, "Operator: " + tm.getSimOperator());
             Log.d(TAG, "Operator Name: " + tm.getSimOperatorName());
             Log.d(TAG, "Serial Number: " + tm.getSimSerialNumber());
