@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.network.CommListener;
@@ -22,6 +24,8 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import java.util.Arrays;
 
 /**
  * Created by eyalmuchtar on 11/5/17.
@@ -62,12 +66,17 @@ public class FacebookLoginActivity extends Activity {
 
         info = (TextView) findViewById(R.id.info);
         faceBookLoginButton = (LoginButton) findViewById(R.id.faceBookLoginButton);
+        //faceBookLoginButton.setReadPermissions("email");
+        //faceBookLoginButton.setReadPermissions("user_birthday");
+        faceBookLoginButton.setReadPermissions(Arrays.asList("user_status", "email, user_birthday"));
 
         deviceId = DeviceUtils.getDeviceUniqueID(context);
         phoneNumber = PreferencesUtils.getInstance(context).getPhone();
         otp = PreferencesUtils.getInstance(context).getOTP();
 
         String fbToken = PreferencesUtils.getInstance(context).getFbToken();
+        sendStoredFacebookLoginToken(fbToken);
+
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
@@ -121,18 +130,33 @@ public class FacebookLoginActivity extends Activity {
         });
     }
 
+    private void sendStoredFacebookLoginToken(String token) {
+        ServerUtilities.getInstance().sendFbToken(deviceId, phoneNumber, otp, token, null);
+    }
+
     private void sendFacebookLoginToken(String token) {
         ServerUtilities.getInstance().sendFbToken(deviceId, phoneNumber, otp, token, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "sendFacebookLoginToken -> response: " + response);
+                showToast("FaceBook Registration success");
                 finish();
             }
 
             @Override
             public void exceptionThrown(Throwable throwable) {
                 Log.e(TAG, "exceptionThrown", throwable);
+                showToast("FaceBook Registration failed: " + throwable.getMessage());
                 finish();
+            }
+        });
+    }
+
+    private void showToast(final String message) {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -142,12 +166,14 @@ public class FacebookLoginActivity extends Activity {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "sendFacebookNewToken -> response: " + response);
+                showToast("FaceBook Registration success");
                 finish();
             }
 
             @Override
             public void exceptionThrown(Throwable throwable) {
                 Log.e(TAG, "sendFacebookNewToken", throwable);
+                showToast("FaceBook Registration failed: " + throwable.getMessage());
                 finish();
             }
         });
