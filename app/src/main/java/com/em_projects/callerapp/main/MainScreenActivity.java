@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.main;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +11,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,8 +53,13 @@ import com.em_projects.callerapp.verification.LoginActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.PROCESS_OUTGOING_CALLS;
 import static android.Manifest.permission.READ_CONTACTS;
@@ -64,6 +74,8 @@ import static android.Manifest.permission.WAKE_LOCK;
  */
 
 // Ref: https://gist.github.com/Aeonitis/2337b1ca652173839395be82db7d05c3
+// Ref: https://stackoverflow.com/questions/6922312/get-location-name-from-fetched-coordinates
+// Ref: https://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
 
 public class MainScreenActivity extends AppCompatActivity {
     // Setting IDs
@@ -209,6 +221,50 @@ public class MainScreenActivity extends AppCompatActivity {
             finish();
         }
         faceBookLogin();
+        getLocation();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLocation() {
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        Location locations = getLastKnownLocation(); // locationManager.getLastKnownLocation(provider);
+        List<String> providerList = locationManager.getAllProviders();
+        if (null != locations && null != providerList && providerList.size() > 0) {
+            double longitude = locations.getLongitude();
+            double latitude = locations.getLatitude();
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
+                if (null != listAddresses && listAddresses.size() > 0) {
+                    String location = listAddresses.get(0).getAddressLine(0);
+                    String countryCode = listAddresses.get(0).getCountryCode();
+                    Log.d(TAG, "Location: " + location + " country code: " + countryCode);
+                    // TODO Save country code in Preferences
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO Get country code from preferences
+            }
+        }
+        // TODO Save country code in config.Dynamic
+    }
+
+    @SuppressLint("MissingPermission")
+    private Location getLastKnownLocation() {
+        LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 
     private void faceBookLogin() {
@@ -226,6 +282,8 @@ public class MainScreenActivity extends AppCompatActivity {
         int wakeLockRes = ContextCompat.checkSelfPermission(getApplicationContext(), WAKE_LOCK);
         int readContact = ContextCompat.checkSelfPermission(getApplicationContext(), READ_CONTACTS);
         int receiveBootComplete = ContextCompat.checkSelfPermission(getApplicationContext(), RECEIVE_BOOT_COMPLETED);
+        int locationCoarse = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
+        int locationFine = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
 
         boolean overLay = Settings.canDrawOverlays(this);
 
@@ -237,11 +295,15 @@ public class MainScreenActivity extends AppCompatActivity {
                 wakeLockRes == PackageManager.PERMISSION_GRANTED &&
                 readContact == PackageManager.PERMISSION_GRANTED &&
                 receiveBootComplete == PackageManager.PERMISSION_GRANTED &&
+                locationCoarse == PackageManager.PERMISSION_GRANTED &&
+                locationFine == PackageManager.PERMISSION_GRANTED &&
                 overLay;
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS, WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET,
+                PROCESS_OUTGOING_CALLS, WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED, ACCESS_COARSE_LOCATION,
+                ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -251,17 +313,19 @@ public class MainScreenActivity extends AppCompatActivity {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0) {
 
-                    boolean cameraRes = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean locationRes = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean locationCRes = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean receiveSmsRes = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean readSmsRes = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean readPhoneStateRes = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                     boolean internetRes = grantResults[3] == PackageManager.PERMISSION_GRANTED;
-                    boolean contectRes = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                    boolean outGoingCallRes = grantResults[4] == PackageManager.PERMISSION_GRANTED;
                     boolean wakeLockRes = grantResults[5] == PackageManager.PERMISSION_GRANTED;
-                    boolean writeFileRes = grantResults[6] == PackageManager.PERMISSION_GRANTED;
-                    boolean readFileRes = grantResults[7] == PackageManager.PERMISSION_GRANTED;
+                    boolean readContactRes = grantResults[6] == PackageManager.PERMISSION_GRANTED;
+                    boolean bootRes = grantResults[7] == PackageManager.PERMISSION_GRANTED;
+                    boolean corseLocationRes = grantResults[8] == PackageManager.PERMISSION_GRANTED;
+                    boolean fineLocationRes = grantResults[9] == PackageManager.PERMISSION_GRANTED;
 
-                    if (cameraRes && locationRes && locationCRes && internetRes && contectRes &&
-                            wakeLockRes && writeFileRes && readFileRes) {
+                    if (receiveSmsRes && readSmsRes && readPhoneStateRes && internetRes && outGoingCallRes &&
+                            wakeLockRes && readContactRes && bootRes && corseLocationRes && fineLocationRes) {
                         if (Settings.canDrawOverlays(context)) {
                             //Toast.makeText(context, "Permission Granted, Now you can use the application.", Toast.LENGTH_LONG).show();
                             continueAppLoading();
@@ -272,7 +336,8 @@ public class MainScreenActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(context, "Permission Denied, You cannot access the application.", Toast.LENGTH_LONG).show();
                         if (!hasPermissions(context, RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS,
-                                WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED)) {
+                                WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED, ACCESS_COARSE_LOCATION,
+                                ACCESS_FINE_LOCATION)) {
                             Toast.makeText(context, "You need to allow access to all the permissions", Toast.LENGTH_LONG).show();
                             requestPermission();
                         }
