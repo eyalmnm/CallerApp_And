@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -275,5 +276,12 @@ public class StringUtils {
             return android.util.Patterns.PHONE.matcher(number).matches(); // number.matches("^[+]?[0-9]{10,13}$");
         }
         return false;
+    }
+
+    public static void printBundleData(String tag, Bundle bundle) {
+        Set<String> keys = bundle.keySet();
+        for (String key : keys) {
+            Log.d(tag, key + " = " + bundle.get(key));
+        }
     }
 }
