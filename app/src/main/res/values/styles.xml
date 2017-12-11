@@ -16,6 +16,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/rubik</item>
         <item name="android:windowSoftInputMode">adjustResize|adjustPan</item>
     </style>
 
@@ -27,7 +28,7 @@
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="android:colorBackground">@color/colorPrimary</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/rubik</item>
         <item name="actionMenuTextColor">@color/app_text_color</item>
         <item name="android:textSize">@dimen/text_size_reg</item>
         <item name="android:textColor">@color/app_text_color</item>
@@ -37,6 +38,7 @@
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColor">@color/app_text_color</item>
         <item name="android:textSize">@dimen/text_size_reg</item>
+        <item name="android:fontFamily">@font/rubik</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorAccent">@color/orange</item>
         <item name="colorControlNormal">@color/app_text_color</item>
