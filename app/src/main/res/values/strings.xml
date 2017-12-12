@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">WizeCaller</string>
 
+    <!-- Splash -->
+    <string name="app_version_format">Version v %s (%d) </string>
+
     <!-- SMS Verification Strings -->
     <string name="title_activity_sms">SmsActivity</string>
     <string name="action_logout">Logout</string>
