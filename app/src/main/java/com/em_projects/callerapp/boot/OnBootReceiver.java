@@ -16,6 +16,7 @@ public class OnBootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Reload the application
         Intent startIntent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(startIntent);
     }
 }
