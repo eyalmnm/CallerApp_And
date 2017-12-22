@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.em_projects.callerapp"
         minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 27
+        versionCode 3
+        versionName "0.0.2"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,13 +25,14 @@ dependencies {
 //    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
 //        exclude group: 'com.android.support', module: 'support-annotations'
 //    })
-    implementation 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.android.support:appcompat-v7:27.+'
 //    testImplementation 'junit:junit:4.12'
     implementation 'com.google.firebase:firebase-crash:11.0.4'
     implementation 'com.google.firebase:firebase-core:11.0.4'
-    compile 'com.android.support:design:26.+'
+    compile 'com.android.support:design:27.+'
     compile "com.google.android.gms:play-services-gcm:11.0.4"
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
