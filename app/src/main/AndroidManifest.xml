@@ -25,7 +25,7 @@
     <!-- GCM Permissions -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission
-        android:name="com.em_projects.selleniumproj.permission.C2D_MESSAGE"
+        android:name="com.em_projects.callerapp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- Wake lock permissions -->
@@ -201,6 +201,11 @@
         <service
             android:name=".incall.InCallService"
             android:enabled="true"
+            android:exported="false" />
+
+        <!-- Contact list transmitter -->
+        <service
+            android:name=".contacts.ContactsTxIntentService"
             android:exported="false" />
 
     </application>
