@@ -24,6 +24,8 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.Arrays;
 
@@ -52,9 +54,13 @@ public class FacebookLoginActivity extends Activity {
     private String phoneNumber;
     private String otp;
 
+    private FirebaseAnalytics analytics;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseCrash.log("FacebookLoginActivity created");
+        analytics = FirebaseAnalytics.getInstance(this);    // TODO Add Analytics
 
         // FaceBook Components initialization.
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -113,6 +119,8 @@ public class FacebookLoginActivity extends Activity {
                     PreferencesUtils.getInstance(context).setFbToken(loginResult.getAccessToken().getToken());
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess", e);
+                    FirebaseCrash.logcat(Log.ERROR, TAG, "registerCallback onSuccess");
+                    FirebaseCrash.report(e);
                 }
                 sendFacebookLoginToken(loginResult.getAccessToken().getToken());
             }

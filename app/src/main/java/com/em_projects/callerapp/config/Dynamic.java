@@ -3,6 +3,7 @@ package com.em_projects.callerapp.config;
 import android.content.Context;
 
 import com.em_projects.callerapp.utils.PreferencesUtils;
+import com.em_projects.callerapp.utils.StringUtils;
 
 /**
  * Created by eyal muchtar on 20/07/2017.
@@ -11,14 +12,16 @@ import com.em_projects.callerapp.utils.PreferencesUtils;
 public class Dynamic {
 
     public static String call_unique_ID = "1000";
-    public static String gcm_token = "";
+    private static String gcm_token = "";
     private static String myNumber;
     private static String myOTP;
+    private static String myCountryCode;
 
 
     public Dynamic(Context context) {
         myNumber = PreferencesUtils.getInstance(context).getPhone();
         myOTP = PreferencesUtils.getInstance(context).getOTP();
+        myCountryCode = PreferencesUtils.getInstance(context).getCountryCode();
     }
 
     public static String getMyNumber() {
@@ -43,5 +46,23 @@ public class Dynamic {
 
     public static void setCall_unique_ID(String call_unique_ID) {
         Dynamic.call_unique_ID = call_unique_ID;
+    }
+
+    public static String getCountryCode() {
+        return myCountryCode;
+    }
+
+    public static void setCountryCode(String countryCode) {
+        Dynamic.myCountryCode = countryCode;
+    }
+
+    public static String getGcmToken() {
+        return gcm_token;
+    }
+
+    public static void setGcmToken(String gcm_token) {
+        if (true == StringUtils.isNullOrEmpty(Dynamic.gcm_token)) {
+            Dynamic.gcm_token = gcm_token;
+        }
     }
 }

@@ -38,6 +38,18 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
         String event = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        StringUtils.printBundleData(TAG, intent.getExtras());
+
+        try {
+            PhoneNumber phoneNumber = new PhoneNumber(incomingNumber, context);
+            String countryCode = phoneNumber.getCountryCode();
+            if (true == StringUtils.isNullOrEmpty(countryCode)) {
+                phoneNumber = new PhoneNumber(incomingNumber, Dynamic.getCountryCode(), context);
+            }
+            incomingNumber = phoneNumber.getNumber();
+        } catch (Exception e) {
+            Log.e(TAG, "onReceive", e);
+        }
         Log.d(TAG, "The received event : " + event + ", incoming_number : " + incomingNumber);
 
         try {

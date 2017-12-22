@@ -42,7 +42,7 @@ public class Constants {
     public static String cell_identity = "cell_identity";
 
     // Server Communication parameters
-    public static String serverURL = "http://37.142.222.89:8080"; // http://server.8200.zone:8080";
+    public static String serverURL = "http://advert.zone:37443"; //77.127.141.67:37443"; // http://server.8200.zone:8080";
     public static String ourSecret = "ourSecret";
     public static String deviceId = "deviceId";
     public static String gcmToken = "gcmToken";
@@ -57,6 +57,7 @@ public class Constants {
     public static String fbOldToken = "fb_old_token";
     public static String callerPhone = "caller_phone";
     public static String contatcts = "contatcts_list";
+    public static String countryCode = "country_code";
 
     // Server Communication methods
     public static String smsVerification = "new_user";

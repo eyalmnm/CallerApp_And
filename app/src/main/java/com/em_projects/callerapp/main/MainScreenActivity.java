@@ -52,8 +52,9 @@ import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.verification.LoginActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -77,15 +78,23 @@ import static android.Manifest.permission.WAKE_LOCK;
 // Ref: https://stackoverflow.com/questions/6922312/get-location-name-from-fetched-coordinates
 // Ref: https://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
 
+
+// Ref: https://stackoverflow.com/questions/14540394/listen-to-incoming-whatsapp-messages-notifications
+// Ref: https://stackoverflow.com/a/14907818/341497
+// Ref: https://developer.android.com/training/accessibility/service.html#create
+
+
 public class MainScreenActivity extends AppCompatActivity {
     // Setting IDs
     public static final int APP_SETTING = 100;
     public static final int USER_PROFILE = 101;
     private static final String TAG = "MainScreenActivity";
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final boolean USE_FACEBOOK_LOGIN = true;  // Uses Facebook
     private static int PERM_REQUEST_CODE_DRAW_OVERLAYS = 1234;
-
     private Context context;
+
+    private FirebaseAnalytics analytics;
 
     private SearchView searchView;
 
@@ -100,13 +109,15 @@ public class MainScreenActivity extends AppCompatActivity {
 
     // Permissions
     // Registration \ Login (SMS Verification)
-    // GCM Registeration
+    // GCM Registration
     // Social Network Registration
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        FirebaseCrash.log("MainScreenActivity created");
+        analytics = FirebaseAnalytics.getInstance(this);    // TODO Add Analytics
 
         context = this;
 
@@ -148,6 +159,7 @@ public class MainScreenActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
+
     private void loadAppSettingFragment() {
         // TODO try without back stack
     }
@@ -179,6 +191,8 @@ public class MainScreenActivity extends AppCompatActivity {
             new Dynamic(this);
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrash.logcat(Log.ERROR, TAG, "setIsRestration");
+            FirebaseCrash.report(e);
         }
     }
 
@@ -220,12 +234,21 @@ public class MainScreenActivity extends AppCompatActivity {
             Toast.makeText(context, "This device does not supports GCM!", Toast.LENGTH_LONG).show();
             finish();
         }
-        faceBookLogin();
+        if (true == USE_FACEBOOK_LOGIN) {
+            faceBookLogin();
+        }
         getLocation();
+        sendContacts();
+    }
+
+    private void sendContacts() {
+        Intent intent = new Intent(context, ContactsTxIntentService.class);
+        startService(intent);
     }
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
+        String countryCode = null;
         LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         Location locations = getLastKnownLocation(); // locationManager.getLastKnownLocation(provider);
         List<String> providerList = locationManager.getAllProviders();
@@ -237,16 +260,19 @@ public class MainScreenActivity extends AppCompatActivity {
                 List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
                 if (null != listAddresses && listAddresses.size() > 0) {
                     String location = listAddresses.get(0).getAddressLine(0);
-                    String countryCode = listAddresses.get(0).getCountryCode();
+                    countryCode = listAddresses.get(0).getCountryCode();
                     Log.d(TAG, "Location: " + location + " country code: " + countryCode);
-                    // TODO Save country code in Preferences
+                    // Save country code in Preferences
+                    PreferencesUtils.getInstance(context).setCountryCode(countryCode);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                // TODO Get country code from preferences
+            } catch (Exception e) {
+                Log.e(TAG, "getLocation", e);
+                // Get country code from preferences
+                PreferencesUtils.getInstance(context).getCountryCode();
             }
         }
-        // TODO Save country code in config.Dynamic
+        // Save country code in config.Dynamic
+        Dynamic.setCountryCode(countryCode);
     }
 
     @SuppressLint("MissingPermission")
@@ -348,6 +374,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     public void permissionToDrawOverlays() {
         if (android.os.Build.VERSION.SDK_INT >= 23) {   //Android M Or Over
+            FirebaseCrash.log("permissionToDrawOverlays");
             if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                 startActivityForResult(intent, PERM_REQUEST_CODE_DRAW_OVERLAYS);
@@ -463,6 +490,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "onResume");
             }
         }
+        getLocation();
     }
 
     @Override

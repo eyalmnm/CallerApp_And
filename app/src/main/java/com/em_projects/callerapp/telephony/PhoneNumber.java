@@ -298,7 +298,7 @@ public class PhoneNumber {
         }
         mContext = context;
         TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCode = tm.getSimCountryIso();
+        countryCode = tm.getSimCountryIso();
         Log.d(TAG, "number: " + number);
         Log.d(TAG, "Country Code: " + tm.getSimCountryIso());
         Log.d(TAG, "Operator: " + tm.getSimOperator());
@@ -309,6 +309,7 @@ public class PhoneNumber {
         if (!From(number, countryCode)) { // Failed copying numbre
             Log.d(TAG, "Failed to normalize phone number " + number);
             this.phoneNumber = number;
+            countryCode = null;
         }
     }
 

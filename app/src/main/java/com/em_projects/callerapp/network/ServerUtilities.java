@@ -7,6 +7,7 @@ import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.utils.StringUtils;
 import com.em_projects.callerapp.utils.TimeUtils;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -84,7 +85,7 @@ public final class ServerUtilities implements Runnable {
         post(serverUrl, params, listener);
     }
 
-    public void searchPhone(String deviceId, String myPhone, String otp, String searchPhone, CommListener listener) {
+    public void searchPhone(String deviceId, String myPhone, String otp, String gcmToken, String searchPhone, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -92,6 +93,8 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.phoneNumber, myPhone);
         params.put(Constants.otp, otp);
         params.put(Constants.callerPhone, searchPhone);
+        params.put(Constants.gcmToken, gcmToken);
+        Log.w(TAG, "searchPhone -> gcmToken: " + gcmToken);
 
         post(serverUrl, params, listener);
     }
@@ -147,10 +150,10 @@ public final class ServerUtilities implements Runnable {
     private void post(final String serverURL, final Map<String, String> params, CommListener listener) {
 
         //Amend device information for the server
-        params.put("PHONE_MODEL", android.os.Build.MODEL);
-        params.put("PHONE_MANUFACTURER", Build.MANUFACTURER);
-        params.put("VERSION", android.os.Build.VERSION.RELEASE);
-        params.put("PHONE_TYPE", "Android");
+        params.put("phone_model", android.os.Build.MODEL);
+        params.put("phone_manufacturer", Build.MANUFACTURER);
+        params.put("version", android.os.Build.VERSION.RELEASE);
+        params.put("phone_type", "Android");
 
         queue.add(new CommRequest(serverURL, params, listener));
         synchronized (monitor) {
@@ -197,6 +200,8 @@ public final class ServerUtilities implements Runnable {
             Log.e(TAG, "handleRequest", ex);
             if (requestHolder != null && requestHolder.getListener() != null) {
                 requestHolder.getListener().exceptionThrown(ex);
+                FirebaseCrash.logcat(Log.ERROR, TAG, "handleRequest");
+                FirebaseCrash.report(ex);
             }
         }
     }
@@ -206,6 +211,7 @@ public final class ServerUtilities implements Runnable {
         Map<String, String> params = commRequest.getParams();
         CommRequest.MethodType method = commRequest.getMethodType();
         String serverUrl = commRequest.getServerURL();
+        FirebaseCrash.log("transmitData: " + serverUrl);
         HttpResponse httpResponse = null;
         HttpClient client = new DefaultHttpClient();
         Log.d(TAG, "uniqueId: " + params.get(Dynamic.getCall_unique_ID()));

@@ -15,6 +15,7 @@ import com.em_projects.callerapp.network.ServerUtilities;
 import com.em_projects.callerapp.utils.ContactsUtils;
 import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.PreferencesUtils;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONException;
 
@@ -25,6 +26,7 @@ import org.json.JSONException;
 public class ContactsTxIntentService extends IntentService {
     private static final String TAG = "ContactsTxIntentService";
 
+    private static final long MONTH = 30 * 24 * 60 * 60 * 1000;
     private Context context;
 
     // Thread's properties
@@ -43,6 +45,12 @@ public class ContactsTxIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
+        // Check last transition
+        if (MONTH < getTimeDiff()) {
+            return;
+        }
+        updateTransmissionTime();
+
         // Init the context
         context = this.getApplicationContext();
 
@@ -51,6 +59,15 @@ public class ContactsTxIntentService extends IntentService {
 
         // Send Contacts to server
         sendContacts();
+    }
+
+    private void updateTransmissionTime() {
+        PreferencesUtils.getInstance(context).setLastContactsTransmissionTime(System.currentTimeMillis());
+    }
+
+    private long getTimeDiff() {
+        long lastTx = PreferencesUtils.getInstance(context).getLastContactsTransmissionTime();
+        return (System.currentTimeMillis() - lastTx);
     }
 
     private void sendContacts() {
@@ -75,6 +92,8 @@ public class ContactsTxIntentService extends IntentService {
                     });
                 } catch (JSONException e) {
                     Log.e(TAG, "onHandleIntent", e);
+                    FirebaseCrash.logcat(Log.ERROR, TAG, "sendContacts");
+                    FirebaseCrash.report(e);
                 }
             }
         });

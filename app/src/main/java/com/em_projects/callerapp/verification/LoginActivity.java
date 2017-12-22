@@ -42,6 +42,8 @@ import com.em_projects.callerapp.ui.widgets.CustomFont;
 import com.em_projects.callerapp.ui.widgets.VerificationViewPager;
 import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.StringUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,6 +93,8 @@ public class LoginActivity extends Activity {
     // Hold a refrence to this
     private Context context;
 
+    private FirebaseAnalytics analytics;
+
     public static boolean isSuccessVerification(String response) {
         Log.d(TAG, "isSuccessVerification");
         return "success validation".equalsIgnoreCase(response.trim());
@@ -100,12 +104,15 @@ public class LoginActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+        FirebaseCrash.log("LoginActivity created");
         // Make sure the view adjust while showing keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Log.d(TAG, "onCreate");
 
         // Init the reference to this
         context = this;
+
+        analytics = FirebaseAnalytics.getInstance(this);    // TODO Add Analytics
 
         // Init Views
         initViewComponents();
@@ -263,6 +270,8 @@ public class LoginActivity extends Activity {
                         Log.e(TAG, "btnRequestSms OnClick", e);
                         Toast.makeText(context, R.string.invalid_phone_entered, Toast.LENGTH_LONG).show();
                         moveToLoginScreen();
+                        FirebaseCrash.logcat(Log.ERROR, TAG, "requestSMSVerification");
+                        FirebaseCrash.report(e);
                     }
                 }
             }
@@ -303,6 +312,8 @@ public class LoginActivity extends Activity {
                     } catch (Exception e) {
                         Log.e(TAG, "btnVerifyOtp onClick ", e);
                         moveToLoginScreen();
+                        FirebaseCrash.logcat(Log.ERROR, TAG, "verifyOtpCode");
+                        FirebaseCrash.report(e);
                     }
                 }
             }

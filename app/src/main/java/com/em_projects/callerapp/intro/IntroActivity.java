@@ -121,6 +121,4 @@ public class IntroActivity extends AppCompatActivity {
             return null;
         }
     }
-
-
 }

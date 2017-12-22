@@ -6,24 +6,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.dialogs.IpAddressDialog;
 import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.tracer.ExceptionHandler;
+import com.em_projects.callerapp.utils.AppUtils;
 import com.em_projects.callerapp.utils.StringUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity implements IpAddressDialog.IpDialogClickListener {
     private static final String TAG = "MainActivity";
 
     private Context context;
 
+    private FirebaseAnalytics analytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        analytics = FirebaseAnalytics.getInstance(this);    // TODO Add Analytics
 
         context = this;
+
+        TextView versionNumber = findViewById(R.id.version_number);
+        versionNumber.setText(getString(R.string.app_version_format,
+                AppUtils.getAppVersion(this), AppUtils.getAppVerionCode(this)));
 
         ExceptionHandler.register(this);
 

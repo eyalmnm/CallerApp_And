@@ -101,6 +101,29 @@ public class PreferencesUtils {
         }
     }
 
+    public long getLastContactsTransmissionTime() {
+        return preferences.getLong("LastContactsTransmissionTime", 0);
+    }
+
+    public void setLastContactsTransmissionTime(long time) {
+        editor.putLong("LastContactsTransmissionTime", time);
+        editor.commit();
+    }
+
+    public String getCountryCode() {
+        return preferences.getString(Constants.countryCode, null);
+    }
+
+    public void setCountryCode(String countryCode) throws Exception {
+        if (false == StringUtils.isNullOrEmpty(countryCode)) {
+            editor.putString(Constants.countryCode, countryCode);
+            editor.commit();
+        } else {
+            throw new Exception("Invalid Country Code");
+        }
+    }
+
+
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
