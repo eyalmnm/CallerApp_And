@@ -73,4 +73,7 @@ public class Constants {
     // Connection token
     public static String token = "token";
 
+    // Preferences
+    public static String introIsShown = "introIsShown";
+
 }
