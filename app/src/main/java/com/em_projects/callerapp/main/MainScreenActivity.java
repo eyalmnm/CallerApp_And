@@ -450,14 +450,11 @@ public class MainScreenActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, IntroActivity.class);
                 intent.putExtra("fromMain", true);
                 startActivity(intent);
-                settingLayout.closeDrawer(left_drawer);
-                return;
+                break;
             default:
                 fragment = null;
                 break;
         }
-
-        fragment = new DummyFragment();
 
         if (null != fragment) {
             if (null != args) {
