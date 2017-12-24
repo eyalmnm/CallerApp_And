@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.intro.viewpagerindicator.CirclePageIndicator;
 import com.em_projects.callerapp.main.MainScreenActivity;
+import com.em_projects.callerapp.utils.PreferencesUtils;
 
 
 /**
@@ -29,6 +30,8 @@ public class IntroActivity extends AppCompatActivity {
     private IntroItemsAdapter introItemsAdapter;
     private CirclePageIndicator indicator;
     private TextView skipIntroButton;
+
+    private boolean fromMain = false;
 
     private int[] titles = new int[]{
             R.string.first_intro_title,
@@ -55,6 +58,8 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         mLayout = findViewById(R.id.introViewPager);
+        Intent intent = getIntent();
+        fromMain = intent.getBooleanExtra("fromMain", false);
         context = this;
 
 
@@ -72,10 +77,13 @@ public class IntroActivity extends AppCompatActivity {
         skipIntroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MainScreenActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                if (false == fromMain) {
+                    Intent intent = new Intent(context, MainScreenActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    PreferencesUtils.getInstance(context).setIntroIsShown(true);
+                    overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
+                }
                 finish();
             }
         });
