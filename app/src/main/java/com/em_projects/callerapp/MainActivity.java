@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.dialogs.IpAddressDialog;
 import com.em_projects.callerapp.intro.IntroActivity;
+import com.em_projects.callerapp.main.MainScreenActivity;
 import com.em_projects.callerapp.tracer.ExceptionHandler;
 import com.em_projects.callerapp.utils.AppUtils;
+import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.utils.StringUtils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -47,7 +49,12 @@ public class MainActivity extends AppCompatActivity implements IpAddressDialog.I
     }
 
     private void moveToNextScreen() {
-        Intent intent = new Intent(context, IntroActivity.class);
+        Intent intent = null;
+        if (true == PreferencesUtils.getInstance(this).getIntroIsShown()) {
+            intent = new Intent(context, MainScreenActivity.class);
+        } else {
+            intent = new Intent(context, IntroActivity.class);
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out);
