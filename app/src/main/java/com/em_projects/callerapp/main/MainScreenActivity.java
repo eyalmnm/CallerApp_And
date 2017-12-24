@@ -45,6 +45,7 @@ import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
+import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.main.activities.FacebookLoginActivity;
 import com.em_projects.callerapp.main.fragments.DummyFragment;
 import com.em_projects.callerapp.models.Setting;
@@ -88,6 +89,8 @@ public class MainScreenActivity extends AppCompatActivity {
     // Setting IDs
     public static final int APP_SETTING = 100;
     public static final int USER_PROFILE = 101;
+    public static final int INTRO_SCREEN = 102;
+
     private static final String TAG = "MainScreenActivity";
     private static final int PERMISSION_REQUEST_CODE = 200;
     private static final boolean USE_FACEBOOK_LOGIN = true;  // Uses Facebook
@@ -133,6 +136,7 @@ public class MainScreenActivity extends AppCompatActivity {
         settings = new ArrayList<Setting>();
         settings.add(new Setting(getString(R.string.settings), R.mipmap.ic_launcher_round, APP_SETTING));
         settings.add(new Setting(getString(R.string.my_profile), R.mipmap.ic_launcher_round, USER_PROFILE));
+        settings.add(new Setting(getString(R.string.app_intro), R.mipmap.ic_launcher_round, INTRO_SCREEN));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -435,29 +439,23 @@ public class MainScreenActivity extends AppCompatActivity {
     private void selectItem(int position /*, Bundle args*/) {
         Fragment fragment = null;
         Bundle args = null; // TODO Remove this statement
-//        switch (settings.get(position).getId()) {
-//            case FIND_RECORD:
-//                fragment = new FindRecordFragment();
-//                break;
-//            case SHOW_RECORD:
-//                fragment = new ShowRecordFragment();
-//                break;
-//            case NEW_RECORD:
-//                fragment = new NewRecordFragment();
-//                break;
-//            case SHOW_ALL_RECORDS:
-//                fragment = new ShowAllRecordsFragment();
-//                break;
-//            case OPEN_GALERY:
-//                fragment = new OpenGaleryFragment();
-//                break;
-////            case FIND_RESULTS:
-////                fragment = new FindResultsFragment();
-////                break;
-//            default:
-//                fragment = null;
-//                break;
-//        }
+        switch (settings.get(position).getId()) {
+            case APP_SETTING:
+                fragment = new DummyFragment();
+                break;
+            case USER_PROFILE:
+                fragment = new DummyFragment();
+                break;
+            case INTRO_SCREEN:
+                Intent intent = new Intent(context, IntroActivity.class);
+                intent.putExtra("fromMain", true);
+                startActivity(intent);
+                settingLayout.closeDrawer(left_drawer);
+                return;
+            default:
+                fragment = null;
+                break;
+        }
 
         fragment = new DummyFragment();
 
