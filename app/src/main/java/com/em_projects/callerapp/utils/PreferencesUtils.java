@@ -123,6 +123,15 @@ public class PreferencesUtils {
         }
     }
 
+    public boolean getIntroIsShown() {
+        return preferences.getBoolean(Constants.introIsShown, false);
+    }
+
+    public void setIntroIsShown(boolean isShown) {
+        editor.putBoolean(Constants.introIsShown, isShown);
+        editor.commit();
+    }
+
 
     @Override
     protected void finalize() throws Throwable {
