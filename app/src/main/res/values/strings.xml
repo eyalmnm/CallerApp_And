@@ -40,6 +40,7 @@
     <!-- Main Activity Screen -->
     <string name="settings">Settings</string>
     <string name="my_profile">My Profile</string>
+    <string name="app_intro">Intro</string>
 
     <!-- FaceBook -->
     <string name="facebook_app_id">1722543137778905</string>
