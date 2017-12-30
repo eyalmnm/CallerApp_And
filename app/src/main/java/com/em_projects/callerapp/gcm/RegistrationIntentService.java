@@ -56,7 +56,7 @@ public class RegistrationIntentService extends IntentService {
             String token = instanceID.getToken(Constants.GCM_SENDER_ID,
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // END get token
-            Dynamic.setGcmToken(token);
+            Dynamic.setGcmToken(context, token);
             Log.i(TAG, "GCM Registration Token: " + token);
 
             // TODO: Implement this method to send any registration to your app's servers.
@@ -96,7 +96,7 @@ public class RegistrationIntentService extends IntentService {
                 Log.d(TAG, "newDataArrived: " + response);
                 showToast("GCM Registration success");
                 try {
-                    Dynamic.setGcmToken(token);
+                    Dynamic.setGcmToken(context, token);
                 } catch (Exception e) {
                     Log.e(TAG, "sendRegistrationToServer -> newDataArrived", e);
                 }

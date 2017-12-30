@@ -58,6 +58,7 @@ public class Constants {
     public static String callerPhone = "caller_phone";
     public static String contatcts = "contatcts_list";
     public static String countryCode = "country_code";
+    public static String duration = "duration";
 
     // Server Communication methods
     public static String smsVerification = "new_user";
@@ -67,6 +68,7 @@ public class Constants {
     public static String searchPhone = "search_phone";
     public static String sendFbToken = "send_token";
     public static String sendNewFbToken = "send_token";
+    public static String callTerminated = "call_log";
 
     // Server Communication secret
     public static String secret = "sfasfwtweerwenjhvytetqw8er9y8rhhjvctu67r687et9yqiehnnbebfdq8etqo";

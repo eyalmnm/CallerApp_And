@@ -1,6 +1,5 @@
 package com.em_projects.callerapp;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,17 +7,14 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.em_projects.callerapp.config.Constants;
-import com.em_projects.callerapp.dialogs.IpAddressDialog;
 import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.main.MainScreenActivity;
 import com.em_projects.callerapp.tracer.ExceptionHandler;
 import com.em_projects.callerapp.utils.AppUtils;
 import com.em_projects.callerapp.utils.PreferencesUtils;
-import com.em_projects.callerapp.utils.StringUtils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class MainActivity extends AppCompatActivity implements IpAddressDialog.IpDialogClickListener {
+public class MainActivity extends AppCompatActivity /*implements IpAddressDialog.IpDialogClickListener*/ {
     private static final String TAG = "MainActivity";
 
     private Context context;
@@ -42,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements IpAddressDialog.I
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-//                moveToNextScreen(); // TODO
-                showIpDialog(); // TODO
+                moveToNextScreen();
+//                showIpDialog();
             }
         }, 3000);
     }
@@ -61,25 +57,25 @@ public class MainActivity extends AppCompatActivity implements IpAddressDialog.I
         finish();
     }
 
-    private void showIpDialog() {
-        FragmentManager fm = getFragmentManager();
-        IpAddressDialog dialog = new IpAddressDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString("ip_addr_pref", Constants.serverURL);
-        dialog.setArguments(bundle);
-        dialog.show(fm, "IpAddressDialog");
-    }
+//    private void showIpDialog() {
+//        FragmentManager fm = getFragmentManager();
+//        IpAddressDialog dialog = new IpAddressDialog();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("ip_addr_pref", Constants.serverURL);
+//        dialog.setArguments(bundle);
+//        dialog.show(fm, "IpAddressDialog");
+//    }
 
-    @Override
-    public void okButtonClick(String ipAddress) {
-        if (false == StringUtils.isNullOrEmpty(ipAddress)) {
-            Constants.serverURL = ipAddress;
-        }
-        moveToNextScreen();
-    }
+//    @Override
+//    public void okButtonClick(String ipAddress) {
+//        if (false == StringUtils.isNullOrEmpty(ipAddress)) {
+//            Constants.serverURL = ipAddress;
+//        }
+//        moveToNextScreen();
+//    }
 
-    @Override
-    public void cancelButtonClick() {
-        moveToNextScreen();
-    }
+//    @Override
+//    public void cancelButtonClick() {
+//        moveToNextScreen();
+//    }
 }

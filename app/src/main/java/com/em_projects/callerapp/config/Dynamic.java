@@ -56,12 +56,16 @@ public class Dynamic {
         Dynamic.myCountryCode = countryCode;
     }
 
-    public static String getGcmToken() {
+    public static String getGcmToken(Context context) {
+        if (StringUtils.isNullOrEmpty(gcm_token)) {
+            gcm_token = PreferencesUtils.getInstance(context).getGcmToken();
+        }
         return gcm_token;
     }
 
-    public static void setGcmToken(String gcm_token) {
+    public static void setGcmToken(Context context, String gcm_token) throws Exception {
         if (true == StringUtils.isNullOrEmpty(Dynamic.gcm_token)) {
+            PreferencesUtils.getInstance(context).setGcmToken(gcm_token);
             Dynamic.gcm_token = gcm_token;
         }
     }

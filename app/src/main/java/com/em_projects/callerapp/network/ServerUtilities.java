@@ -60,6 +60,21 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
+    public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, long duration, String fullName, String e164Format, CommListener listener) {
+        String serverUrl = Constants.serverURL + "/" + Constants.callTerminated;
+        HashMap params = new HashMap();
+        params.put(Constants.ourSecret, Constants.secret);
+        params.put(Constants.deviceId, deviceId);
+        params.put(Constants.phoneNumber, myPhone);
+        params.put(Constants.otp, otp);
+        params.put(Constants.callerPhone, e164Format);
+        params.put(Constants.gcmToken, gcmToken);
+        params.put(Constants.duration, String.valueOf(duration));
+        params.put(Constants.fullName, fullName);
+
+        post(serverUrl, params, listener);
+    }
+
     public void sendFbToken(String deviceId, String phone, String otp, String fbToken, CommListener listener) {
         String serverUrl = Constants.serverURL + "/" + Constants.sendFbToken;
         HashMap params = new HashMap();
@@ -95,6 +110,7 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.callerPhone, searchPhone);
         params.put(Constants.gcmToken, gcmToken);
         Log.w(TAG, "searchPhone -> gcmToken: " + gcmToken);
+        Log.w(TAG, "searchPhone -> phone: " + myPhone);
 
         post(serverUrl, params, listener);
     }

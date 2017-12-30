@@ -61,12 +61,13 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
             switch (event) {
                 case "RINGING":
-                    searchForCallerByPhone(context, incomingNumber);
+                    sendRinging(context, incomingNumber);
                     break;
                 case "OFFHOOK":
+                    sendOffHook(context, incomingNumber);
                     break;
                 case "IDLE":
-                    context.stopService(new Intent(context, InCallService.class)); // TODO Consider this
+                    sendIdle(context, incomingNumber);
                     break;
             }
         } catch (Exception e) {
@@ -77,9 +78,24 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
     }
 
-    private void searchForCallerByPhone(final Context context, String incomingNumber) {
+    private void sendIdle(final Context context, String incomingNumber) {
         Intent inCallServiceIntent = new Intent(context, InCallService.class);
         inCallServiceIntent.putExtra(Constants.callerPhone, incomingNumber);
+        inCallServiceIntent.putExtra("idle", "idle");
+        context.startService(inCallServiceIntent);
+    }
+
+    private void sendOffHook(final Context context, String incomingNumber) {
+        Intent inCallServiceIntent = new Intent(context, InCallService.class);
+        inCallServiceIntent.putExtra(Constants.callerPhone, incomingNumber);
+        inCallServiceIntent.putExtra("offhook", "offhook");
+        context.startService(inCallServiceIntent);
+    }
+
+    private void sendRinging(final Context context, String incomingNumber) {
+        Intent inCallServiceIntent = new Intent(context, InCallService.class);
+        inCallServiceIntent.putExtra(Constants.callerPhone, incomingNumber);
+        inCallServiceIntent.putExtra("ringing", "ringing");
         context.startService(inCallServiceIntent);
     }
 }
