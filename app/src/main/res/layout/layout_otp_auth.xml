@@ -58,7 +58,7 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
+    <!--TextView
         android:id="@+id/btn_verify_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,6 +76,30 @@
         android:layout_below="@id/input_layout_otp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/lbl_resend_message"
+        android:textColor="@color/app_text_color"
+        android:textSize="17sp" /-->
+
+    <TextView
+        android:id="@+id/btn_verify_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_layout_otp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/lbl_confirm"
+        android:textColor="@color/app_text_color"
+        android:textSize="21dp" />
+
+    <TextView
+        android:id="@+id/btn_resend_otp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:text="@string/lbl_resend_message"
         android:textColor="@color/app_text_color"
