@@ -61,6 +61,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, long duration, String fullName, String e164Format, CommListener listener) {
+        Log.d(TAG, "callTerminated");
         String serverUrl = Constants.serverURL + "/" + Constants.callTerminated;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -76,6 +77,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void sendFbToken(String deviceId, String phone, String otp, String fbToken, CommListener listener) {
+        Log.d(TAG, "sendFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendFbToken;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -88,6 +90,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void sendNewFbToken(String deviceId, String phone, String otp, String fbToken, String oldFbToken, CommListener listener) {
+        Log.d(TAG, "sendNewFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendNewFbToken;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -101,6 +104,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void searchPhone(String deviceId, String myPhone, String otp, String gcmToken, String searchPhone, CommListener listener) {
+        Log.d(TAG, "searchPhone");
         String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -109,13 +113,18 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.otp, otp);
         params.put(Constants.callerPhone, searchPhone);
         params.put(Constants.gcmToken, gcmToken);
+
+        Log.w(TAG, "searchPhone -> deviceId: " + deviceId);
+        Log.w(TAG, "searchPhone -> myPhone: " + myPhone);
+        Log.w(TAG, "searchPhone -> otp: " + otp);
         Log.w(TAG, "searchPhone -> gcmToken: " + gcmToken);
-        Log.w(TAG, "searchPhone -> phone: " + myPhone);
+        Log.w(TAG, "searchPhone -> searchPhone: " + searchPhone);
 
         post(serverUrl, params, listener);
     }
 
     public void sendGcmToken(String deviceId, String phone, String gcmToken, CommListener listener) {
+        Log.d(TAG, "sendGcmToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendGcmToken;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -127,6 +136,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void sendContact(String deviceId, String phone, String otp, String contatctsListJsonArray, CommListener listener) {
+        Log.d(TAG, "sendContact");
         String serverUrl = Constants.serverURL + "/" + Constants.sendContatcts;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -139,6 +149,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void requestSMSVerification(String deviceId, String phoneNumber, String fullName, CommListener listener) {
+        Log.d(TAG, "requestSMSVerification");
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
         HashMap params = new HashMap();
         params.put(Constants.ourSecret, Constants.secret);
@@ -151,6 +162,7 @@ public final class ServerUtilities implements Runnable {
     }
 
     public void verifyOtpCode(String otp, String phoneNumber, String deviceId, CommListener listener) {
+        Log.d(TAG, "verifyOtpCode");
         String serverUrl = Constants.serverURL + "/" + Constants.otpVerification;
         HashMap params = new HashMap();
         params.put(Constants.otp, otp);
@@ -164,6 +176,7 @@ public final class ServerUtilities implements Runnable {
 
     // Puts the request into queue for requests and add some additional data
     private void post(final String serverURL, final Map<String, String> params, CommListener listener) {
+        Log.d(TAG, "post");
 
         //Amend device information for the server
         params.put("phone_model", android.os.Build.MODEL);
@@ -180,6 +193,7 @@ public final class ServerUtilities implements Runnable {
     // The main looper of the server requests
     @Override
     public void run() {
+        Log.d(TAG, "run");
         while (isRunning) {
             if (queue.isEmpty()) {
                 synchronized (monitor) {
@@ -201,6 +215,7 @@ public final class ServerUtilities implements Runnable {
 
     // Handle a single request till returns data to listener
     private void handleRequest(final CommRequest requestHolder) {
+        Log.d(TAG, "handleRequest");
         try {
             if (requestHolder != null) {
                 String response = transmitData(requestHolder);
@@ -224,6 +239,7 @@ public final class ServerUtilities implements Runnable {
 
     // Sends the request to the server. Supporting GET and POST only
     private synchronized String transmitData(CommRequest commRequest) throws IOException {
+        Log.d(TAG, "transmitData");
         Map<String, String> params = commRequest.getParams();
         CommRequest.MethodType method = commRequest.getMethodType();
         String serverUrl = commRequest.getServerURL();
@@ -261,6 +277,7 @@ public final class ServerUtilities implements Runnable {
 
     // constructs the GET body using the parameters
     private String encodeParams(Map<String, String> params) {
+        Log.d(TAG, "encodeParams");
         StringBuilder bodyBuilder = new StringBuilder();
         Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -281,6 +298,7 @@ public final class ServerUtilities implements Runnable {
 
     // constructs the POST body using the parameters
     private ArrayList<NameValuePair> convertMapToNameValuePairs(Map<String, String> params) {
+        Log.d(TAG, "convertMapToNameValuePairs");
         Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>(params.size());
         // constructs the POST body using the parameters
@@ -294,12 +312,14 @@ public final class ServerUtilities implements Runnable {
     }
 
     private JSONObject convertMapToJson(Map<String, String> params) {
+        Log.d(TAG, "convertMapToJson");
         JSONObject json = new JSONObject(params);
         return json;
     }
 
     // Reads the returned data and convert it to String
     private String handleHttpResponse(HttpResponse httpResponse) throws IllegalStateException, IOException {
+        Log.d(TAG, "handleHttpResponse");
         InputStream is = httpResponse.getEntity().getContent();
         InputStreamReader isr = new InputStreamReader(is, "UTF-8");
         BufferedReader bufferedReader = new BufferedReader(isr);

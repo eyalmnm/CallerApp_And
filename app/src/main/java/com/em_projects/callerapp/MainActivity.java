@@ -1,5 +1,6 @@
 package com.em_projects.callerapp;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity /*implements IpAddressDialog
 
         ExceptionHandler.register(this);
 
+        removeNotifications();
+
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -42,6 +45,11 @@ public class MainActivity extends AppCompatActivity /*implements IpAddressDialog
 //                showIpDialog();
             }
         }, 3000);
+    }
+
+    private void removeNotifications() {
+        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nManager.cancelAll();
     }
 
     private void moveToNextScreen() {

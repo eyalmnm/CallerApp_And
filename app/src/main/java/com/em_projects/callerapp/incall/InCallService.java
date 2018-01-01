@@ -74,6 +74,7 @@ public class InCallService extends Service {
     public void onCreate() {
         super.onCreate();
         context = this;
+        new Dynamic(context);
         // Init UI
         windowManager = (WindowManager) getApplicationContext().getSystemService(WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getSize(displaySize);
@@ -145,7 +146,6 @@ public class InCallService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String callerPhone = null;
-        context = this;
         if (false == intent.getExtras().containsKey(Constants.callerPhone)) {
             stopSelf();
             FirebaseCrash.log("Empty caller phone arrived");
@@ -165,6 +165,8 @@ public class InCallService extends Service {
                 String deviceId = DeviceUtils.getDeviceUniqueID(context);
                 String gcmToken = Dynamic.getGcmToken(context);
                 final String finalCallerPhone = callerPhone;
+                FirebaseCrash.log(TAG + " sending searchPhone Request. ServerUtile is null? "
+                        + (null == ServerUtilities.getInstance()));
                 ServerUtilities.getInstance().searchPhone(deviceId, myPhone, otp, gcmToken, callerPhone, new CommListener() {
                     @Override
                     public void newDataArrived(String response) {
@@ -263,6 +265,7 @@ public class InCallService extends Service {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo)
                         .setContentTitle("CallWize")
+                        .setOngoing(false)
                         .setContentText("Incoming call from " + fullName + " Phone number " + e164Format);
         int NOTIFICATION_ID = (int) (System.currentTimeMillis() % 10000);
         Intent targetIntent = new Intent(this, MainActivity.class);
