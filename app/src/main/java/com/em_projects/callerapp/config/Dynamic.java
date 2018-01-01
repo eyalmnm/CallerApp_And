@@ -22,6 +22,7 @@ public class Dynamic {
         myNumber = PreferencesUtils.getInstance(context).getPhone();
         myOTP = PreferencesUtils.getInstance(context).getOTP();
         myCountryCode = PreferencesUtils.getInstance(context).getCountryCode();
+        gcm_token = PreferencesUtils.getInstance(context).getGcmToken();
     }
 
     public static String getMyNumber() {
