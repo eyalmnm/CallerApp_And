@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.incall;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -58,8 +60,9 @@ public class InCallService extends Service {
 
     private Context context;
     private Point displaySize = new Point();
-    private long startTime;
+    private long startTime = 0;
     private String fullName, nationalFormat, e164Format, picture;
+    private Bitmap bitmap = null;
 
     // UI Components
     private LayoutInflater inflater;
@@ -73,6 +76,8 @@ public class InCallService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, "onCreate");
+        FirebaseCrash.log(TAG + " onCreate"); // TODO
         context = this;
         new Dynamic(context);
         // Init UI
@@ -104,10 +109,15 @@ public class InCallService extends Service {
         inflater = LayoutInflater.from(this);
         floatingWidget = inflater.inflate(R.layout.layout_floating_layout, null);
 
+
         pictureImageView = floatingWidget.findViewById(R.id.pictureImageView);
         fullNameTextView = floatingWidget.findViewById(R.id.fullNameTextView);
         phoneNumberTextView = floatingWidget.findViewById(R.id.phoneNumberTextView);
         windowManager.addView(floatingWidget, mainWindow);
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "apercu_regular.otf");
+        fullNameTextView.setTypeface(typeface);
+        phoneNumberTextView.setTypeface(typeface);
 
         floatingWidget.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
@@ -130,6 +140,9 @@ public class InCallService extends Service {
                         int Ydiff = (int) (event.getRawY() - initialTouchY);
                         if (Xdiff > 10 || Ydiff > 10) {
                             Log.w(TAG, "XDiff: " + Xdiff + "  YDiff: " + Ydiff);
+                            if (Math.abs(Xdiff) > Math.abs(Ydiff * 5)) {  // Swipe to Hide
+                                floatingWidget.setVisibility(View.GONE);
+                            }
                         }
                         return true;
                     case MotionEvent.ACTION_MOVE:
@@ -145,6 +158,8 @@ public class InCallService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand");
+        FirebaseCrash.log(TAG + " onStartCommand"); // TODO
         String callerPhone = null;
         if (false == intent.getExtras().containsKey(Constants.callerPhone)) {
             stopSelf();
@@ -156,17 +171,21 @@ public class InCallService extends Service {
         } else if (true == intent.getExtras().containsKey("idle")) {
             long duration = System.currentTimeMillis() - startTime;
             informServer(duration, e164Format, fullName);
+            if (0 == startTime) {  // Missed call
+                showNotification(fullName, e164Format);
+            }
             // stopSelf();
         } else if (true == intent.getExtras().containsKey("ringing")) {
             callerPhone = intent.getStringExtra(Constants.callerPhone);
             if (false == StringUtils.isNullOrEmpty(callerPhone)) {
+                startTime = 0;
                 String myPhone = Dynamic.getMyNumber();
                 String otp = Dynamic.getMyOTP();
                 String deviceId = DeviceUtils.getDeviceUniqueID(context);
                 String gcmToken = Dynamic.getGcmToken(context);
                 final String finalCallerPhone = callerPhone;
                 FirebaseCrash.log(TAG + " sending searchPhone Request. ServerUtile is null? "
-                        + (null == ServerUtilities.getInstance()));
+                        + (null == ServerUtilities.getInstance())); // TODO
                 ServerUtilities.getInstance().searchPhone(deviceId, myPhone, otp, gcmToken, callerPhone, new CommListener() {
                     @Override
                     public void newDataArrived(String response) {
@@ -183,7 +202,6 @@ public class InCallService extends Service {
                             } else {
                                 // show caller data
                                 try {
-                                    Bitmap bitmap = null;
                                     JSONObject callerData = new JSONObject(response);
                                     fullName = JSONUtils.getStringValue(callerData, "full_name");
                                     nationalFormat = JSONUtils.getStringValue(callerData, "nationalFormat");
@@ -207,6 +225,8 @@ public class InCallService extends Service {
 
                     @Override
                     public void exceptionThrown(Throwable throwable) {
+                        FirebaseCrash.logcat(Log.ERROR, TAG, "searchPhone exceptionThrown");
+                        FirebaseCrash.report(throwable);
                         Log.e(TAG, "searchForCallerByPhone" + throwable);
                     }
                 });
@@ -216,6 +236,8 @@ public class InCallService extends Service {
     }
 
     private void informServer(long duration, String e164Format, String fullName) {
+        Log.d(TAG, "informServer");
+        FirebaseCrash.log(TAG + " informServer"); // TODO
         String myPhone = Dynamic.getMyNumber();
         String otp = Dynamic.getMyOTP();
         String deviceId = DeviceUtils.getDeviceUniqueID(context);
@@ -244,6 +266,8 @@ public class InCallService extends Service {
     }
 
     private void showContactData(final String fullName, final String e164Format, final Bitmap bitmap) {
+        Log.d(TAG, "showContactData");
+        FirebaseCrash.log(TAG + " showContactData"); // TODO
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -253,7 +277,6 @@ public class InCallService extends Service {
                     Bitmap circleBitmap = ImageUtils.getCircleBitmap(bitmap);
                     pictureImageView.setImageBitmap(circleBitmap);
                 }
-                showNotification(fullName, e164Format);
                 floatingWidget.invalidate();
             }
         });
@@ -272,7 +295,9 @@ public class InCallService extends Service {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
         NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nManager.notify(NOTIFICATION_ID, builder.build());
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+        nManager.notify(NOTIFICATION_ID, notification);
     }
 
     private void showMessage(final String msg) {
@@ -294,6 +319,7 @@ public class InCallService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
+        FirebaseCrash.log(TAG + " onDestroy"); // TODO
         super.onDestroy();
         if (floatingWidget != null) windowManager.removeView(floatingWidget);
     }

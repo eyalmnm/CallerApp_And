@@ -20,13 +20,14 @@ import com.em_projects.callerapp.utils.StringUtils;
 // <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 public class PhoneCallReceiver extends BroadcastReceiver {
 
+    private static volatile boolean isIncomingCalll = false;
     final String TAG = "PhoneCallReceiver";
-
     private Context context;
 
     private String incomingNumber;
 
     public PhoneCallReceiver() {
+        Log.d(TAG, "Constructor");
     }
 
     // Ref: http://stackoverflow.com/questions/19491458/android-call-waiting-state
@@ -34,11 +35,13 @@ public class PhoneCallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         Log.e(TAG, "onReceive: " + StringUtils.intentToString(intent));
-        Toast.makeText(context, "Incoming Call Detected!!!", Toast.LENGTH_SHORT).show();
 
         String event = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         StringUtils.printBundleData(TAG, intent.getExtras());
+        if ("RINGING".equalsIgnoreCase(event)) {
+            Toast.makeText(context, "Incoming Call Detected!!!", Toast.LENGTH_SHORT).show();
+        }
 
         try {
             PhoneNumber phoneNumber = new PhoneNumber(incomingNumber, context);
@@ -61,13 +64,19 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
             switch (event) {
                 case "RINGING":
+                    isIncomingCalll = true;
                     sendRinging(context, incomingNumber);
                     break;
                 case "OFFHOOK":
-                    sendOffHook(context, incomingNumber);
+                    if (true == isIncomingCalll) {
+                        sendOffHook(context, incomingNumber);
+                    }
                     break;
                 case "IDLE":
-                    sendIdle(context, incomingNumber);
+                    if (true == isIncomingCalll) {
+                        sendIdle(context, incomingNumber);
+                    }
+                    isIncomingCalll = false;
                     break;
             }
         } catch (Exception e) {
