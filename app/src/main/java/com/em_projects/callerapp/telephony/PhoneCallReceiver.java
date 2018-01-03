@@ -12,7 +12,7 @@ import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.incall.InCallService;
 import com.em_projects.callerapp.utils.StringUtils;
 
-
+// Ref: https://stackoverflow.com/questions/27185989/missed-call-detection-in-android
 // Ref: http://stackoverflow.com/questions/19491458/android-call-waiting-state
 // Ref: http://stackoverflow.com/a/33389985/341497
 // Ref: http://androidexample.com/Incomming_Phone_Call_Broadcast_Receiver__-_Android_Example/index.php?view=article_discription&aid=61

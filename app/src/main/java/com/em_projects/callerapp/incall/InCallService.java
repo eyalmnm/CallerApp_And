@@ -49,6 +49,7 @@ import java.net.URL;
  * Created by eyal muchtar on 11/9/17.
  */
 
+// Ref: https://stackoverflow.com/questions/27185989/missed-call-detection-in-android
 // Ref: http://www.truiton.com/2014/10/android-foreground-service-example/
 // Ref: https://stackoverflow.com/questions/26112150/android-create-circular-image-with-picasso
 // Ref: https://stackoverflow.com/questions/3629179/android-activity-over-default-lock-screen
