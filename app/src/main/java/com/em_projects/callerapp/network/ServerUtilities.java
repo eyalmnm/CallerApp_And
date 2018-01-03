@@ -4,7 +4,6 @@ import android.os.Build;
 import android.util.Log;
 
 import com.em_projects.callerapp.config.Constants;
-import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.utils.StringUtils;
 import com.em_projects.callerapp.utils.TimeUtils;
 import com.google.firebase.crash.FirebaseCrash;
@@ -119,6 +118,10 @@ public final class ServerUtilities implements Runnable {
         Log.w(TAG, "searchPhone -> otp: " + otp);
         Log.w(TAG, "searchPhone -> gcmToken: " + gcmToken);
         Log.w(TAG, "searchPhone -> searchPhone: " + searchPhone);
+
+        FirebaseCrash.log("searchPhone -> deviceId: " + deviceId + " searchPhone -> myPhone: " + myPhone
+                + " searchPhone -> otp: " + otp + " searchPhone -> gcmToken: " + gcmToken
+                + " searchPhone -> searchPhone: " + searchPhone); // TODO
 
         post(serverUrl, params, listener);
     }
@@ -243,11 +246,9 @@ public final class ServerUtilities implements Runnable {
         Map<String, String> params = commRequest.getParams();
         CommRequest.MethodType method = commRequest.getMethodType();
         String serverUrl = commRequest.getServerURL();
-        FirebaseCrash.log("transmitData: " + serverUrl);
+        FirebaseCrash.log("transmitData: " + serverUrl); // TODO
         HttpResponse httpResponse = null;
         HttpClient client = new DefaultHttpClient();
-        Log.d(TAG, "uniqueId: " + params.get(Dynamic.getCall_unique_ID()));
-        Log.d(TAG, "senderPhone");
 
         if (method == CommRequest.MethodType.GET) {
             String body = encodeParams(params);
