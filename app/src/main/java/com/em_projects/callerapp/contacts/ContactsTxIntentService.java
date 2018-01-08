@@ -26,7 +26,7 @@ import org.json.JSONException;
 public class ContactsTxIntentService extends IntentService {
     private static final String TAG = "ContactsTxIntentService";
 
-    private static final long MONTH = 30 * 24 * 60 * 60 * 1000;
+    private static final long WEEK = 7 * 24 * 60 * 60 * 1000;
     private Context context;
 
     // Thread's properties
@@ -46,7 +46,7 @@ public class ContactsTxIntentService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
 
         // Check last transition
-        if (MONTH < getTimeDiff()) {
+        if (WEEK < getTimeDiff()) {
             return;
         }
         updateTransmissionTime();
