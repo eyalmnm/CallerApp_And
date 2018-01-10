@@ -195,6 +195,7 @@ public class InCallService extends Service {
                             if (true == "no phone found".equalsIgnoreCase(response.trim())
                                     || true == StringUtils.isNullOrEmpty(response)) {
                                 // Display data from phone
+                                e164Format = finalCallerPhone;
                                 fullName = ContactsUtils.getContactName(context, finalCallerPhone);
                                 if (true == StringUtils.isNullOrEmpty(fullName)) {
                                     fullName = "Unknown caller";
