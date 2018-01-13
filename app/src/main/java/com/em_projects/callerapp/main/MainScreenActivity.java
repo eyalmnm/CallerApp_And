@@ -43,6 +43,7 @@ import android.widget.Toast;
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
+import com.em_projects.callerapp.contacts.ContactsContentObserverManager;
 import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
 import com.em_projects.callerapp.intro.IntroActivity;
@@ -224,8 +225,7 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private void uploadContacts() {
-        Intent intent = new Intent(this, ContactsTxIntentService.class);
-        startService(intent);
+        ContactsContentObserverManager.getInstance(context).registerContactsContentObserver(context);
     }
 
     private void gcmRegistration() {

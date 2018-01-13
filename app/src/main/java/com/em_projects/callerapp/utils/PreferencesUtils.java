@@ -101,14 +101,14 @@ public class PreferencesUtils {
         }
     }
 
-    public long getLastContactsTransmissionTime() {
-        return preferences.getLong("LastContactsTransmissionTime", 0);
-    }
-
-    public void setLastContactsTransmissionTime(long time) {
-        editor.putLong("LastContactsTransmissionTime", time);
-        editor.commit();
-    }
+//    public long getLastContactsTransmissionTime() {
+//        return preferences.getLong("LastContactsTransmissionTime", 0);
+//    }
+//
+//    public void setLastContactsTransmissionTime(long time) {
+//        editor.putLong("LastContactsTransmissionTime", time);
+//        editor.commit();
+//    }
 
     public String getCountryCode() {
         return preferences.getString(Constants.countryCode, null);
