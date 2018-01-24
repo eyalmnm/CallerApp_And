@@ -1,5 +1,6 @@
 package com.em_projects.callerapp.incall;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -44,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.List;
 
 /**
  * Created by eyal muchtar on 11/9/17.
@@ -73,6 +77,10 @@ public class InCallService extends Service {
     private ImageView pictureImageView;
     private TextView fullNameTextView;
     private TextView phoneNumberTextView;
+
+    // Location
+    private Thread runner;
+    private Location location;
 
     @Override
     public void onCreate() {
@@ -184,6 +192,7 @@ public class InCallService extends Service {
                 String otp = Dynamic.getMyOTP();
                 String deviceId = DeviceUtils.getDeviceUniqueID(context);
                 String gcmToken = Dynamic.getGcmToken(context);
+                startLocationFinder(); // TODO Use new thread
                 final String finalCallerPhone = callerPhone;
                 FirebaseCrash.log(TAG + " sending searchPhone Request. ServerUtile is null? "
                         + (null == ServerUtilities.getInstance())); // TODO
@@ -237,14 +246,32 @@ public class InCallService extends Service {
         return START_STICKY;
     }
 
+    private void startLocationFinder() {
+        runner = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                location = getLastKnownLocation();
+            }
+        });
+        runner.start();
+    }
+
     private void informServer(long duration, String e164Format, String fullName) {
         Log.d(TAG, "informServer");
         FirebaseCrash.log(TAG + " informServer"); // TODO
+        double longitudeDbl = -1000;
+        double latitudeDbl = -1000;
+        if (null != location) {
+            longitudeDbl = location.getLongitude();
+            latitudeDbl = location.getLatitude();
+        }
+        String longitude = String.valueOf(longitudeDbl);
+        String latitude = String.valueOf(latitudeDbl);
         String myPhone = Dynamic.getMyNumber();
         String otp = Dynamic.getMyOTP();
         String deviceId = DeviceUtils.getDeviceUniqueID(context);
         String gcmToken = Dynamic.getGcmToken(context);
-        ServerUtilities.getInstance().callTerminated(deviceId, myPhone, otp, gcmToken, duration, fullName, e164Format, new CommListener() {
+        ServerUtilities.getInstance().callTerminated(deviceId, myPhone, otp, gcmToken, duration, fullName, e164Format, latitude, longitude, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -312,6 +339,33 @@ public class InCallService extends Service {
         });
     }
 
+    @SuppressLint("MissingPermission")
+    private Location getLastKnownLocation() {
+        Location bestLocation = null;
+        try {
+            LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            List<String> providers = mLocationManager.getProviders(true);
+
+            for (String provider : providers) {
+                Location l = mLocationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l;
+                }
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "getLastKnownLocation", ex);
+            FirebaseCrash.logcat(Log.ERROR, TAG, "getLastKnownLocation");
+            FirebaseCrash.report(ex);
+        } finally {
+            return bestLocation;
+        }
+
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -321,6 +375,13 @@ public class InCallService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
+        if (null != runner) {
+            try {
+                runner.join();
+            } catch (InterruptedException e) {
+            }
+            runner = null;
+        }
         FirebaseCrash.log(TAG + " onDestroy"); // TODO
         super.onDestroy();
         if (floatingWidget != null) windowManager.removeView(floatingWidget);
