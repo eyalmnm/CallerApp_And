@@ -1,17 +1,19 @@
 package com.em_projects.callerapp.ui.widgets.custom_text;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
-import com.em_projects.reminder.R;
+import com.em_projects.callerapp.R;
 
 /**
  * Created by eyalmuchtar on 12/22/17.
  */
 
+@SuppressLint("AppCompatCustomView")
 public class CustomCheckBox extends CheckBox {
 
     public CustomCheckBox(Context context, AttributeSet attrs) {

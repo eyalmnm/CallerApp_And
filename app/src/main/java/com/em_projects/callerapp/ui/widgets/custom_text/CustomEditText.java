@@ -7,7 +7,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-import com.em_projects.reminder.R;
+import com.em_projects.callerapp.R;
 
 
 /**
