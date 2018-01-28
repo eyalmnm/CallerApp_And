@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleThumbnail">
+        <attr name="bct_image" format="integer" />
+        <attr name="bct_padding" format="integer" />
+        <!--attr name="bct_size" format="string" /-->
+        <attr name="bct_minimal" format="boolean" />
+        <attr name="android:text" />
+    </declare-styleable>
+
+</resources>
