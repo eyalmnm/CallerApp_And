@@ -9,7 +9,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -17,6 +19,7 @@ import java.net.URL;
  * Created by eyalmuchtar on 18/06/2017.
  */
 
+// Ref: https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
 public class ImageUtils {
 
 //    public static final Bitmap defaultAvatar = ImageUtils.getCircleBitmap(BitmapFactory.decodeResource(context().getResources(), R.drawable.default_avatar));
@@ -159,5 +162,12 @@ public class ImageUtils {
      */
     public static Bitmap byteArray2Bitmap(byte[] bytes) {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public static String bitmapToBase64String(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }
