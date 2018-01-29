@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +47,8 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by eyal muchtar on 11/9/17.
@@ -74,7 +75,7 @@ public class InCallService extends Service {
     private WindowManager windowManager;
     private WindowManager.LayoutParams mainWindow;
     private View floatingWidget;
-    private ImageView pictureImageView;
+    private CircleImageView pictureImageView;
     private TextView fullNameTextView;
     private TextView phoneNumberTextView;
 
@@ -119,9 +120,9 @@ public class InCallService extends Service {
         floatingWidget = inflater.inflate(R.layout.layout_floating_layout, null);
 
 
-        pictureImageView = floatingWidget.findViewById(R.id.pictureImageView);
-        fullNameTextView = floatingWidget.findViewById(R.id.fullNameTextView);
-        phoneNumberTextView = floatingWidget.findViewById(R.id.phoneNumberTextView);
+        pictureImageView = floatingWidget.findViewById(R.id.profile_image);
+        fullNameTextView = floatingWidget.findViewById(R.id.callerNameCustomTextView);
+        phoneNumberTextView = floatingWidget.findViewById(R.id.callerPhoneCustomTextView);
         windowManager.addView(floatingWidget, mainWindow);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "apercu_regular.otf");
