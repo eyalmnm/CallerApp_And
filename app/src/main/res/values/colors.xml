@@ -37,6 +37,8 @@
     <color name="bg_view_otp">#fc6d38</color>
 
     <color name="white">#FFFFFFFF</color>
+    <color name="floating_layout_main_text_color">#6333a4</color>
+    <color name="floating_layout_sub_text_color">#141b5e</color>
 
     <color name="bthumbnail_background">#ffffffff</color>
     <color name="bthumbnail_placeholder">#e9e9e9</color>
