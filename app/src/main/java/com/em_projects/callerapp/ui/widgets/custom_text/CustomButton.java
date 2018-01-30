@@ -32,7 +32,7 @@ public class CustomButton extends Button {
 
         if (fontName != null) {
             AssetManager assetManager = context.getAssets();
-            Typeface typeface = Typeface.createFromAsset(assetManager, "fonts/" + fontName + ".ttf");
+            Typeface typeface = Typeface.createFromAsset(assetManager, "fonts/" + fontName + ".otf");
             setTypeface(typeface);
         }
     }

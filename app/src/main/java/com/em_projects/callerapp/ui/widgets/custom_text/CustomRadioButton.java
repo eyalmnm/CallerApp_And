@@ -29,7 +29,7 @@ public class CustomRadioButton extends RadioButton {
         styledAttrs.recycle();
 
         if (fontName != null) {
-            Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontName + ".ttf");
+            Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontName + ".otf");
             setTypeface(typeface);
         }
     }
