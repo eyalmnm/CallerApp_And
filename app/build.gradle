@@ -8,8 +8,8 @@ android {
         applicationId "com.em_projects.callerapp"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 9
-        versionName "0.1.0"
+        versionCode 11
+        versionName "0.2.1"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
