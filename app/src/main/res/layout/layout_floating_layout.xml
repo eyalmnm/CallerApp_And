@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_container"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/floating_layout_bg_image_width"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
@@ -10,60 +10,73 @@
 
     <RelativeLayout
         android:id="@+id/mainBgImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_width="@dimen/floating_layout_bg_image_width"
+        android:layout_height="@dimen/floating_layout_bg_image_height"
+        android:layout_marginTop="@dimen/floating_layout_bg_image_top_margin"
         android:background="@drawable/group_2">
+
+        <LinearLayout
+            android:id="@+id/spamLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spam_layout_margin_top"
+            android:orientation="vertical">
 
         <ImageView
             android:id="@+id/spamImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="@dimen/spam_imageview_width"
+            android:layout_height="@dimen/spam_imageview_height"
+            android:layout_gravity="center_horizontal"
             android:src="@drawable/shape_2_copy" />
 
         <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
             android:id="@+id/spamCustomTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/spam_textview_width"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spamImageView"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="@dimen/spam_textview_top_margin"
+            android:gravity="center"
             android:text="spam"
-            android:textSize="9sp"
+            android:textSize="@dimen/spam_textview_text_size"
             app:custom_font="apercu_regular" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/blockImageView"
+        <LinearLayout
+            android:id="@+id/blockLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="14dp"
-            android:layout_marginTop="14dp"
-            android:src="@drawable/layer_11" />
+            android:layout_marginTop="@dimen/block_layout_top_margin"
+            android:orientation="vertical">
 
-        <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
-            android:id="@+id/blockCustomTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/spamCustomTextView"
-            android:layout_alignRight="@id/blockImageView"
-            android:layout_marginLeft="18dp"
-            android:text="Block"
-            android:textSize="9sp"
-            app:custom_font="apercu_regular" />
+            <ImageView
+                android:id="@+id/blockImageView"
+                android:layout_width="@dimen/block_imageview_width"
+                android:layout_height="@dimen/block_imageview_height"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/layer_11" />
+
+            <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+                android:id="@+id/blockCustomTextView"
+                android:layout_width="@dimen/block_textview_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/block_textview_top_margin"
+                android:gravity="center"
+                android:text="Block"
+                android:textSize="@dimen/block_textview_text_size"
+                app:custom_font="apercu_regular" />
+
+        </LinearLayout>
 
         <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
             android:id="@+id/callerNameCustomTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spamCustomTextView"
+            android:layout_below="@id/spamLayout"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="@dimen/caller_name_textview_top_margin"
             android:text="Caller name"
             android:textColor="@color/floating_layout_main_text_color"
-            android:textSize="13sp"
+            android:textSize="@dimen/caller_name_textview_text_size"
             app:custom_font="apercu_regular" />
 
         <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
@@ -72,20 +85,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/callerNameCustomTextView"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="@dimen/caller_phone_textview_top_margin"
             android:text="Caller phone"
             android:textColor="@color/floating_layout_sub_text_color"
-            android:textSize="11sp"
+            android:textSize="@dimen/caller_phone_textview_text_size"
             app:custom_font="apercu_regular" />
 
         <ImageView
             android:id="@+id/mailImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/mail_imageview_width"
+            android:layout_height="@dimen/mail_imageview_height"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="17dp"
+            android:layout_marginBottom="@dimen/mail_imageview_bottom_margin"
+            android:layout_marginStart="@dimen/mail_imageview_start_margin"
             android:src="@drawable/layer_16" />
 
         <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
@@ -93,23 +106,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/mailImageView"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/mail_textview_start_margin"
             android:layout_toEndOf="@id/mailImageView"
             android:text="eyal@em-projects.com"
             android:textColor="@android:color/black"
-            android:textSize="9sp"
+            android:textSize="@dimen/mail_textview_text_size"
             app:custom_font="apercu_regular" />
 
         <ImageView
             android:id="@+id/facebookImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/facebook_imageview_width"
+            android:layout_height="@dimen/facebook_imageview_height"
             android:layout_above="@id/mailImageView"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="21dp"
+            android:layout_marginBottom="@dimen/facebook_imageview_bottom_margin"
+            android:layout_marginStart="@dimen/facebook_imageview_start_margin"
             android:src="@drawable/layer_15_copy" />
 
         <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+            android:id="@+id/facebookTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/facebookImageView"
@@ -117,18 +131,38 @@
             android:layout_toEndOf="@id/facebookImageView"
             android:text="eyal@em-projects.com"
             android:textColor="@android:color/black"
-            android:textSize="9sp"
+            android:textSize="@dimen/facebook_imageview_text_size"
             app:custom_font="apercu_regular" />
 
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="@dimen/profile_image_width"
+        android:layout_height="@dimen/profile_image_height"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/profile_image_shadow_shape" />
+
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="@dimen/profile_image_width"
+        android:layout_height="@dimen/profile_image_height"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_perm_identity_black_24dp"
+        android:visibility="visible"
         app:civ_border_color="#FFFFFF"
         app:civ_border_width="2dp" />
+
+    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+        android:id="@+id/initialsImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/initial_image_shape"
+        android:gravity="center"
+        android:text="EM"
+        android:textColor="@color/floating_layout_main_text_color"
+        android:textSize="@dimen/initials_font_size"
+        android:visibility="invisible"
+        app:custom_font="apercu_regular" />
 
 </RelativeLayout>
