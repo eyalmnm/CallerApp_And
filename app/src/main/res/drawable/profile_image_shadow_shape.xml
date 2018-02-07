@@ -10,8 +10,8 @@
         </shape>
     </item>
     <item
-        android:bottom="6dp"
-        android:right="6dp">
+        android:bottom="4dp"
+        android:right="3dp">
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="oval">
             <size

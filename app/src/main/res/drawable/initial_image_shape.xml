@@ -7,7 +7,7 @@
         android:width="@dimen/profile_image_width"
         android:height="@dimen/profile_image_height" />
     <stroke
-        android:width="4dp"
+        android:width="2dp"
         android:color="@color/white" />
 
 </shape>
