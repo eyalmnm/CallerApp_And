@@ -18,7 +18,7 @@ public class CustomFont {
      * @return Typeface class specifies the typeface and intrinsic style of a font
      */
     public static Typeface fontApercuRegular(Context context) {
-        Typeface font = Typeface.createFromAsset(context.getAssets(), "apercu_regular.otf");
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/apercu_regular.otf");
         return font;
     }
     /**
@@ -27,7 +27,7 @@ public class CustomFont {
      * @return Typeface class specifies the typeface and intrinsic style of a font
      */
     public static Typeface fontApercuMedium(Context context) {
-        Typeface font = Typeface.createFromAsset(context.getAssets(), "apercu_medium.otf");
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/apercu_medium.otf");
         return font;
     }
     /**
