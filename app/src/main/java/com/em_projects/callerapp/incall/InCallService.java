@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -35,9 +34,9 @@ import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.network.CommListener;
 import com.em_projects.callerapp.network.ServerUtilities;
+import com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView;
 import com.em_projects.callerapp.utils.ContactsUtils;
 import com.em_projects.callerapp.utils.DeviceUtils;
-import com.em_projects.callerapp.utils.ImageUtils;
 import com.em_projects.callerapp.utils.JSONUtils;
 import com.em_projects.callerapp.utils.StringUtils;
 import com.google.firebase.crash.FirebaseCrash;
@@ -78,6 +77,7 @@ public class InCallService extends Service {
     private CircleImageView pictureImageView;
     private TextView fullNameTextView;
     private TextView phoneNumberTextView;
+    private CustomTextView initialsImageView;
 
     // Location
     private Thread runner;
@@ -96,7 +96,7 @@ public class InCallService extends Service {
 
         if (Build.VERSION.SDK_INT == 26) {
             mainWindow = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
@@ -104,30 +104,31 @@ public class InCallService extends Service {
                     PixelFormat.TRANSPARENT);
         } else {
             mainWindow = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                     PixelFormat.TRANSPARENT);
         }
-        mainWindow.gravity = Gravity.CENTER_HORIZONTAL; //  | Gravity.TOP; // Gravity.RIGHT | Gravity.TOP;
-        mainWindow.x = 0;
-        mainWindow.y = 100;
+        mainWindow.gravity = Gravity.CENTER; //  | Gravity.TOP; // Gravity.RIGHT | Gravity.TOP;
+        //mainWindow.x = 0;
+        //mainWindow.y = 100;
 
         // Connections Map View
         inflater = LayoutInflater.from(this);
         floatingWidget = inflater.inflate(R.layout.layout_floating_layout, null);
 
-
+        initialsImageView = floatingWidget.findViewById(R.id.initialsImageView);
         pictureImageView = floatingWidget.findViewById(R.id.profile_image);
         fullNameTextView = floatingWidget.findViewById(R.id.callerNameCustomTextView);
         phoneNumberTextView = floatingWidget.findViewById(R.id.callerPhoneCustomTextView);
         windowManager.addView(floatingWidget, mainWindow);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "apercu_regular.otf");
-        fullNameTextView.setTypeface(typeface);
-        phoneNumberTextView.setTypeface(typeface);
+//        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/apercu_regular.otf");
+//        fullNameTextView.setTypeface(typeface);
+//        phoneNumberTextView.setTypeface(typeface);
+        initialsImageView.setVisibility(View.GONE);
 
         floatingWidget.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
@@ -171,9 +172,15 @@ public class InCallService extends Service {
         Log.d(TAG, "onStartCommand");
         FirebaseCrash.log(TAG + " onStartCommand"); // TODO
         String callerPhone = null;
-        if (false == intent.getExtras().containsKey(Constants.callerPhone)) {
+//        if (null == intent) {
+//            FirebaseCrash.log("Intent is null in InCallService!!!");
+//            stopSelf();
+//            return START_NOT_STICKY;
+//        }
+        if (null == intent || false == intent.getExtras().containsKey(Constants.callerPhone)) {
             stopSelf();
-            FirebaseCrash.log("Empty caller phone arrived");
+            FirebaseCrash.log("Empty caller phone or intent is null");
+            Log.e(TAG, "Empty caller phone or intent is null");
             return START_STICKY;
         }
         if (true == intent.getExtras().containsKey("offhook")) {
@@ -188,6 +195,13 @@ public class InCallService extends Service {
         } else if (true == intent.getExtras().containsKey("ringing")) {
             callerPhone = intent.getStringExtra(Constants.callerPhone);
             if (false == StringUtils.isNullOrEmpty(callerPhone)) {
+                e164Format = callerPhone;
+                fullName = ContactsUtils.getContactName(context, callerPhone);
+                if (true == StringUtils.isNullOrEmpty(fullName)) {
+                    fullName = "";
+                }
+                bitmap = ContactsUtils.retrieveContactPhoto(context, callerPhone);
+                showContactData(fullName, callerPhone, bitmap);
                 startTime = 0;
                 String myPhone = Dynamic.getMyNumber();
                 String otp = Dynamic.getMyOTP();
@@ -205,12 +219,13 @@ public class InCallService extends Service {
                             if (true == "no phone found".equalsIgnoreCase(response.trim())
                                     || true == StringUtils.isNullOrEmpty(response)) {
                                 // Display data from phone
-                                e164Format = finalCallerPhone;
-                                fullName = ContactsUtils.getContactName(context, finalCallerPhone);
-                                if (true == StringUtils.isNullOrEmpty(fullName)) {
-                                    fullName = "Unknown caller";
-                                }
-                                showContactData(fullName, finalCallerPhone, null);
+//                                e164Format = finalCallerPhone;
+//                                fullName = ContactsUtils.getContactName(context, finalCallerPhone);
+//                                if (true == StringUtils.isNullOrEmpty(fullName)) {
+//                                    fullName = "";
+//                                }
+//                                showContactData(fullName, finalCallerPhone, null);
+                                // Do Nothing.
                             } else {
                                 // show caller data
                                 try {
@@ -304,13 +319,29 @@ public class InCallService extends Service {
                 phoneNumberTextView.setText(e164Format);
                 fullNameTextView.setText(fullName);
                 if (null != bitmap) {
-                    Bitmap circleBitmap = ImageUtils.getCircleBitmap(bitmap);
-                    pictureImageView.setImageBitmap(circleBitmap);
+//                    Bitmap circleBitmap = ImageUtils.getCircleBitmap(bitmap);
+//                    pictureImageView.setImageBitmap(circleBitmap);
+                    initialsImageView.setVisibility(View.INVISIBLE);
+                    pictureImageView.setVisibility(View.VISIBLE);
+                    pictureImageView.setImageBitmap(bitmap);
+                } else if (false == StringUtils.isNullOrEmpty(fullName) && null == bitmap) {
+                    pictureImageView.setVisibility(View.INVISIBLE);
+                    initialsImageView.setVisibility(View.VISIBLE);
+                    initialsImageView.setText(getInitials(fullName));
                 }
                 floatingWidget.invalidate();
             }
         });
 
+    }
+
+    private String getInitials(String fullName) {
+        String[] names = fullName.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String name : names) {
+            sb.append(name.charAt(0));
+        }
+        return sb.toString().trim();
     }
 
     private void showNotification(String fullName, String e164Format) {
@@ -319,7 +350,8 @@ public class InCallService extends Service {
                         .setSmallIcon(R.drawable.logo)
                         .setContentTitle("CallWize")
                         .setOngoing(false)
-                        .setContentText("Incoming call from " + fullName + " Phone number " + e164Format);
+                        .setContentText("Incoming call from " +
+                                (false == StringUtils.isNullOrEmpty(fullName) ? fullName : e164Format));
         int NOTIFICATION_ID = (int) (System.currentTimeMillis() % 10000);
         Intent targetIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
