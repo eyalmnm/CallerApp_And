@@ -81,7 +81,6 @@ public class ContactsUtils {
         String contactId = null;
         Bitmap photo = null;
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
 
         Cursor cursor =
@@ -98,20 +97,16 @@ public class ContactsUtils {
             }
             cursor.close();
         }
-
-//        Bitmap photo = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
-
         try {
             InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
                     ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactId)));
-
             if (inputStream != null) {
                 photo = BitmapFactory.decodeStream(inputStream);
             }
-
-            assert inputStream != null;
-            inputStream.close();
-
+//            assert inputStream != null;
+            if (null != inputStream) {
+                inputStream.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -288,21 +283,25 @@ public class ContactsUtils {
                     emailCursor.close();
 
                     // Read Contacts Photo
-//                    Bitmap photo = null; // = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
-//                    try {
-//                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
-//                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contact_id)));
-//
-//                        if (inputStream != null) {
-//                            photo = BitmapFactory.decodeStream(inputStream);    // TODO
-//                        }
-//
+                    Bitmap photo = null; // = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_image);
+                    try {
+                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contact_id)));
+
+                        if (inputStream != null) {
+                            photo = BitmapFactory.decodeStream(inputStream);    // TODO
+                            output.append("\n Photo:" + ImageUtils.bitmapToBase64String(photo));
+                            photo.recycle();
+                        }
+
 //                        assert inputStream != null;
-//                        inputStream.close();
-//
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "getContacts", e);
-//                    }
+                        if (null != inputStream) {
+                            inputStream.close();
+                        }
+
+                    } catch (IOException e) {
+                        Log.e(TAG, "getContacts", e);
+                    }
                 }
 
                 // Add the contact to the ArrayList
