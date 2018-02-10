@@ -111,7 +111,12 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         Intent inCallServiceIntent = new Intent(context, InCallService.class);
         inCallServiceIntent.putExtra(Constants.callerPhone, incomingNumber);
         inCallServiceIntent.putExtra("ringing", "ringing");
-        context.startService(inCallServiceIntent);
+        // Android 8
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+            context.startForegroundService(inCallServiceIntent);
+        } else {
+            context.startService(inCallServiceIntent);
+        }
     }
 }
 
