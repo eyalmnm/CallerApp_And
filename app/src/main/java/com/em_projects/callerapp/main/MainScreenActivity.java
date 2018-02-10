@@ -208,7 +208,6 @@ public class MainScreenActivity extends AppCompatActivity {
                 String otp = data.getStringExtra(Constants.otp);
                 String phone = data.getStringExtra(Constants.phoneNumber);
                 setIsRestration(otp, phone);
-                uploadContacts();
                 gcmRegistration();
             }
         } else if (requestCode == PERM_REQUEST_CODE_DRAW_OVERLAYS) {
@@ -224,11 +223,13 @@ public class MainScreenActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void uploadContacts() {
-        ContactsContentObserverManager.getInstance(context).registerContactsContentObserver(context);
+    private void createContactsContentObserver() {
+        Log.d(TAG, "createContactsContentObserver");
+        ContactsContentObserverManager.getInstance(context).registerContactsContentObserver();
     }
 
     private void gcmRegistration() {
+        Log.d(TAG, "gcmRegistration");
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
         if (resultCode == ConnectionResult.SUCCESS) {
@@ -242,12 +243,30 @@ public class MainScreenActivity extends AppCompatActivity {
             faceBookLogin();
         }
         getLocation();
-        sendContacts();
+        createContactsContentObserver();
+
+        if (true == isFirstTime()) {
+            transmitContactsList();
+            transmitCallLog();
+            setFirstTime(false);
+        }
     }
 
-    private void sendContacts() {
+    private void transmitCallLog() {
+        // TODO
+    }
+
+    private void transmitContactsList() {
         Intent intent = new Intent(context, ContactsTxIntentService.class);
-        startService(intent);
+        // startService(intent);  // TODO
+    }
+
+    private boolean isFirstTime() {
+        return PreferencesUtils.getInstance(context).isFirstTime();
+    }
+
+    private void setFirstTime(boolean firstTime) {
+        PreferencesUtils.getInstance(context).setFirstTime(firstTime);
     }
 
     @SuppressLint("MissingPermission")

@@ -7,11 +7,13 @@ import android.net.Uri;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by eyalmuchtar on 1/8/18.
  */
 
+// Ref: https://www.grokkingandroid.com/use-contentobserver-to-listen-to-changes/ 
 // Ref: https://stackoverflow.com/questions/5020276/can-you-determine-what-contact-changes-w-registercontentobserver
 // Ref: https://stackoverflow.com/questions/25686018/android-how-to-detect-contact-list-is-changed  <----------------------<<<-
 // Ref: https://stackoverflow.com/questions/5751351/android-how-do-you-detect-which-contact-changed
@@ -29,13 +31,12 @@ public class ContactsContentObserverManager {
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
-                transmitContactsList(context);
             }
 
             @Override
             public void onChange(boolean selfChange, Uri uri) {
                 super.onChange(selfChange, uri);
-                transmitContactsList(context);
+                transmitContactsList();
             }
         };
     }
@@ -48,15 +49,15 @@ public class ContactsContentObserverManager {
         return instance;
     }
 
-    private void transmitContactsList(Context context) {
+    private void transmitContactsList() {
         if (null != context) {
+            Toast.makeText(context, "Updating Contacts List...", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ContactsTxIntentService.class);
             context.startService(intent);
         }
     }
 
-    public void registerContactsContentObserver(Context ctx) {
-        context = ctx;
+    public void registerContactsContentObserver() {
         if (null != context) {
             context.getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
         }

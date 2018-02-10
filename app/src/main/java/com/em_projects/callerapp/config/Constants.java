@@ -59,6 +59,8 @@ public class Constants {
     public static String contatcts = "contatcts_list";
     public static String countryCode = "country_code";
     public static String duration = "duration";
+    public static String latitude = "latitude";
+    public static String longitude = "longitude";
 
     // Server Communication methods
     public static String smsVerification = "new_user";
@@ -77,5 +79,6 @@ public class Constants {
 
     // Preferences
     public static String introIsShown = "introIsShown";
+    public static String isFirstTime = "isFirstTime";
 
 }

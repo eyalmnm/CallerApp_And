@@ -33,6 +33,7 @@ import java.util.Arrays;
  * Created by eyalmuchtar on 11/5/17.
  */
 
+// Ref: https://stackoverflow.com/questions/21775198/facebook-api-this-app-is-in-development-mode 
 // Ref: https://code.tutsplus.com/tutorials/quick-tip-add-facebook-login-to-your-android-app--cms-23837
 // Ref: https://developers.facebook.com/docs/facebook-login/android/accesstokens
 // Ref: https://developers.facebook.com/docs/facebook-login/android/

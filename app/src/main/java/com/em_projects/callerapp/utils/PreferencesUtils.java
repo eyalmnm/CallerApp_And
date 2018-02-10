@@ -132,6 +132,15 @@ public class PreferencesUtils {
         editor.commit();
     }
 
+    public boolean isFirstTime() {
+        return preferences.getBoolean(Constants.isFirstTime, true);
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        editor.putBoolean(Constants.isFirstTime, firstTime);
+        editor.commit();
+    }
+
 
     @Override
     protected void finalize() throws Throwable {

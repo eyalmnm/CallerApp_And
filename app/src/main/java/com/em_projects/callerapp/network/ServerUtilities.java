@@ -59,7 +59,7 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
-    public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, long duration, String fullName, String e164Format, CommListener listener) {
+    public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, long duration, String fullName, String e164Format, String latitude, String longitude, CommListener listener) {
         Log.d(TAG, "callTerminated");
         String serverUrl = Constants.serverURL + "/" + Constants.callTerminated;
         HashMap params = new HashMap();
@@ -71,6 +71,8 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.gcmToken, gcmToken);
         params.put(Constants.duration, String.valueOf(duration));
         params.put(Constants.fullName, fullName);
+        params.put(Constants.latitude, latitude);
+        params.put(Constants.longitude, longitude);
 
         post(serverUrl, params, listener);
     }

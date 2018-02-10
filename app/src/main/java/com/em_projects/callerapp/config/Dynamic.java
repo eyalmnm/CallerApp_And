@@ -65,7 +65,7 @@ public class Dynamic {
     }
 
     public static void setGcmToken(Context context, String gcm_token) throws Exception {
-        if (true == StringUtils.isNullOrEmpty(Dynamic.gcm_token)) {
+        if (false == StringUtils.isNullOrEmpty(gcm_token)) {
             PreferencesUtils.getInstance(context).setGcmToken(gcm_token);
             Dynamic.gcm_token = gcm_token;
         }
