@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.em_projects.callerapp.config.Constants;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +79,7 @@ public class ContactsUtils {
 
     public static Bitmap retrieveContactPhoto(Context context, String number) {
         ContentResolver contentResolver = context.getContentResolver();
-        String contactId = null;
+        String contactIdStr = null;
         Bitmap photo = null;
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
@@ -93,13 +94,26 @@ public class ContactsUtils {
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+                contactIdStr = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
             }
             cursor.close();
         }
+        if (true == StringUtils.isNullOrEmpty(contactIdStr)) {
+            FirebaseCrash.log("contactId is null in " + TAG + " retrieveContactPhoto");
+            return null;
+        }
+        Long contactId = 0L;
+        try {
+            contactId = new Long(contactIdStr);
+        } catch (Exception ex) {
+            Log.e(TAG, "retrieveContactPhoto", ex);
+            FirebaseCrash.logcat(Log.ERROR, TAG, "retrieveContactPhoto");
+            FirebaseCrash.report(ex);
+            return null;
+        }
         try {
             InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
-                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactId)));
+                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId));
             if (inputStream != null) {
                 photo = BitmapFactory.decodeStream(inputStream);
             }
