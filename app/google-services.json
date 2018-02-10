@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "587872310921",
+    "firebase_url": "https://wizecaller-5b19a.firebaseio.com",
+    "project_id": "wizecaller-5b19a",
+    "storage_bucket": "wizecaller-5b19a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587872310921:android:b97b8e44240622c7",
+        "android_client_info": {
+          "package_name": "com.em_projects.callerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587872310921-bdptfqsq1k0jves72j4keanc2aknjl8q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.em_projects.callerapp",
+            "certificate_hash": "ee4bdd90d7083976d17878f0f99f3482584f8e6f"
+          }
+        },
+        {
+          "client_id": "587872310921-t6aoe6ev8g26jos7nl1ghugaqptgvtmf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4pxl2_tknfCM7uUNerlaenoi7CKLo07A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587872310921-t6aoe6ev8g26jos7nl1ghugaqptgvtmf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
