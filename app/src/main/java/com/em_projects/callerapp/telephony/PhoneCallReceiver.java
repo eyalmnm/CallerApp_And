@@ -3,6 +3,7 @@ package com.em_projects.callerapp.telephony;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -91,7 +92,12 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         Intent inCallServiceIntent = new Intent(context, InCallService.class);
         inCallServiceIntent.putExtra(Constants.callerPhone, incomingNumber);
         inCallServiceIntent.putExtra("idle", "idle");
-        context.startService(inCallServiceIntent);
+        // Android 8
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+            context.startForegroundService(inCallServiceIntent);
+        } else {
+            context.startService(inCallServiceIntent);
+        }
     }
 
     private void sendOffHook(final Context context, String incomingNumber) {
