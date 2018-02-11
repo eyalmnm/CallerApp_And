@@ -2,6 +2,7 @@ package com.em_projects.callerapp.incall;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -87,9 +88,24 @@ public class InCallService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
-        FirebaseCrash.log(TAG + " onCreate"); // TODO
+        FirebaseCrash.log(TAG + " onCreate");
         context = this;
         new Dynamic(context);
+        // Start Foreground service
+        if (Build.VERSION.SDK_INT >= 26) {
+            String CHANNEL_ID = "wizecall_channel_01";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "WizeCall Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("")
+                    .setContentText("").build();
+
+            startForeground(1, notification);
+        }
         // Init UI
         windowManager = (WindowManager) getApplicationContext().getSystemService(WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getSize(displaySize);
