@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 
+import com.em_projects.callerapp.utils.ContactsUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,11 +16,13 @@ import java.util.Date;
  * Created by eyalmuchtar on 2/22/18.
  */
 
+// Required "android.permission.READ_CALL_LOG" permission
 public class CallLogHelper {
 
-    private ArrayList<CallLogEntry> getAllCallLogs(Context context) {
+    public static ArrayList<CallLogEntry> getAllCallLogs(Context context) {
         ArrayList<CallLogEntry> callLogEntries = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
         // reading all data in descending order according to DATE
         String strOrder = CallLog.Calls.DATE + " DESC";
         Uri callUri = Uri.parse("content://call_log/calls");
@@ -29,22 +33,31 @@ public class CallLogHelper {
             String callNumber = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.NUMBER));
 
-            String callName = cur.getString(cur
-                    .getColumnIndex(CallLog.Calls.CACHED_NAME));
+            String callName = ContactsUtils.getContactName(context, callNumber);
 
             String callDate = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.DATE));
-
-            SimpleDateFormat formatter = new SimpleDateFormat(
-                    "dd-MMM-yyyy HH:mm");
             String dateString = formatter.format(new Date(Long
                     .parseLong(callDate)));
 
-            String callType = cur.getString(cur
+            String callType = "";
+            int callTypeCode = cur.getInt(cur
                     .getColumnIndex(CallLog.Calls.TYPE));
+            switch (callTypeCode) {
+                case CallLog.Calls.OUTGOING_TYPE:
+                    callType = "Outgoing";
+                    break;
+                case CallLog.Calls.INCOMING_TYPE:
+                    callType = "Incoming";
+                    break;
+                case CallLog.Calls.MISSED_TYPE:
+                    callType = "Missed";
+                    break;
+            }
 
-            String isCallNew = cur.getString(cur
+            String isCallNewCode = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.NEW));
+            String isCallNew = CallLog.Calls.NEW.equalsIgnoreCase(isCallNewCode) ? "New Call" : "Not New Call";
 
             String duration = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.DURATION));

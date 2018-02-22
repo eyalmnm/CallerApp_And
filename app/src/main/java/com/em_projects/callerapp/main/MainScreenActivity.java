@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
+import com.em_projects.callerapp.call_log.CallLogHelper;
 import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.contacts.ContactsContentObserverManager;
@@ -65,6 +66,7 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.PROCESS_OUTGOING_CALLS;
+import static android.Manifest.permission.READ_CALL_LOG;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
@@ -247,13 +249,13 @@ public class MainScreenActivity extends AppCompatActivity {
 
         if (true == isFirstTime()) {
             transmitContactsList();
-            transmitCallLog();
             setFirstTime(false);
         }
     }
 
-    private void transmitCallLog() {
+    private void showCallLog() {   // TODO
         // TODO
+        CallLogHelper.getAllCallLogs(context);
     }
 
     private void transmitContactsList() {
@@ -333,6 +335,7 @@ public class MainScreenActivity extends AppCompatActivity {
         int receiveBootComplete = ContextCompat.checkSelfPermission(getApplicationContext(), RECEIVE_BOOT_COMPLETED);
         int locationCoarse = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
         int locationFine = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+        int callLog = ContextCompat.checkSelfPermission(getApplicationContext(), READ_CALL_LOG);
 
         boolean overLay = Settings.canDrawOverlays(this);
 
@@ -346,13 +349,14 @@ public class MainScreenActivity extends AppCompatActivity {
                 receiveBootComplete == PackageManager.PERMISSION_GRANTED &&
                 locationCoarse == PackageManager.PERMISSION_GRANTED &&
                 locationFine == PackageManager.PERMISSION_GRANTED &&
+                callLog == PackageManager.PERMISSION_GRANTED &&
                 overLay;
     }
 
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET,
                 PROCESS_OUTGOING_CALLS, WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED, ACCESS_COARSE_LOCATION,
-                ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+                ACCESS_FINE_LOCATION, READ_CALL_LOG}, PERMISSION_REQUEST_CODE);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -372,9 +376,10 @@ public class MainScreenActivity extends AppCompatActivity {
                     boolean bootRes = grantResults[7] == PackageManager.PERMISSION_GRANTED;
                     boolean corseLocationRes = grantResults[8] == PackageManager.PERMISSION_GRANTED;
                     boolean fineLocationRes = grantResults[9] == PackageManager.PERMISSION_GRANTED;
+                    boolean callLog = grantResults[10] == PackageManager.PERMISSION_GRANTED;
 
                     if (receiveSmsRes && readSmsRes && readPhoneStateRes && internetRes && outGoingCallRes &&
-                            wakeLockRes && readContactRes && bootRes && corseLocationRes && fineLocationRes) {
+                            wakeLockRes && readContactRes && bootRes && corseLocationRes && fineLocationRes && callLog) {
                         if (Settings.canDrawOverlays(context)) {
                             //Toast.makeText(context, "Permission Granted, Now you can use the application.", Toast.LENGTH_LONG).show();
                             continueAppLoading();
@@ -386,7 +391,7 @@ public class MainScreenActivity extends AppCompatActivity {
                         Toast.makeText(context, "Permission Denied, You cannot access the application.", Toast.LENGTH_LONG).show();
                         if (!hasPermissions(context, RECEIVE_SMS, READ_SMS, READ_PHONE_STATE, INTERNET, PROCESS_OUTGOING_CALLS,
                                 WAKE_LOCK, READ_CONTACTS, RECEIVE_BOOT_COMPLETED, ACCESS_COARSE_LOCATION,
-                                ACCESS_FINE_LOCATION)) {
+                                ACCESS_FINE_LOCATION, READ_CALL_LOG)) {
                             Toast.makeText(context, "You need to allow access to all the permissions", Toast.LENGTH_LONG).show();
                             requestPermission();
                         }
