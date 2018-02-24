@@ -8,20 +8,15 @@ import java.util.Map;
 
 public class CommRequest {
 
-    public enum MethodType {GET, POST, SOCKET};
-
     private String serverURL;
+    ;
     private Map<String, String> params;
     private CommListener listener;
     private MethodType methodType;
-
-
     public CommRequest(String serverURL, Map<String, String> params, CommListener listener) {
-        this.serverURL = serverURL;
-        this.params = params;
-        this.listener = listener;
-        this.methodType = MethodType.POST;
+        this(serverURL, params, MethodType.POST, listener);
     }
+
 
     public CommRequest(String serverURL, Map<String, String> params, MethodType methodType, CommListener listener) {
         this.serverURL = serverURL;
@@ -45,4 +40,6 @@ public class CommRequest {
     public MethodType getMethodType() {
         return methodType;
     }
+
+    public enum MethodType {GET, POST, SOCKET}
 }
