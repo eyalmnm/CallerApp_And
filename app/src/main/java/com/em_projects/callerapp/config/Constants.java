@@ -42,8 +42,7 @@ public class Constants {
     public static String cell_identity = "cell_identity";
 
     // Server Communication parameters
-    public static String serverURL = "http://advert.zone:37443"; //77.127.141.67:37443"; // http://server.8200.zone:8080";
-    public static String ourSecret = "ourSecret";
+    public static String serverURL = "http://advert.zone:37443";
     public static String deviceId = "deviceId";
     public static String gcmToken = "gcmToken";
     public static String phoneNumber = "phone";
