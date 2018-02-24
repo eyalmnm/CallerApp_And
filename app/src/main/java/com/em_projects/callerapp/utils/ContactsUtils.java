@@ -81,6 +81,10 @@ public class ContactsUtils {
         ContentResolver contentResolver = context.getContentResolver();
         String contactIdStr = null;
         Bitmap photo = null;
+        if (true == StringUtils.isNullOrEmpty(number)) {
+            FirebaseCrash.log("phone number is null in " + TAG + " retrieveContactPhoto");
+            return null;
+        }
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
 
@@ -105,7 +109,7 @@ public class ContactsUtils {
         Long contactId = 0L;
         try {
             contactId = new Long(contactIdStr);
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             Log.e(TAG, "retrieveContactPhoto", ex);
             FirebaseCrash.logcat(Log.ERROR, TAG, "retrieveContactPhoto");
             FirebaseCrash.report(ex);
