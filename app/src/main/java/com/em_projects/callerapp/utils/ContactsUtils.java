@@ -111,7 +111,7 @@ public class ContactsUtils {
             contactId = new Long(contactIdStr);
         } catch (Throwable ex) {
             Log.e(TAG, "retrieveContactPhoto", ex);
-            FirebaseCrash.logcat(Log.ERROR, TAG, "retrieveContactPhoto");
+            FirebaseCrash.logcat(Log.ERROR, TAG, "retrieveContactPhoto for: ID" + contactIdStr);
             FirebaseCrash.report(ex);
             return null;
         }
