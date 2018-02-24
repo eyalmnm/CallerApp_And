@@ -63,7 +63,6 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "callTerminated");
         String serverUrl = Constants.serverURL + "/" + Constants.callTerminated;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, myPhone);
         params.put(Constants.otp, otp);
@@ -81,7 +80,6 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "sendFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendFbToken;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.otp, otp);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
@@ -94,7 +92,6 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "sendNewFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendNewFbToken;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.otp, otp);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
@@ -108,31 +105,19 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "searchPhone");
         String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, myPhone);
         params.put(Constants.otp, otp);
         params.put(Constants.callerPhone, searchPhone);
         params.put(Constants.gcmToken, gcmToken);
 
-        Log.w(TAG, "searchPhone -> deviceId: " + deviceId);
-        Log.w(TAG, "searchPhone -> myPhone: " + myPhone);
-        Log.w(TAG, "searchPhone -> otp: " + otp);
-        Log.w(TAG, "searchPhone -> gcmToken: " + gcmToken);
-        Log.w(TAG, "searchPhone -> searchPhone: " + searchPhone);
-
-        FirebaseCrash.log("searchPhone -> deviceId: " + deviceId + " searchPhone -> myPhone: " + myPhone
-                + " searchPhone -> otp: " + otp + " searchPhone -> gcmToken: " + gcmToken
-                + " searchPhone -> searchPhone: " + searchPhone); // TODO
-
-        post(serverUrl, params, listener);
+        post(serverUrl, params, CommRequest.MethodType.GET, listener);
     }
 
     public void sendGcmToken(String deviceId, String phone, String gcmToken, CommListener listener) {
         Log.d(TAG, "sendGcmToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendGcmToken;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.gcmToken, gcmToken);
@@ -144,7 +129,6 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "sendContact");
         String serverUrl = Constants.serverURL + "/" + Constants.sendContatcts;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.otp, otp);
@@ -157,7 +141,6 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "requestSMSVerification");
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
         HashMap params = new HashMap();
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
         params.put(Constants.fullName, fullName);
@@ -171,13 +154,29 @@ public final class ServerUtilities implements Runnable {
         String serverUrl = Constants.serverURL + "/" + Constants.otpVerification;
         HashMap params = new HashMap();
         params.put(Constants.otp, otp);
-        params.put(Constants.ourSecret, Constants.secret);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
         params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
 
         post(serverUrl, params, listener);
     }
+
+    // Puts the request into queue for requests and add some additional data
+    private void post(final String serverURL, final Map<String, String> params, CommRequest.MethodType methodType, CommListener listener) {
+        Log.d(TAG, "post");
+
+        //Amend device information for the server
+        params.put("phone_model", android.os.Build.MODEL);
+        params.put("phone_manufacturer", Build.MANUFACTURER);
+        params.put("version", android.os.Build.VERSION.RELEASE);
+        params.put("phone_type", "Android");
+
+        queue.add(new CommRequest(serverURL, params, methodType, listener));
+        synchronized (monitor) {
+            monitor.notifyAll();
+        }
+    }
+
 
     // Puts the request into queue for requests and add some additional data
     private void post(final String serverURL, final Map<String, String> params, CommListener listener) {
