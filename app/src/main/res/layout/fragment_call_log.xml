@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/call_log_root_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <RelativeLayout
+        android:id="@+id/mainBgImageView"
+        android:layout_width="@dimen/floating_layout_bg_image_width"
+        android:layout_height="@dimen/floating_layout_bg_image_height"
+        android:layout_marginTop="@dimen/floating_layout_bg_image_top_margin"
+        android:background="@drawable/group_2">
+
+        <ImageView
+            android:id="@+id/settingsImageView"
+            android:layout_width="@dimen/setting_imageview_width"
+            android:layout_height="@dimen/setting_imageview_height"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/setting_imageview_left_maring"
+            android:layout_marginTop="@dimen/setting_imageview_top_maring"
+            android:src="@drawable/layer_15" />
+
+        <ImageView
+            android:id="@+id/searchImageView"
+            android:layout_width="@dimen/search_imageview_width"
+            android:layout_height="@dimen/search_imageview_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/search_imageview_right_maring"
+            android:layout_marginTop="@dimen/search_imageview_top_maring"
+            android:src="@drawable/layer_37" />
+
+        <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+            android:id="@+id/commonCallsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/commmon_calls_textview_left_margin"
+            android:layout_marginTop="@dimen/commmon_calls_textview_top_margin"
+            android:gravity="center_horizontal"
+            android:text="COMMON CALLS"
+            android:textColor="#341272"
+            android:textSize="@dimen/commmon_calls_textview_text_size"
+            app:custom_font="rubik_bold" />
+
+        <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+            android:id="@+id/showMoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/commonCallsTextView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/show_more_textview_right_margin"
+            android:gravity="center_horizontal"
+            android:text="SHOW MORE"
+            android:textColor="#6d0ebf"
+            android:textSize="@dimen/show_more_textview_text_size"
+            app:custom_font="rubik_bold" />
+
+        <LinearLayout
+            android:id="@+id/commonCallAvatarsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/commonCallsTextView"
+            android:layout_marginTop="@dimen/common_call_avatars_container_top_margin"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/callLogListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mainBgImageView"
+        android:background="@color/white" />
+
+    <ImageView
+        android:layout_width="@dimen/profile_image_width"
+        android:layout_height="@dimen/profile_image_height"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/layer_0" />
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/profile_image_width"
+        android:layout_height="@dimen/profile_image_height"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/facebook_blank_photo"
+        android:visibility="visible"
+        app:civ_border_color="#FFFFFF"
+        app:civ_border_width="2dp" />
+
+    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+        android:id="@+id/initialsImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/initial_image_shape"
+        android:gravity="center"
+        android:text="EM"
+        android:textColor="@color/floating_layout_main_text_color"
+        android:textSize="@dimen/initials_font_size"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:custom_font="rubik_bold" />
+
+</RelativeLayout>
