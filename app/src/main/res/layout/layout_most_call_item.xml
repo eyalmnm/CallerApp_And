@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/most_call_item_width"
+    android:layout_width="@dimen/common_call_item_width"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
@@ -9,8 +9,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/mostCallCallerAvatarImageView"
-        android:layout_width="@dimen/most_call_avatar_imageview_width"
-        android:layout_height="@dimen/most_call_avatar_imageview_height"
+        android:layout_width="@dimen/common_call_avatar_imageview_width"
+        android:layout_height="@dimen/common_call_avatar_imageview_height"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/facebook_blank_photo"
         app:civ_border_color="@android:color/transparent"
@@ -24,7 +24,7 @@
         android:gravity="center_horizontal"
         android:text="Oz Ezra"
         android:textColor="#6b0fbf"
-        android:textSize="@dimen/most_call_name_text_size"
+        android:textSize="@dimen/common_call_name_text_size"
         app:custom_font="rubik_regular" />
 
     <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
@@ -35,7 +35,7 @@
         android:gravity="center_horizontal"
         android:text="054-5041249"
         android:textColor="#898989"
-        android:textSize="@dimen/most_call_phone_text_size"
+        android:textSize="@dimen/common_call_phone_text_size"
         app:custom_font="rubik_regular" />
 
 </LinearLayout>
