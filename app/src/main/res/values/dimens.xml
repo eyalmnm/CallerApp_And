@@ -58,47 +58,37 @@
     <dimen name="facebook_imageview_start_margin">26dp</dimen>
     <dimen name="facebook_imageview_text_size">10sp</dimen>
 
+    <!-- Call Log Fragment Dimensions -->
+    <dimen name="setting_imageview_width">18dp</dimen>
+    <dimen name="setting_imageview_height">18dp</dimen>
+    <dimen name="setting_imageview_left_maring">15dp</dimen>
+    <dimen name="setting_imageview_top_maring">20dp</dimen>
+    <dimen name="search_imageview_width">18dp</dimen>
+    <dimen name="search_imageview_height">18dp</dimen>
+    <dimen name="search_imageview_right_maring">16dp</dimen>
+    <dimen name="search_imageview_top_maring">20dp</dimen>
+    <dimen name="commmon_calls_textview_text_size">12sp</dimen>
+    <dimen name="commmon_calls_textview_top_margin">90dp</dimen>
+    <dimen name="commmon_calls_textview_left_margin">15dp</dimen>
+    <dimen name="show_more_textview_text_size">10sp</dimen>
+    <dimen name="show_more_textview_right_margin">16dp</dimen>
 
-    <!-- Floating layout Dimens -->
-    <!--dimen name="floating_layout_bg_image_width">754dp</dimen>
-    <dimen name="floating_layout_bg_image_height">369dp</dimen>
-    <dimen name="floating_layout_bg_image_top_margin">30dp</dimen>
-    <dimen name="profile_image_height">147dp</dimen>
-    <dimen name="profile_image_width">147dp</dimen>
-    <dimen name="initials_font_size">50sp</dimen>
+    <!-- Common Calls Layout -->
+    <dimen name="common_call_avatars_container_top_margin">12dp</dimen>
+    <dimen name="common_call_item_width">70dp</dimen>
+    <dimen name="common_call_avatar_imageview_width">40dp</dimen>
+    <dimen name="common_call_avatar_imageview_height">40dp</dimen>
+    <dimen name="common_call_name_text_size">9sp</dimen>
+    <dimen name="common_call_phone_text_size">9sp</dimen>
 
-    <dimen name="spam_layout_margin_top">26.7dp</dimen>
-    <dimen name="spam_imageview_width">46dp</dimen>
-    <dimen name="spam_imageview_height">38.7dp</dimen>
-    <dimen name="spam_textview_width">144.6dp</dimen>
-    <dimen name="spam_textview_top_margin">17.3dp</dimen>
-    <dimen name="spam_textview_text_size">24.2sp</dimen>
-
-    <dimen name="block_layout_top_margin">27.3dp</dimen>
-    <dimen name="block_imageview_width">37.3dp</dimen>
-    <dimen name="block_imageview_height">37.3dp</dimen>
-    <dimen name="block_textview_width">146.7dp</dimen>
-    <dimen name="block_textview_top_margin">17.3dp</dimen>
-    <dimen name="block_textview_text_size">24.2sp</dimen>
-
-    <dimen name="caller_name_textview_top_margin">24dp</dimen>
-    <dimen name="caller_name_textview_text_size">34.6sp</dimen>
-
-    <dimen name="caller_phone_textview_top_margin">19.3dp</dimen>
-    <dimen name="caller_phone_textview_text_size">29.2sp</dimen>
-
-    <dimen name="mail_imageview_width">41.3dp</dimen>
-    <dimen name="mail_imageview_height">27.3dp</dimen>
-    <dimen name="mail_imageview_bottom_margin">46dp</dimen>
-    <dimen name="mail_imageview_start_margin">42dp</dimen>
-
-    <dimen name="mail_textview_start_margin">26dp</dimen>
-    <dimen name="mail_textview_text_size">23.1sp</dimen>
-
-    <dimen name="facebook_imageview_width">16.7dp</dimen>
-    <dimen name="facebook_imageview_height">35.3dp</dimen>
-    <dimen name="facebook_imageview_bottom_margin">22.7dp</dimen>
-    <dimen name="facebook_imageview_start_margin">56.7dp</dimen>
-    <dimen name="facebook_imageview_text_size">23.1sp</dimen-->
+    <!-- Call Log List -->
+    <dimen name="call_log_list_item_hight">50dp</dimen>
+    <dimen name="call_log_avatar_imageview_width">40dp</dimen>
+    <dimen name="call_log_avatar_imageview_height">40dp</dimen>
+    <dimen name="call_log_avatar_margin_left">10dp</dimen>
+    <dimen name="call_log_name_text_size">9sp</dimen>
+    <dimen name="call_log_name_margin_left">10dp</dimen>
+    <dimen name="call_log_call_type_margin_left">36dp</dimen>
+    <dimen name="call_log_tools_margin_right">11dp</dimen>
 
 </resources>
