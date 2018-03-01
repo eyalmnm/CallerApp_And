@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/call_log_list_item_hight"
+    android:background="@color/white">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/callCallCallerAvatarImageView"
+        android:layout_width="@dimen/call_log_avatar_imageview_width"
+        android:layout_height="@dimen/call_log_avatar_imageview_height"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/call_log_avatar_margin_left"
+        android:layout_marginStart="@dimen/call_log_avatar_margin_left"
+        android:src="@drawable/facebook_blank_photo"
+        app:civ_border_color="@android:color/transparent"
+        app:civ_border_width="0dp" />
+
+    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+        android:id="@+id/callCallCallerNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/callCallCallerAvatarImageView"
+        android:layout_marginStart="@dimen/call_log_name_margin_left"
+        android:layout_toRightOf="@id/callCallCallerAvatarImageView"
+        android:gravity="center_horizontal"
+        android:text="Oz Ezra"
+        android:textColor="#6b0fbf"
+        android:textSize="@dimen/call_log_name_text_size"
+        app:custom_font="rubik_regular" />
+
+    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+        android:id="@+id/callCallCallerPhoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/callCallCallerNameTextView"
+        android:layout_alignStart="@id/callCallCallerNameTextView"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:text="054-5041249"
+        android:textColor="#898989"
+        android:textSize="@dimen/common_call_phone_text_size"
+        app:custom_font="rubik_regular" />
+
+    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+        android:id="@+id/callCallTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/callCallCallerAvatarImageView"
+        android:layout_alignLeft="@id/callCallCallerNameTextView"
+        android:layout_alignStart="@id/callCallCallerNameTextView"
+        android:gravity="center_horizontal"
+        android:text="10:31  12/4/2018"
+        android:textColor="#898989"
+        android:textSize="@dimen/common_call_phone_text_size"
+        app:custom_font="rubik_regular" />
+
+    <ImageView
+        android:id="@+id/callCallCallerCallTypeImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/call_log_call_type_margin_left"
+        android:layout_marginStart="@dimen/call_log_call_type_margin_left"
+        android:src="@drawable/layer_48" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/call_log_tools_margin_right"
+        android:layout_marginRight="@dimen/call_log_tools_margin_right"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/callCallCallerPhoneImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/layer_44" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <ImageView
+            android:id="@+id/callCallCallerWhatsAppImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/layer_45" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <ImageView
+            android:id="@+id/callCallCallerMessageImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/layer_47" />
+
+    </LinearLayout>
+
+</RelativeLayout>
