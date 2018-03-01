@@ -62,7 +62,8 @@ public class CallLogHelper {
             String duration = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.DURATION));
 
-            callLogEntries.add(new CallLogEntry(callNumber, callName, dateString, callType, isCallNew, duration));
+            callLogEntries.add(new CallLogEntry(context, callNumber, callName, dateString,
+                    callType, isCallNew, duration, ContactsUtils.retrieveContactPhoto(context, callNumber)));
         }
         cur.close();
         return callLogEntries;
