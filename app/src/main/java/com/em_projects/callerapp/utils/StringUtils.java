@@ -284,4 +284,14 @@ public class StringUtils {
             Log.d(tag, key + " = " + bundle.get(key));
         }
     }
+
+    public static String getInitials(String fullName) {
+        String[] names = fullName.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String name : names) {
+            sb.append(name.charAt(0));
+        }
+        return sb.toString().trim();
+    }
+
 }
