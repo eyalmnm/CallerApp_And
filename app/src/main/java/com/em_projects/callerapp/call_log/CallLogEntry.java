@@ -1,25 +1,48 @@
 package com.em_projects.callerapp.call_log;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import com.em_projects.callerapp.R;
+
 /**
  * Created by eyalmuchtar on 2/22/18.
  */
 
 public class CallLogEntry {
+    private static final String TAG = "CallLogEntry";
 
+    private Context context;
     private String callNumber;
     private String callName;
     private String dateString;
     private String callType;
     private String isCallNew;
     private String duration;
+    private Bitmap avatar;
 
-    public CallLogEntry(String callNumber, String callName, String dateString, String callType, String isCallNew, String duration) {
+    public CallLogEntry(Context context, String callNumber, String callName, String dateString,
+                        String callType, String isCallNew, String duration, Bitmap avatar) {
+        this.context = context;
         this.callNumber = callNumber;
         this.callName = callName;
         this.dateString = dateString;
         this.callType = callType;
         this.isCallNew = isCallNew;
         this.duration = duration;
+        if (null == avatar) {
+            loadingAvatar();
+        } else {
+            this.avatar = avatar;
+        }
+    }
+
+    private void loadingAvatar() {
+        // TODO Loading from sever
+        Log.e(TAG, "loadingAvatar TODO Loading from sever!!!   *********");
+        avatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.facebook_blank_photo);
     }
 
     public String getCallNumber() {
@@ -44,6 +67,20 @@ public class CallLogEntry {
 
     public String getDuration() {
         return duration;
+    }
+
+    public Bitmap getAvatar() {
+        return avatar;
+    }
+
+    public int getCallTypeImage() {
+        if (true == callType.equalsIgnoreCase("Outgoing")) {
+            return R.drawable.layer_48;
+        }
+        if (true == callType.equalsIgnoreCase("Incoming")) {
+            return R.drawable.layer_48_copy;
+        }
+        return R.drawable.layer_49;
     }
 
     @Override
