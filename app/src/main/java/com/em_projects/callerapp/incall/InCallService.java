@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,7 @@ public class InCallService extends Service {
     private WindowManager windowManager;
     private WindowManager.LayoutParams mainWindow;
     private View floatingWidget;
+    private RelativeLayout mainBgImageView;
     private CircleImageView pictureImageView;
     private TextView fullNameTextView;
     private TextView phoneNumberTextView;
@@ -136,6 +138,7 @@ public class InCallService extends Service {
         inflater = LayoutInflater.from(this);
         floatingWidget = inflater.inflate(R.layout.layout_floating_layout, null);
 
+        mainBgImageView = floatingWidget.findViewById(R.id.mainBgImageView);
         initialsImageView = floatingWidget.findViewById(R.id.initialsImageView);
         pictureImageView = floatingWidget.findViewById(R.id.profile_image);
         fullNameTextView = floatingWidget.findViewById(R.id.callerNameCustomTextView);
@@ -344,7 +347,7 @@ public class InCallService extends Service {
                 } else if (false == StringUtils.isNullOrEmpty(fullName) && null == bitmap) {
                     pictureImageView.setVisibility(View.INVISIBLE);
                     initialsImageView.setVisibility(View.VISIBLE);
-                    initialsImageView.setText(getInitials(fullName));
+                    initialsImageView.setText(StringUtils.getInitials(fullName));
                 }
                 floatingWidget.invalidate();
             }
@@ -352,14 +355,6 @@ public class InCallService extends Service {
 
     }
 
-    private String getInitials(String fullName) {
-        String[] names = fullName.split("\\s+");
-        StringBuilder sb = new StringBuilder();
-        for (String name : names) {
-            sb.append(name.charAt(0));
-        }
-        return sb.toString().trim();
-    }
 
     private void showNotification(String fullName, String e164Format) {
         NotificationCompat.Builder builder =
