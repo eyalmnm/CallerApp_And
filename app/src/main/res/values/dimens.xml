@@ -68,14 +68,15 @@
     <dimen name="search_imageview_right_maring">16dp</dimen>
     <dimen name="search_imageview_top_maring">20dp</dimen>
     <dimen name="commmon_calls_textview_text_size">12sp</dimen>
-    <dimen name="commmon_calls_textview_top_margin">90dp</dimen>
+    <dimen name="commmon_calls_textview_top_margin">75dp</dimen>
     <dimen name="commmon_calls_textview_left_margin">15dp</dimen>
-    <dimen name="show_more_textview_text_size">10sp</dimen>
+    <dimen name="show_more_textview_text_size">12sp</dimen>
     <dimen name="show_more_textview_right_margin">16dp</dimen>
 
     <!-- Common Calls Layout -->
-    <dimen name="common_call_avatars_container_top_margin">12dp</dimen>
+    <dimen name="common_call_avatars_container_top_margin">0dp</dimen>
     <dimen name="common_call_item_width">70dp</dimen>
+    <dimen name="common_call_item_height">70dp</dimen>
     <dimen name="common_call_avatar_imageview_width">40dp</dimen>
     <dimen name="common_call_avatar_imageview_height">40dp</dimen>
     <dimen name="common_call_name_text_size">9sp</dimen>

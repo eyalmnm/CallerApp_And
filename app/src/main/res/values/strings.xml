@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">WizeCaller</string>
+    <string name="app_name" translatable="false">WizeCaller</string>
 
     <!-- Splash -->
-    <string name="app_version_format">Version v %s (%d) </string>
+    <string name="app_version_format" translatable="false">Version v %s (%d) </string>
 
     <!-- SMS Verification Strings -->
     <string name="title_activity_sms">SmsActivity</string>
@@ -38,6 +38,7 @@
     <string name="fourth_intro_message">Fourth Intro Message</string>
 
     <!-- Main Activity Screen -->
+    <string name="call_log">Call Log</string>
     <string name="settings">Settings</string>
     <string name="my_profile">My Profile</string>
     <string name="app_intro">Intro</string>
@@ -45,5 +46,8 @@
     <!-- FaceBook -->
     <string name="facebook_app_id">1722543137778905</string>
     <string name="facebook_message">In order to get the most of WizeCaller you must login with Facebook.</string>
+
+    <!-- Common Call Item -->
+    <string name="calling_failed_message">In Order to call directly from the app, you must allow phone call permission.</string>
 
 </resources>
