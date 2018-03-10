@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.call_log.CallLogEntry;
@@ -55,9 +56,13 @@ public class CommonCallItemView extends FrameLayout {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Intent intent = new Intent(Intent.ACTION_CALL);; //(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + entry.getCallNumber()));
-                getContext().startActivity(intent);
+                try {
+                    getContext().startActivity(intent);
+                } catch(SecurityException ex) {
+                    Toast.makeText(getContext(), R.string.calling_failed_message, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

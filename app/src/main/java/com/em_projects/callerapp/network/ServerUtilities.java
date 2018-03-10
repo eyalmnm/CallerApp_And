@@ -25,10 +25,12 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import static java.lang.Thread.sleep;
 
@@ -166,6 +168,9 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "post");
 
         //Amend device information for the server
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        params.put("time_zone", tz.getDisplayName());
         params.put("phone_model", android.os.Build.MODEL);
         params.put("phone_manufacturer", Build.MANUFACTURER);
         params.put("version", android.os.Build.VERSION.RELEASE);

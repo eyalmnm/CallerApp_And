@@ -49,6 +49,7 @@ import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
 import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.main.activities.FacebookLoginActivity;
+import com.em_projects.callerapp.main.fragments.CallLogFragment;
 import com.em_projects.callerapp.main.fragments.DummyFragment;
 import com.em_projects.callerapp.models.Setting;
 import com.em_projects.callerapp.utils.PreferencesUtils;
@@ -90,6 +91,7 @@ import static android.Manifest.permission.WAKE_LOCK;
 
 public class MainScreenActivity extends AppCompatActivity {
     // Setting IDs
+    public static final int CALL_LOG = 10;
     public static final int APP_SETTING = 100;
     public static final int USER_PROFILE = 101;
     public static final int INTRO_SCREEN = 102;
@@ -137,9 +139,10 @@ public class MainScreenActivity extends AppCompatActivity {
         setupToolbar();
 
         settings = new ArrayList<Setting>();
-        settings.add(new Setting(getString(R.string.settings), R.mipmap.ic_launcher_round, APP_SETTING));
-        settings.add(new Setting(getString(R.string.my_profile), R.mipmap.ic_launcher_round, USER_PROFILE));
-        settings.add(new Setting(getString(R.string.app_intro), R.mipmap.ic_launcher_round, INTRO_SCREEN));
+        settings.add(new Setting(context.getString(R.string.settings), R.mipmap.ic_launcher_round, APP_SETTING));
+        settings.add(new Setting(context.getString(R.string.my_profile), R.mipmap.ic_launcher_round, USER_PROFILE));
+        settings.add(new Setting(context.getString(R.string.app_intro), R.mipmap.ic_launcher_round, INTRO_SCREEN));
+        settings.add(new Setting(context.getString(R.string.call_log), R.mipmap.ic_launcher_round, CALL_LOG));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -164,6 +167,8 @@ public class MainScreenActivity extends AppCompatActivity {
 
         // Make sure the view adjust while showing keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        showCallLog();
     }
 
 
@@ -253,9 +258,9 @@ public class MainScreenActivity extends AppCompatActivity {
         }
     }
 
-    private void showCallLog() {   // TODO
-        // TODO
-        CallLogHelper.getAllCallLogs(context);
+    private void showCallLog() {
+        CallLogFragment fragment = new CallLogFragment();
+        showFragment(fragment);
     }
 
     private void transmitContactsList() {
@@ -475,6 +480,8 @@ public class MainScreenActivity extends AppCompatActivity {
                 intent.putExtra("fromMain", true);
                 startActivity(intent);
                 break;
+            case CALL_LOG:
+                fragment = new CallLogFragment();
             default:
                 fragment = null;
                 break;
