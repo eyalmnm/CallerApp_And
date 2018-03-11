@@ -54,7 +54,7 @@ public class ImageUtils {
     }
 
     /**
-     * @param url
+     * @param
      * @return
      */
     public static Bitmap loadBitmap(String urlStr) throws IOException {
@@ -162,6 +162,13 @@ public class ImageUtils {
      */
     public static Bitmap byteArray2Bitmap(byte[] bytes) {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public static byte[] bitmap2ByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
     public static String bitmapToBase64String(Bitmap bitmap) {

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.storage.room.CallLogDbEntety;
+import com.em_projects.callerapp.utils.ImageUtils;
 
 /**
  * Created by eyalmuchtar on 2/22/18.
@@ -43,7 +44,7 @@ public class CallLogEntry {
     public CallLogEntry(Context context, CallLogDbEntety dbEntety) {
         this(context, dbEntety.getCallNumber(), dbEntety.getCallName(), dbEntety.getDateString()
                 , dbEntety.getCallType(), dbEntety.getIsCallNew(), dbEntety.getDuration()
-                , dbEntety.getAvatar());
+                , ImageUtils.byteArray2Bitmap(dbEntety.getAvatar()));
     }
 
     private void loadingAvatar() {

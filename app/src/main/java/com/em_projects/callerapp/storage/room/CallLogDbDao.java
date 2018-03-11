@@ -3,12 +3,8 @@ package com.em_projects.callerapp.storage.room;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.em_projects.callerapp.call_log.CallLogEntry;
-
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,27 +14,27 @@ import java.util.List;
 @Dao
 public interface CallLogDbDao {
 
-    @Query("SELECT * FROM callLogTbl")
+    @Query("SELECT * FROM call_log")
     List<CallLogDbEntety> getAll();
 
-    @Query("SELECT COUNT(*) from callLogTbl")
+    @Query("SELECT COUNT(*) from call_log")
     int countCallLogsEntries();
 
-    @Query("delete from callLogTbl")
+    @Query("delete from call_log")
     void removeAllCallLogEntries();
 
-    @Query("delete from callLogTbl where uid in (:ids)")
+    @Query("delete from call_log where uid in (:ids)")
     void removeSpecificBulkOfCallLogEntries(Long[] ids);
 
-    @Query("delete from callLogTbl where uid in (:ids)")
+    @Query("delete from call_log where uid in (:ids)")
     void removeSpecificBulkOfCallLogEntries(String[] ids);
 
     @Insert
-    void insertAll(CallLogEntry... callLogEntries);
+    void insertAll(CallLogDbEntety... callLogDbEntries);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertCallLogs(Collection<CallLogDbEntety> callLogDbEnteties);
+    @Insert
+    public void insertAll(List<CallLogDbEntety> callLogDbEnteties);
 
     @Delete
-    void delete(CallLogEntry callLogEntry);
+    void delete(CallLogDbEntety callLogDbEntety);
 }

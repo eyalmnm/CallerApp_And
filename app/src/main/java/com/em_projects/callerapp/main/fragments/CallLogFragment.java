@@ -20,13 +20,17 @@ import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.call_log.CallLogEntry;
 import com.em_projects.callerapp.call_log.CallLogHelper;
 import com.em_projects.callerapp.models.CallCounterPair;
+import com.em_projects.callerapp.storage.room.AppDatabase;
+import com.em_projects.callerapp.storage.room.CallLogDbEntety;
 import com.em_projects.callerapp.ui.widgets.CommonCallItemView;
 import com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView;
+import com.em_projects.callerapp.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -84,10 +88,43 @@ public class CallLogFragment extends Fragment {
         listAdapter = new CallLogListAdapter(context);
         callLogListView.setAdapter(listAdapter);
 
-        progressDialog = ProgressDialog.show(context, "", "Loading");
+        progressDialog = ProgressDialog.show(context, "", "Loading...");
         // Loading Call Log
+        AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
+        int saveCallLogs = appDatabase.callLogDbDao().countCallLogsEntries();
+        if (0 < saveCallLogs) {
+            callLogEntries = convertToCallLogEntry(appDatabase.callLogDbDao().getAll());
+            makeTheCalculations(callLogEntries);
+            listAdapter.notifyDataSetChanged();
+            updateCommonCallsContainer();
+        }
         new CallLogLoader().execute();
     }
+
+    private ArrayList<CallLogEntry> convertToCallLogEntry(List<CallLogDbEntety> all) {
+        ArrayList<CallLogEntry> entries = new ArrayList<>();
+        for (int i = 0; i < all.size(); i++) {
+            entries.add(new CallLogEntry(context, all.get(i)));
+        }
+        return entries;
+    }
+
+    private ArrayList<CallLogDbEntety> convertToCallLogDbEntry(ArrayList<CallLogEntry> callLogEntries) {
+        ArrayList<CallLogDbEntety> dbEnteties = new ArrayList<>();
+        for (int i = 0; i < callLogEntries.size(); i++) {
+            CallLogDbEntety dbEntety = new CallLogDbEntety();
+            dbEntety.setCallNumber(callLogEntries.get(i).getCallNumber());
+            dbEntety.setCallName(callLogEntries.get(i).getCallName());
+            dbEntety.setDateString(callLogEntries.get(i).getDateString());
+            dbEntety.setCallType(callLogEntries.get(i).getCallType());
+            dbEntety.setIsCallNew(callLogEntries.get(i).getIsCallNew());
+            dbEntety.setDuration(callLogEntries.get(i).getDuration());
+            dbEntety.setAvatar(ImageUtils.bitmap2ByteArray(callLogEntries.get(i).getAvatar()));
+            dbEnteties.add(dbEntety);
+        }
+        return dbEnteties;
+    }
+
 
     private void makeTheCalculations(ArrayList<CallLogEntry> callLogEntries) {
         commonCallsItems = getCommonCalls(callLogEntries);
@@ -135,6 +172,15 @@ public class CallLogFragment extends Fragment {
         return retEntries;
     }
 
+    private void addToCallLogDb(ArrayList<CallLogEntry> callLogEntries) {
+        AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
+        if (0 < appDatabase.callLogDbDao().countCallLogsEntries()) {
+            appDatabase.callLogDbDao().removeAllCallLogEntries();
+            ArrayList<CallLogDbEntety> dbEnteties = convertToCallLogDbEntry(callLogEntries);
+            appDatabase.callLogDbDao().insertAll(dbEnteties);
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -151,6 +197,7 @@ public class CallLogFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             long start = System.currentTimeMillis();
             callLogEntries = CallLogHelper.getAllCallLogs(context);
+            addToCallLogDb(callLogEntries);
             makeTheCalculations(callLogEntries);
             long duration = System.currentTimeMillis() - start;
             Log.d(TAG, "doInBackground duration: " + duration);
@@ -164,6 +211,7 @@ public class CallLogFragment extends Fragment {
             if (null != progressDialog) { progressDialog.dismiss(); }
         }
     }
+
 
     // Call Log List Adapter
     private class CallLogListAdapter extends BaseAdapter {

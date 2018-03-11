@@ -3,7 +3,6 @@ package com.em_projects.callerapp.storage.room;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
 
 /**
  * Created by eyalmuchtar on 3/11/18.
@@ -32,8 +31,8 @@ public class CallLogDbEntety {
     @ColumnInfo(name = "call_duration")
     private String duration;
 
-    @ColumnInfo(name = "caller_avatar")
-    private Bitmap avatar;
+    @ColumnInfo(name = "caller_avatar", typeAffinity = ColumnInfo.BLOB)
+    private byte[] avatar;
 
     public int getUid() {
         return uid;
@@ -91,11 +90,11 @@ public class CallLogDbEntety {
         this.duration = duration;
     }
 
-    public Bitmap getAvatar() {
+    public byte[] getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Bitmap avatar) {
+    public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
 }
