@@ -25,13 +25,13 @@ public interface CallLogDbDao {
     int countCallLogsEntries();
 
     @Query("delete from callLogTbl")
-    void removeAllMessages();
+    void removeAllCallLogEntries();
 
     @Query("delete from callLogTbl where uid in (:ids)")
-    void removeSpecificBulkOfMessages(Long[] ids);
+    void removeSpecificBulkOfCallLogEntries(Long[] ids);
 
     @Query("delete from callLogTbl where uid in (:ids)")
-    void removeSpecificBulkOfMessages(String[] ids);
+    void removeSpecificBulkOfCallLogEntries(String[] ids);
 
     @Insert
     void insertAll(CallLogEntry... callLogEntries);
