@@ -14,7 +14,6 @@ import com.em_projects.callerapp.call_log.CallLogEntry;
 @Database(entities = {CallLogEntry.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
-
     private static AppDatabase INSTANCE;
 
     public static AppDatabase getAppDatabase(Context context) {
@@ -32,6 +31,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
+    public abstract CallLogDbDao callLogDbDao();
 
     public abstract CallLogEntry callLogEntry();
 }

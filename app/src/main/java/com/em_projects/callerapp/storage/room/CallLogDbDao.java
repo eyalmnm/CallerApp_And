@@ -3,10 +3,12 @@ package com.em_projects.callerapp.storage.room;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.em_projects.callerapp.call_log.CallLogEntry;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,6 +35,9 @@ public interface CallLogDbDao {
 
     @Insert
     void insertAll(CallLogEntry... callLogEntries);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public void insertCallLogs(Collection<CallLogDbEntety> sites);
 
     @Delete
     void delete(CallLogEntry callLogEntry);
