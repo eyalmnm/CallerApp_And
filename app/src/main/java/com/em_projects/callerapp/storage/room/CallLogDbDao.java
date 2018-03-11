@@ -37,7 +37,7 @@ public interface CallLogDbDao {
     void insertAll(CallLogEntry... callLogEntries);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertCallLogs(Collection<CallLogDbEntety> sites);
+    public void insertCallLogs(Collection<CallLogDbEntety> callLogDbEnteties);
 
     @Delete
     void delete(CallLogEntry callLogEntry);
