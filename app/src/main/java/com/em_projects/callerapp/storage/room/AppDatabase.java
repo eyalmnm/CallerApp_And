@@ -33,6 +33,4 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract CallLogDbDao callLogDbDao();
-
-    public abstract CallLogEntry callLogEntry();
 }
