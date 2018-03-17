@@ -143,35 +143,40 @@
 
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="@dimen/profile_image_width"
-        android:layout_height="@dimen/profile_image_height"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/layer_0" />
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="@dimen/profile_image_width"
-        android:layout_height="@dimen/profile_image_height"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/facebook_blank_photo"
-        android:visibility="visible"
-        app:civ_border_color="#FFFFFF"
-        app:civ_border_width="2dp" />
-
-    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
-        android:id="@+id/initialsImageView"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/initial_image_shape"
-        android:gravity="center"
-        android:text="EM"
-        android:textColor="@color/floating_layout_main_text_color"
-        android:textSize="@dimen/initials_font_size"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:custom_font="rubik_bold" />
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="@dimen/profile_image_width"
+            android:layout_height="@dimen/profile_image_height"
+            android:scaleType="centerInside"
+            android:src="@drawable/layer_0" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="@dimen/profile_image_width"
+            android:layout_height="@dimen/profile_image_height"
+            android:layout_gravity="center"
+            android:src="@drawable/facebook_blank_photo"
+            android:visibility="visible"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="2dp" />
+
+        <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+            android:id="@+id/initialsImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/initial_image_shape"
+            android:gravity="center"
+            android:text="EM"
+            android:textColor="@color/floating_layout_main_text_color"
+            android:textSize="@dimen/initials_font_size"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:custom_font="rubik_bold" />
+    </FrameLayout>
 
 </RelativeLayout>
