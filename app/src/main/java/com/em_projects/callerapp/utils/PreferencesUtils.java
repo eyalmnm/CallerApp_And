@@ -148,4 +148,13 @@ public class PreferencesUtils {
         editor = null;
         preferences = null;
     }
+
+    public long getLastContactsTransmit() {
+        return preferences.getLong(Constants.lastContactsTx, 0);
+    }
+
+    public void setLastContactsTransmit(long lastContactsTx) {
+        editor.putLong(Constants.lastContactsTx, lastContactsTx);
+        editor.commit();
+    }
 }
