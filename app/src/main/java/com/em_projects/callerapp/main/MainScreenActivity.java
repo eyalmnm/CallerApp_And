@@ -24,34 +24,19 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.em_projects.callerapp.R;
-import com.em_projects.callerapp.call_log.CallLogHelper;
 import com.em_projects.callerapp.config.Constants;
 import com.em_projects.callerapp.config.Dynamic;
 import com.em_projects.callerapp.contacts.ContactsContentObserverManager;
 import com.em_projects.callerapp.contacts.ContactsTxIntentService;
 import com.em_projects.callerapp.gcm.RegistrationIntentService;
-import com.em_projects.callerapp.intro.IntroActivity;
 import com.em_projects.callerapp.main.activities.FacebookLoginActivity;
 import com.em_projects.callerapp.main.fragments.CallLogFragment;
-import com.em_projects.callerapp.main.fragments.DummyFragment;
-import com.em_projects.callerapp.models.Setting;
 import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.verification.LoginActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -59,7 +44,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -104,16 +88,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     private FirebaseAnalytics analytics;
 
-    private SearchView searchView;
-
     private PowerManager.WakeLock wakeLock;
-
-    private DrawerLayout settingLayout;
-    private ListView left_drawer;
-    private ArrayList<Setting> settings;
-    private Toolbar toolbar;
-    private android.support.v7.app.ActionBarDrawerToggle drawerToggle;
-    private View view;
 
     // Permissions
     // Registration \ Login (SMS Verification)
@@ -132,28 +107,6 @@ public class MainScreenActivity extends AppCompatActivity {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
 
-        settingLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        left_drawer = (ListView) findViewById(R.id.left_drawer);
-        view = settingLayout;
-
-        setupToolbar();
-
-        settings = new ArrayList<Setting>();
-        settings.add(new Setting(context.getString(R.string.settings), R.mipmap.ic_launcher_round, APP_SETTING));
-        settings.add(new Setting(context.getString(R.string.my_profile), R.mipmap.ic_launcher_round, USER_PROFILE));
-        settings.add(new Setting(context.getString(R.string.app_intro), R.mipmap.ic_launcher_round, INTRO_SCREEN));
-        settings.add(new Setting(context.getString(R.string.call_log), R.mipmap.ic_launcher_round, CALL_LOG));
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        loadAppSettingFragment(); // try without back stack
-
-        left_drawer.setAdapter(new SettingAdapter());
-        left_drawer.setOnItemClickListener(new DrawerItemClickListener());
-        setupDrawerToggle();
-        settingLayout.setDrawerListener(drawerToggle);
-
         // Check permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!checkPermissions()) {
@@ -167,8 +120,6 @@ public class MainScreenActivity extends AppCompatActivity {
 
         // Make sure the view adjust while showing keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-        showCallLog();
     }
 
 
@@ -255,6 +206,8 @@ public class MainScreenActivity extends AppCompatActivity {
         if (true == isFirstTime()) {
             transmitContactsList();
             setFirstTime(false);
+        } else {
+            showCallLog();
         }
     }
 
@@ -435,67 +388,6 @@ public class MainScreenActivity extends AppCompatActivity {
                 .show();
     }
 
-    void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        searchView = toolbar.findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // filter by (newText);
-                return false;
-            }
-        });
-    }
-
-    void setupDrawerToggle() {
-        drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this, settingLayout, toolbar, R.string.app_name, R.string.app_name);
-        //This is necessary to change the icon of the Drawer Toggle upon state change.
-        drawerToggle.syncState();
-    }
-
-    /**
-     * Swaps fragments in the main content view
-     * if args is null then show all otherwise show the related data
-     */
-    private void selectItem(int position /*, Bundle args*/) {
-        Fragment fragment = null;
-        Bundle args = null; // TODO Remove this statement
-        switch (settings.get(position).getId()) {
-            case APP_SETTING:
-                fragment = new DummyFragment();
-                break;
-            case USER_PROFILE:
-                fragment = new DummyFragment();
-                break;
-            case INTRO_SCREEN:
-                Intent intent = new Intent(context, IntroActivity.class);
-                intent.putExtra("fromMain", true);
-                startActivity(intent);
-                break;
-            case CALL_LOG:
-                fragment = new CallLogFragment();
-            default:
-                fragment = null;
-                break;
-        }
-
-        if (null != fragment) {
-            if (null != args) {
-                fragment.setArguments(args);
-            }
-            showFragment(fragment);
-        }
-        settingLayout.closeDrawer(left_drawer);
-    }
-
     private void showFragment(Fragment fragment) {
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -530,50 +422,4 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         super.onPause();
     }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    private class SettingAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return settings.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return settings.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (null == view) {
-                view = LayoutInflater.from(context).inflate(R.layout.setting_item, viewGroup, false);
-            }
-
-            // Lookup view for data population
-            ImageView img = (ImageView) view.findViewById(R.id.img);
-            TextView stng = (TextView) view.findViewById(R.id.stng);
-
-            // Populate the data into the template view using the data object
-            Setting setting = settings.get(i);
-            img.setImageResource(setting.getIconId());
-            stng.setText(setting.getName());
-            view.setId(setting.getId());
-
-            return view;
-        }
-    }
-
 }
