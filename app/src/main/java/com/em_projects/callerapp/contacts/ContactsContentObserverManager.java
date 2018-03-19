@@ -9,6 +9,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.em_projects.callerapp.utils.PreferencesUtils;
+
 /**
  * Created by eyalmuchtar on 1/8/18.
  */
@@ -20,9 +22,9 @@ import android.widget.Toast;
 
 public class ContactsContentObserverManager {
     private static final String TAG = "ContactsContentObsrMngr";
-
     private static Context context;
     private static ContactsContentObserverManager instance;
+    private final long minTimeBetweenTx = 12 * 60 * 60 * 1000;
     private ContentObserver observer;
 
     private ContactsContentObserverManager(Context ctx) {
@@ -52,8 +54,12 @@ public class ContactsContentObserverManager {
     private void transmitContactsList() {
         if (null != context) {
             Toast.makeText(context, "Updating Contacts List...", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, ContactsTxIntentService.class);
-            context.startService(intent);
+            long lastTX = PreferencesUtils.getInstance(context).getLastContactsTransmit();
+            if (minTimeBetweenTx < (System.currentTimeMillis() - lastTX)) {
+                PreferencesUtils.getInstance(context).setLastContactsTransmit(System.currentTimeMillis());
+                Intent intent = new Intent(context, ContactsTxIntentService.class);
+                context.startService(intent);
+            }
         }
     }
 
