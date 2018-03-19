@@ -79,5 +79,6 @@ public class Constants {
     // Preferences
     public static String introIsShown = "introIsShown";
     public static String isFirstTime = "isFirstTime";
+    public static String lastContactsTx = "lastContactsTx";
 
 }
