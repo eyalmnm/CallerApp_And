@@ -6,14 +6,21 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:paddingTop="5dp">
 
     <RelativeLayout
         android:id="@+id/mainBgImageView"
-        android:layout_width="@dimen/floating_layout_bg_image_width"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/floating_layout_bg_image_height"
         android:layout_marginTop="@dimen/floating_layout_bg_image_top_margin"
-        android:background="@drawable/group_2">
+        android:background="@color/white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/group_2_2" />
 
         <ImageView
             android:id="@+id/settingsImageView"
@@ -69,45 +76,79 @@
             android:layout_marginTop="@dimen/common_call_avatars_container_top_margin"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="5dp" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/boundaryView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mainBgImageView"
+        android:background="@color/white">
+
+        <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+            android:id="@+id/recentCallListTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="@dimen/search_imageview_right_maring"
+            android:layout_marginTop="15dp"
+            android:text="RECENT CALLS"
+            android:textColor="#341272"
+            android:textSize="12sp"
+            app:custom_font="rubik_bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDivider" />
+
     </RelativeLayout>
 
     <ListView
         android:id="@+id/callLogListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mainBgImageView"
-        android:background="@color/white" />
+        android:layout_below="@id/boundaryView"
+        android:background="@color/white"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
 
-    <ImageView
-        android:layout_width="@dimen/profile_image_width"
-        android:layout_height="@dimen/profile_image_height"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/layer_0" />
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="@dimen/profile_image_width"
-        android:layout_height="@dimen/profile_image_height"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/facebook_blank_photo"
-        android:visibility="visible"
-        app:civ_border_color="#FFFFFF"
-        app:civ_border_width="2dp" />
-
-    <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
-        android:id="@+id/initialsImageView"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/initial_image_shape"
-        android:gravity="center"
-        android:text="EM"
-        android:textColor="@color/floating_layout_main_text_color"
-        android:textSize="@dimen/initials_font_size"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:custom_font="rubik_bold" />
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="@dimen/profile_image_width"
+            android:layout_height="@dimen/profile_image_height"
+            android:scaleType="centerInside"
+            android:src="@drawable/layer_0" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="@dimen/profile_image_width"
+            android:layout_height="@dimen/profile_image_height"
+            android:layout_gravity="center"
+            android:src="@drawable/facebook_blank_photo"
+            android:visibility="visible"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="2dp" />
+
+        <com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView
+            android:id="@+id/initialsImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/initial_image_shape"
+            android:gravity="center"
+            android:text="EM"
+            android:textColor="@color/floating_layout_main_text_color"
+            android:textSize="@dimen/initials_font_size"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:custom_font="rubik_bold" />
+    </FrameLayout>
 
 </RelativeLayout>

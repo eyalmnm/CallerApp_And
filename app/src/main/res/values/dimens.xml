@@ -74,7 +74,7 @@
     <dimen name="show_more_textview_right_margin">16dp</dimen>
 
     <!-- Common Calls Layout -->
-    <dimen name="common_call_avatars_container_top_margin">0dp</dimen>
+    <dimen name="common_call_avatars_container_top_margin">5dp</dimen>
     <dimen name="common_call_item_width">70dp</dimen>
     <dimen name="common_call_item_height">70dp</dimen>
     <dimen name="common_call_avatar_imageview_width">40dp</dimen>
