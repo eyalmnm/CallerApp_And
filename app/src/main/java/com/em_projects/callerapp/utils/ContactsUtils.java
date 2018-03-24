@@ -370,7 +370,7 @@ public class ContactsUtils {
                 int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
 
                 if (hasPhoneNumber > 0) {
-                    output.put(Constants.fullName, name);
+                    output.put(Constants.contactFullName, name);
 
                     //This is to read multiple phone numbers associated with the same contact
                     JSONArray phoneNumberArray = new JSONArray();

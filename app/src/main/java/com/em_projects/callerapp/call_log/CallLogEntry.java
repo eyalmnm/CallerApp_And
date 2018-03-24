@@ -7,7 +7,9 @@ import android.util.Log;
 
 import com.em_projects.callerapp.R;
 import com.em_projects.callerapp.storage.room.CallLogDbEntety;
+import com.em_projects.callerapp.utils.ContactsUtils;
 import com.em_projects.callerapp.utils.ImageUtils;
+import com.em_projects.callerapp.utils.StringUtils;
 
 /**
  * Created by eyalmuchtar on 2/22/18.
@@ -25,26 +27,42 @@ public class CallLogEntry {
     private String duration;
     private Bitmap avatar;
 
-    public CallLogEntry(Context context, String callNumber, String callName, String dateString,
-                        String callType, String isCallNew, String duration, Bitmap avatar) {
-        this.context = context;
-        this.callNumber = callNumber;
-        this.callName = callName;
+    public CallLogEntry(Context context, String callNumber, String dateString,
+                        String callType, String isCallNew, String duration) {
+        this(context, callNumber, null, dateString, callType, isCallNew, duration, true);
+    }
+
+    public CallLogEntry(final Context cxt, final String callNum, final String callerName, String dateString,
+                        String callType, String isCallNew, String duration, boolean selfLoading) {
+        this.context = cxt;
+        this.callNumber = callNum;
+        this.callName = callerName;
         this.dateString = dateString;
         this.callType = callType;
         this.isCallNew = isCallNew;
         this.duration = duration;
-        if (null == avatar) {
-            loadingAvatar();
-        } else {
-            this.avatar = avatar;
+        if (true == selfLoading) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap avatarImage = ContactsUtils.retrieveContactPhoto(context, callNumber);
+                    if (null == avatarImage) {
+                        loadingAvatar();
+                    } else {
+                        avatar = avatarImage;
+                    }
+                    if (true == StringUtils.isNullOrEmpty(callerName)) {
+                        callName = ContactsUtils.getContactName(context, callNumber);
+                    }
+                }
+            }).start();
         }
     }
 
     public CallLogEntry(Context context, CallLogDbEntety dbEntety) {
         this(context, dbEntety.getCallNumber(), dbEntety.getCallName(), dbEntety.getDateString()
-                , dbEntety.getCallType(), dbEntety.getIsCallNew(), dbEntety.getDuration()
-                , ImageUtils.byteArray2Bitmap(dbEntety.getAvatar()));
+                , dbEntety.getCallType(), dbEntety.getIsCallNew(), dbEntety.getDuration(), false);
+        avatar = ImageUtils.byteArray2Bitmap(dbEntety.getAvatar());
     }
 
     private void loadingAvatar() {

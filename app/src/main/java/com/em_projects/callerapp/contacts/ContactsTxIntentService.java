@@ -15,6 +15,7 @@ import com.em_projects.callerapp.network.ServerUtilities;
 import com.em_projects.callerapp.utils.ContactsUtils;
 import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.PreferencesUtils;
+import com.em_projects.callerapp.utils.StringUtils;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONException;
@@ -64,7 +65,9 @@ public class ContactsTxIntentService extends IntentService {
                     String deviceId = DeviceUtils.getDeviceUniqueID(context);
                     String phoneNumber = PreferencesUtils.getInstance(context).getPhone();
                     String otp = PreferencesUtils.getInstance(context).getOTP();
-                    ServerUtilities.getInstance().sendContact(deviceId, phoneNumber, otp, contactsList, new CommListener() {
+                    String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+                    if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
+                    ServerUtilities.getInstance().sendContact(deviceId, phoneNumber, otp, wcToken, contactsList, new CommListener() {
                         @Override
                         public void newDataArrived(String response) {
                             Log.d(TAG, "newDataArrived response: " + response);

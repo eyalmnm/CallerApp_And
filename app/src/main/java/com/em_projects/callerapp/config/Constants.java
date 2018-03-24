@@ -42,16 +42,17 @@ public class Constants {
     public static String cell_identity = "cell_identity";
 
     // Server Communication parameters
-    public static String serverURL = "http://advert.zone:37443";
-    public static String deviceId = "deviceId";
+    public static String serverURL = "http://85.64.214.121:3000"; // "http://advert.zone:37443";
+    public static String deviceId = "device_id";
     public static String gcmToken = "gcmToken";
     public static String phoneNumber = "phone";
     public static String email = "email";
+    public static String contactFullName = "full_name";
     public static String firstName = "firstName";
     public static String lastName = "lastName";
-    public static String fullName = "fullName";
-    public static String timeStamp = "timeStamp";
-    public static String otp = "sms_validation";
+    public static String fullName = "full_name";
+    public static String timeStamp = "time_stamp";
+    public static String otp = "otp";
     public static String fbToken = "fb_token";
     public static String fbOldToken = "fb_old_token";
     public static String callerPhone = "caller_phone";
@@ -62,8 +63,8 @@ public class Constants {
     public static String longitude = "longitude";
 
     // Server Communication methods
-    public static String smsVerification = "new_user";
-    public static String otpVerification = "validate";
+    public static String smsVerification = "register_user";
+    public static String otpVerification = "validate_user";
     public static String sendContatcts = "upload_contacts";
     public static String sendGcmToken = "send_token";
     public static String searchPhone = "search_phone";
@@ -80,5 +81,6 @@ public class Constants {
     public static String introIsShown = "introIsShown";
     public static String isFirstTime = "isFirstTime";
     public static String lastContactsTx = "lastContactsTx";
+    public static String WCToken = "wctoken";
 
 }

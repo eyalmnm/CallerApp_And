@@ -40,6 +40,7 @@ import com.em_projects.callerapp.ui.widgets.custom_text.CustomTextView;
 import com.em_projects.callerapp.utils.ContactsUtils;
 import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.JSONUtils;
+import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.utils.StringUtils;
 import com.google.firebase.crash.FirebaseCrash;
 
@@ -229,9 +230,11 @@ public class InCallService extends Service {
                 String gcmToken = Dynamic.getGcmToken(context);
                 startLocationFinder(); // TODO Use new thread
                 final String finalCallerPhone = callerPhone;
+                String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+                if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
                 FirebaseCrash.log(TAG + " sending searchPhone Request. ServerUtile is null? "
                         + (null == ServerUtilities.getInstance())); // TODO
-                ServerUtilities.getInstance().searchPhone(deviceId, myPhone, otp, gcmToken, callerPhone, new CommListener() {
+                ServerUtilities.getInstance().searchPhone(deviceId, myPhone, otp, wcToken, gcmToken, callerPhone, new CommListener() {
                     @Override
                     public void newDataArrived(String response) {
                         Log.d(TAG, "searchForCallerByPhone response: " + response);
@@ -307,7 +310,9 @@ public class InCallService extends Service {
         String otp = Dynamic.getMyOTP();
         String deviceId = DeviceUtils.getDeviceUniqueID(context);
         String gcmToken = Dynamic.getGcmToken(context);
-        ServerUtilities.getInstance().callTerminated(deviceId, myPhone, otp, gcmToken, duration, fullName, e164Format, latitude, longitude, new CommListener() {
+        String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+        if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
+        ServerUtilities.getInstance().callTerminated(deviceId, myPhone, otp, gcmToken, wcToken, duration, fullName, e164Format, latitude, longitude, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {

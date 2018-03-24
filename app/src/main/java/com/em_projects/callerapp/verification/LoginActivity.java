@@ -41,9 +41,14 @@ import com.em_projects.callerapp.telephony.SmsReceiver;
 import com.em_projects.callerapp.ui.widgets.CustomFont;
 import com.em_projects.callerapp.ui.widgets.VerificationViewPager;
 import com.em_projects.callerapp.utils.DeviceUtils;
+import com.em_projects.callerapp.utils.JSONUtils;
+import com.em_projects.callerapp.utils.PreferencesUtils;
 import com.em_projects.callerapp.utils.StringUtils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,9 +100,23 @@ public class LoginActivity extends Activity {
 
     private FirebaseAnalytics analytics;
 
-    public static boolean isSuccessVerification(String response) {
+    public static boolean isSuccessVerification(Context context, String response) {
         Log.d(TAG, "isSuccessVerification");
-        return "success validation".equalsIgnoreCase(response.trim());
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            String token = JSONUtils.getStringValue(jsonObject, "token");
+            if (true == StringUtils.isNullOrEmpty(token)) {
+                return false;
+            } else {
+                PreferencesUtils.getInstance(context).setWCToken(token);
+                return true;
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "isSuccessVerification", e);
+            FirebaseCrash.logcat(Log.ERROR, TAG, "isSuccessVerification");
+            FirebaseCrash.report(e);
+        }
+        return false;
     }
 
     @Override
@@ -295,7 +314,7 @@ public class LoginActivity extends Activity {
                             public void newDataArrived(String response) {
                                 Log.d(TAG, "btn_verify_otp - newDataArrived response: " + response);
                                 try {
-                                    if (true == isSuccessVerification(response)) {
+                                    if (true == isSuccessVerification(context, response)) {
                                         backToMainScreen(otp);
                                     }
                                 } catch (Exception e) {

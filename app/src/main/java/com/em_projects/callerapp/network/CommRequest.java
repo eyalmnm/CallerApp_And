@@ -14,7 +14,7 @@ public class CommRequest {
     private CommListener listener;
     private MethodType methodType;
     public CommRequest(String serverURL, Map<String, String> params, CommListener listener) {
-        this(serverURL, params, MethodType.POST, listener);
+        this(serverURL, params, MethodType.GET, listener);
     }
 
 

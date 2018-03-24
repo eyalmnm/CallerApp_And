@@ -140,11 +140,15 @@ public class FacebookLoginActivity extends Activity {
     }
 
     private void sendStoredFacebookLoginToken(String token) {
-        ServerUtilities.getInstance().sendFbToken(deviceId, phoneNumber, otp, token, null);
+        String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+        if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
+        ServerUtilities.getInstance().sendFbToken(deviceId, phoneNumber, otp, wcToken, token, null);
     }
 
     private void sendFacebookLoginToken(String token) {
-        ServerUtilities.getInstance().sendFbToken(deviceId, phoneNumber, otp, token, new CommListener() {
+        String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+        if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
+        ServerUtilities.getInstance().sendFbToken(deviceId, phoneNumber, otp, wcToken, token, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "sendFacebookLoginToken -> response: " + response);
@@ -171,7 +175,9 @@ public class FacebookLoginActivity extends Activity {
     }
 
     private void sendFacebookNewToken(String oldToken, String newToken) {
-        ServerUtilities.getInstance().sendNewFbToken(deviceId, phoneNumber, otp, newToken, oldToken, new CommListener() {
+        String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+        if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
+        ServerUtilities.getInstance().sendNewFbToken(deviceId, phoneNumber, otp, wcToken, newToken, oldToken, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "sendFacebookNewToken -> response: " + response);

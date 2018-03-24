@@ -39,9 +39,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by eyalmuchtar on 2/24/18.
  */
 
+// Ref: https://stackoverflow.com/questions/3224193/set-the-layout-weight-of-a-textview-programmatically
+
 public class CallLogFragment extends Fragment {
     private static final String TAG = "CallLogFragment";
 
+    private int NUMBER_OF_COMMON_CALLS = 5;
     private Context context;
     private ProgressDialog progressDialog;
 
@@ -131,8 +134,11 @@ public class CallLogFragment extends Fragment {
     }
 
     private void updateCommonCallsContainer() {
-        for (int i = 0; i < 5 && i < commonCallsItems.size(); i ++) {
-            commonCallAvatarsContainer.addView(new CommonCallItemView(context, commonCallsItems.get(i)));
+        for (int i = 0; i < NUMBER_OF_COMMON_CALLS && i < commonCallsItems.size(); i++) {
+            View view = new CommonCallItemView(context, commonCallsItems.get(i));
+            view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            commonCallAvatarsContainer.addView(view);
         }
     }
 
@@ -164,7 +170,7 @@ public class CallLogFragment extends Fragment {
 
         // return the most call entries
         ArrayList<CallLogEntry> retEntries = new ArrayList<>();
-        for(int i = 0; i < 5 && i < countersArray.size(); i ++) {
+        for (int i = 0; i < NUMBER_OF_COMMON_CALLS && i < countersArray.size(); i++) {
             CallCounterPair pair = countersArray.get(i);
             CallLogEntry entry = entries.get(pair.getKey());
             retEntries.add(entry);

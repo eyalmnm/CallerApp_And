@@ -16,6 +16,7 @@ public class Dynamic {
     private static String myNumber;
     private static String myOTP;
     private static String myCountryCode;
+    private static String myWCToken;
 
 
     public Dynamic(Context context) {
@@ -23,6 +24,7 @@ public class Dynamic {
         myOTP = PreferencesUtils.getInstance(context).getOTP();
         myCountryCode = PreferencesUtils.getInstance(context).getCountryCode();
         gcm_token = PreferencesUtils.getInstance(context).getGcmToken();
+        myWCToken = PreferencesUtils.getInstance(context).getWCToken();
     }
 
     public static String getMyNumber() {

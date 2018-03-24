@@ -61,7 +61,7 @@ public final class ServerUtilities implements Runnable {
         return instance;
     }
 
-    public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, long duration, String fullName, String e164Format, String latitude, String longitude, CommListener listener) {
+    public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, String wcToken, long duration, String fullName, String e164Format, String latitude, String longitude, CommListener listener) {
         Log.d(TAG, "callTerminated");
         String serverUrl = Constants.serverURL + "/" + Constants.callTerminated;
         HashMap params = new HashMap();
@@ -74,11 +74,12 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.fullName, fullName);
         params.put(Constants.latitude, latitude);
         params.put(Constants.longitude, longitude);
+        params.put(Constants.WCToken, wcToken);
 
         post(serverUrl, params, listener);
     }
 
-    public void sendFbToken(String deviceId, String phone, String otp, String fbToken, CommListener listener) {
+    public void sendFbToken(String deviceId, String phone, String otp, String wcToken, String fbToken, CommListener listener) {
         Log.d(TAG, "sendFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendFbToken;
         HashMap params = new HashMap();
@@ -86,11 +87,12 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.fbToken, fbToken);
+        params.put(Constants.WCToken, wcToken);
 
         post(serverUrl, params, listener);
     }
 
-    public void sendNewFbToken(String deviceId, String phone, String otp, String fbToken, String oldFbToken, CommListener listener) {
+    public void sendNewFbToken(String deviceId, String phone, String otp, String wcToken, String fbToken, String oldFbToken, CommListener listener) {
         Log.d(TAG, "sendNewFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendNewFbToken;
         HashMap params = new HashMap();
@@ -99,11 +101,12 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.fbToken, fbToken);
         params.put(Constants.fbOldToken, oldFbToken);
+        params.put(Constants.WCToken, wcToken);
 
         post(serverUrl, params, listener);
     }
 
-    public void searchPhone(String deviceId, String myPhone, String otp, String gcmToken, String searchPhone, CommListener listener) {
+    public void searchPhone(String deviceId, String myPhone, String otp, String wcToken, String gcmToken, String searchPhone, CommListener listener) {
         Log.d(TAG, "searchPhone");
         String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
         HashMap params = new HashMap();
@@ -112,22 +115,24 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.otp, otp);
         params.put(Constants.callerPhone, searchPhone);
         params.put(Constants.gcmToken, gcmToken);
+        params.put(Constants.WCToken, wcToken);
 
         post(serverUrl, params, CommRequest.MethodType.GET, listener);
     }
 
-    public void sendGcmToken(String deviceId, String phone, String gcmToken, CommListener listener) {
+    public void sendGcmToken(String deviceId, String phone, String gcmToken, String wcToken, CommListener listener) {
         Log.d(TAG, "sendGcmToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendGcmToken;
         HashMap params = new HashMap();
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.gcmToken, gcmToken);
+        params.put(Constants.WCToken, wcToken);
 
         post(serverUrl, params, listener);
     }
 
-    public void sendContact(String deviceId, String phone, String otp, String contatctsListJsonArray, CommListener listener) {
+    public void sendContact(String deviceId, String phone, String otp, String wcToken, String contatctsListJsonArray, CommListener listener) {
         Log.d(TAG, "sendContact");
         String serverUrl = Constants.serverURL + "/" + Constants.sendContatcts;
         HashMap params = new HashMap();
@@ -135,6 +140,7 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.otp, otp);
         params.put(Constants.contatcts, contatctsListJsonArray);
+        params.put(Constants.WCToken, wcToken);
 
         post(serverUrl, params, listener);
     }
@@ -146,7 +152,6 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
         params.put(Constants.fullName, fullName);
-        params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
 
         post(serverUrl, params, listener);
     }
@@ -158,7 +163,6 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.otp, otp);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
-        params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
 
         post(serverUrl, params, listener);
     }
@@ -170,12 +174,12 @@ public final class ServerUtilities implements Runnable {
         //Amend device information for the server
         Calendar cal = Calendar.getInstance();
         TimeZone tz = cal.getTimeZone();
-        params.put("time_zone", tz.getDisplayName());
+        params.put("time_zone", String.valueOf(tz.getRawOffset() / TimeUtils.HOUR)); //tz.getDisplayName());
+        params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
         params.put("phone_model", android.os.Build.MODEL);
         params.put("phone_manufacturer", Build.MANUFACTURER);
         params.put("version", android.os.Build.VERSION.RELEASE);
         params.put("phone_type", "Android");
-
         queue.add(new CommRequest(serverURL, params, methodType, listener));
         synchronized (monitor) {
             monitor.notifyAll();
@@ -188,6 +192,10 @@ public final class ServerUtilities implements Runnable {
         Log.d(TAG, "post");
 
         //Amend device information for the server
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        params.put("time_zone", String.valueOf(tz.getRawOffset() / TimeUtils.HOUR)); //tz.getDisplayName());
+        params.put(Constants.timeStamp, String.valueOf(TimeUtils.getTime()));
         params.put("phone_model", android.os.Build.MODEL);
         params.put("phone_manufacturer", Build.MANUFACTURER);
         params.put("version", android.os.Build.VERSION.RELEASE);

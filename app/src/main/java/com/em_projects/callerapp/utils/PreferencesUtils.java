@@ -50,7 +50,9 @@ public class PreferencesUtils {
     public boolean isRegisteredUser() {
         String otp = getOTP();
         String phoneNumber = getPhone();
-        return (false == StringUtils.isNullOrEmpty(otp)) && (false == StringUtils.isNullOrEmpty(phoneNumber));
+        String wcToken = getWCToken();
+        return (false == StringUtils.isNullOrEmpty(otp)) && (false == StringUtils.isNullOrEmpty(phoneNumber)
+                && (false == StringUtils.isNullOrEmpty(wcToken)));
     }
 
     public void registerUser(String phoneNumber, String otp) throws Exception {
@@ -155,6 +157,15 @@ public class PreferencesUtils {
 
     public void setLastContactsTransmit(long lastContactsTx) {
         editor.putLong(Constants.lastContactsTx, lastContactsTx);
+        editor.commit();
+    }
+
+    public String getWCToken() {
+        return preferences.getString(Constants.WCToken, null);
+    }
+
+    public void setWCToken(String token) {
+        editor.putString(Constants.WCToken, token);
         editor.commit();
     }
 }

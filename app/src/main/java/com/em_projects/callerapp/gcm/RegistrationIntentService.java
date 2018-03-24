@@ -19,6 +19,7 @@ import com.em_projects.callerapp.network.CommListener;
 import com.em_projects.callerapp.network.ServerUtilities;
 import com.em_projects.callerapp.utils.DeviceUtils;
 import com.em_projects.callerapp.utils.PreferencesUtils;
+import com.em_projects.callerapp.utils.StringUtils;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -90,7 +91,9 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(final String token, String phoneNumber) {
         String deviceId = DeviceUtils.getDeviceUniqueID(this);
-        ServerUtilities.getInstance().sendGcmToken(deviceId, phoneNumber, token, new CommListener() {
+        String wcToken = PreferencesUtils.getInstance(context).getWCToken();
+        if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
+        ServerUtilities.getInstance().sendGcmToken(deviceId, phoneNumber, token, wcToken, new CommListener() {
             @Override
             public void newDataArrived(String response) {
                 Log.d(TAG, "newDataArrived: " + response);

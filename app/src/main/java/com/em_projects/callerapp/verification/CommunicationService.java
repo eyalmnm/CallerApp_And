@@ -46,7 +46,7 @@ public class CommunicationService extends IntentService {
                 public void newDataArrived(String response) {
                     String action;
                     try {
-                        if (true == LoginActivity.isSuccessVerification(response)) {
+                        if (true == LoginActivity.isSuccessVerification(context, response)) {
                             action = LoginActivity.OPT_VERIFICATION_SUCCESS;
                         } else {
                             action = LoginActivity.OPT_VERIFICATION_FAILED;

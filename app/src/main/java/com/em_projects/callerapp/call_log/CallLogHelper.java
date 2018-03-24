@@ -5,8 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
-
-import com.em_projects.callerapp.utils.ContactsUtils;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,12 +27,13 @@ public class CallLogHelper {
         Uri callUri = Uri.parse("content://call_log/calls");
         Cursor cur = cr.query(callUri, null, null, null, strOrder);
         // loop through cursor
+        long start = System.currentTimeMillis();
         while (cur.moveToNext()) {
 
             String callNumber = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.NUMBER));
 
-            String callName = ContactsUtils.getContactName(context, callNumber);
+            //String callName = ContactsUtils.getContactName(context, callNumber);
 
             String callDate = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.DATE));
@@ -62,10 +62,11 @@ public class CallLogHelper {
             String duration = cur.getString(cur
                     .getColumnIndex(CallLog.Calls.DURATION));
 
-            callLogEntries.add(new CallLogEntry(context, callNumber, callName, dateString,
-                    callType, isCallNew, duration, ContactsUtils.retrieveContactPhoto(context, callNumber)));
+            callLogEntries.add(new CallLogEntry(context, callNumber, dateString,
+                    callType, isCallNew, duration));
         }
         cur.close();
+        Log.e("CallLogHelper", "duration: " + String.valueOf((System.currentTimeMillis() - start)));
         return callLogEntries;
     }
 }
