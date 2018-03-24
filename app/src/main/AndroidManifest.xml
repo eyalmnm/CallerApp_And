@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.em_projects.callerapp">
 
     <!-- SMS Receiver Permissions -->
@@ -42,15 +43,18 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
 
+    <!-- // TODO Change allowBackup to true -->
+    <!-- // TODO Remove tools:replace -->
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:configChanges="screenSize|orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
