@@ -67,7 +67,7 @@ public class ContactsTxIntentService extends IntentService {
                     String otp = PreferencesUtils.getInstance(context).getOTP();
                     String wcToken = PreferencesUtils.getInstance(context).getWCToken();
                     if (true == StringUtils.isNullOrEmpty(wcToken)) wcToken = "";
-                    ServerUtilities.getInstance().sendContact(deviceId, phoneNumber, otp, wcToken, contactsList, new CommListener() {
+                    ServerUtilities.getInstance().sendContactsList(deviceId, phoneNumber, otp, wcToken, contactsList, new CommListener() {
                         @Override
                         public void newDataArrived(String response) {
                             Log.d(TAG, "newDataArrived response: " + response);

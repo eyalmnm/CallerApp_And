@@ -218,7 +218,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     private void transmitContactsList() {
         Intent intent = new Intent(context, ContactsTxIntentService.class);
-        // startService(intent);  // TODO
+        startService(intent);  // TODO
     }
 
     private boolean isFirstTime() {

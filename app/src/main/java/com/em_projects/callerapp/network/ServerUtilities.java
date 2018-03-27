@@ -64,7 +64,7 @@ public final class ServerUtilities implements Runnable {
     public void callTerminated(String deviceId, String myPhone, String otp, String gcmToken, String wcToken, long duration, String fullName, String e164Format, String latitude, String longitude, CommListener listener) {
         Log.d(TAG, "callTerminated");
         String serverUrl = Constants.serverURL + "/" + Constants.callTerminated;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, myPhone);
         params.put(Constants.otp, otp);
@@ -74,7 +74,7 @@ public final class ServerUtilities implements Runnable {
         params.put(Constants.fullName, fullName);
         params.put(Constants.latitude, latitude);
         params.put(Constants.longitude, longitude);
-        params.put(Constants.WCToken, wcToken);
+        params.put(Constants.token, wcToken);
 
         post(serverUrl, params, listener);
     }
@@ -82,12 +82,12 @@ public final class ServerUtilities implements Runnable {
     public void sendFbToken(String deviceId, String phone, String otp, String wcToken, String fbToken, CommListener listener) {
         Log.d(TAG, "sendFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendFbToken;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.otp, otp);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.fbToken, fbToken);
-        params.put(Constants.WCToken, wcToken);
+        params.put(Constants.token, wcToken);
 
         post(serverUrl, params, listener);
     }
@@ -95,13 +95,13 @@ public final class ServerUtilities implements Runnable {
     public void sendNewFbToken(String deviceId, String phone, String otp, String wcToken, String fbToken, String oldFbToken, CommListener listener) {
         Log.d(TAG, "sendNewFbToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendNewFbToken;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.otp, otp);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.fbToken, fbToken);
         params.put(Constants.fbOldToken, oldFbToken);
-        params.put(Constants.WCToken, wcToken);
+        params.put(Constants.token, wcToken);
 
         post(serverUrl, params, listener);
     }
@@ -109,13 +109,13 @@ public final class ServerUtilities implements Runnable {
     public void searchPhone(String deviceId, String myPhone, String otp, String wcToken, String gcmToken, String searchPhone, CommListener listener) {
         Log.d(TAG, "searchPhone");
         String serverUrl = Constants.serverURL + "/" + Constants.searchPhone;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, myPhone);
         params.put(Constants.otp, otp);
         params.put(Constants.callerPhone, searchPhone);
         params.put(Constants.gcmToken, gcmToken);
-        params.put(Constants.WCToken, wcToken);
+        params.put(Constants.token, wcToken);
 
         post(serverUrl, params, CommRequest.MethodType.GET, listener);
     }
@@ -123,32 +123,32 @@ public final class ServerUtilities implements Runnable {
     public void sendGcmToken(String deviceId, String phone, String gcmToken, String wcToken, CommListener listener) {
         Log.d(TAG, "sendGcmToken");
         String serverUrl = Constants.serverURL + "/" + Constants.sendGcmToken;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.gcmToken, gcmToken);
-        params.put(Constants.WCToken, wcToken);
+        params.put(Constants.token, wcToken);
 
         post(serverUrl, params, listener);
     }
 
-    public void sendContact(String deviceId, String phone, String otp, String wcToken, String contatctsListJsonArray, CommListener listener) {
+    public void sendContactsList(String deviceId, String phone, String otp, String wcToken, String contactsListJsonArray, CommListener listener) {
         Log.d(TAG, "sendContact");
         String serverUrl = Constants.serverURL + "/" + Constants.sendContatcts;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phone);
         params.put(Constants.otp, otp);
-        params.put(Constants.contatcts, contatctsListJsonArray);
-        params.put(Constants.WCToken, wcToken);
+        params.put(Constants.contatcts, contactsListJsonArray);
+        params.put(Constants.token, wcToken);
 
-        post(serverUrl, params, listener);
+        post(serverUrl, params, CommRequest.MethodType.POST, listener);
     }
 
     public void requestSMSVerification(String deviceId, String phoneNumber, String fullName, CommListener listener) {
         Log.d(TAG, "requestSMSVerification");
         String serverUrl = Constants.serverURL + "/" + Constants.smsVerification;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);
         params.put(Constants.fullName, fullName);
@@ -159,7 +159,7 @@ public final class ServerUtilities implements Runnable {
     public void verifyOtpCode(String otp, String phoneNumber, String deviceId, CommListener listener) {
         Log.d(TAG, "verifyOtpCode");
         String serverUrl = Constants.serverURL + "/" + Constants.otpVerification;
-        HashMap params = new HashMap();
+        HashMap params = new HashMap(20);
         params.put(Constants.otp, otp);
         params.put(Constants.deviceId, deviceId);
         params.put(Constants.phoneNumber, phoneNumber);

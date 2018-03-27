@@ -42,14 +42,14 @@ public class Constants {
     public static String cell_identity = "cell_identity";
 
     // Server Communication parameters
-    public static String serverURL = "http://85.64.214.121:3000"; // "http://advert.zone:37443";
+    public static String serverURL = "http://77.126.90.154:3000"; // "http://advert.zone:37443";
     public static String deviceId = "device_id";
-    public static String gcmToken = "gcmToken";
+    public static String gcmToken = "gcm_token";
     public static String phoneNumber = "phone";
     public static String email = "email";
     public static String contactFullName = "full_name";
-    public static String firstName = "firstName";
-    public static String lastName = "lastName";
+    public static String firstName = "first_name";
+    public static String lastName = "last_name";
     public static String fullName = "full_name";
     public static String timeStamp = "time_stamp";
     public static String otp = "otp";
@@ -66,7 +66,7 @@ public class Constants {
     public static String smsVerification = "register_user";
     public static String otpVerification = "validate_user";
     public static String sendContatcts = "upload_contacts";
-    public static String sendGcmToken = "send_token";
+    public static String sendGcmToken = "update_token";
     public static String searchPhone = "search_phone";
     public static String sendFbToken = "send_token";
     public static String sendNewFbToken = "send_token";
